@@ -15,11 +15,11 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Frame | 4040 / 2040 / 2020 V-slot, 520 × 530 × 560 mm |
 | Motion | MGN12H linear rail on every axis, GT2 6 mm belts |
 | Z | One motor, belt-linked to two TR8×8 lead screws |
-| Electronics | BTT Manta M8P V2.0 + CB1, 6 × TMC2209, 24 V |
+| Electronics | BTT Octopus Pro V1.1 + Raspberry Pi, 6 × TMC2209, 24 V |
 | Toolhead mass | 518 g each (modelled) |
-| Moving bed mass | 2.18 kg (modelled) |
-| Frame mass | 4.48 kg; complete modelled machine **14.51 kg**, 80 bodies |
-| Estimated cost | ~A$1,934 inc. GST |
+| Moving bed mass | 1.27 kg (modelled) |
+| Frame mass | 4.48 kg; complete modelled machine **13.41 kg**, 87 bodies |
+| Estimated cost | ~A$1,991 inc. GST |
 
 ## What's here
 
@@ -34,7 +34,7 @@ cad/
   parameters.csv             the 38 driving parameters
   mass-report.csv            per-part mass
 klipper/
-  printer.cfg        full machine config for the Manta M8P V2.0
+  printer.cfg        full machine config for the Octopus Pro V1.1
   idex-macros.cfg    toolchange, copy and mirror modes, start/end
 ```
 
@@ -53,8 +53,8 @@ The starting point was an existing dual-extruder design that modelled out at abo
 Titan extruders and Chimera hotend with Orbiter v2.5 direct drives and separate V6
 hotends, and putting **two** carriage blocks under each toolhead, takes the moving mass
 to 518 g. The X axis then models out around 13,200 mm/s² — at which point the **bed**
-becomes the slowest axis at about 3,200 mm/s², and that is what the Klipper config is
-set to.
+becomes the slowest axis — 5,948 mm/s² after the bed was rebuilt (see
+[design-notes.md](docs/design-notes.md) §12), and that is what the Klipper config is set to.
 
 ## Everything is driven by parameters
 

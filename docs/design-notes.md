@@ -29,14 +29,13 @@ Result:
 |---|---|---|---|
 | Original: 1 block, 1.42 kg toolhead | 1.42 kg | 40.0 Hz | 3,541 mm/s² |
 | This design: 2 blocks, 518 g toolhead | 0.518 kg | 77.5 Hz | 13,259 mm/s² |
-| Y axis (the bed) | 2.18 kg | 38.2 Hz | **3,219 mm/s²** |
+| Y axis (the bed) | 1.27 kg | 51.9 Hz | **5,948 mm/s²** |
 
-**The bed is now the slowest axis.** `max_accel` in `printer.cfg` is set to 3,200
-for that reason. Raising it means stiffening the bed, not the gantry.
+**The bed is still the slowest axis.** `max_accel` in `printer.cfg` is set to
+5,900 for that reason. Raising it further means stiffening the bed again.
 
-The bed mass is measured off the completed model (carrier plate + heated bed +
-four MGN12H blocks), not estimated. The earlier estimate of 1.83 kg gave
-3,824 mm/s²; the real 2.18 kg is 19% heavier and costs 16% of the acceleration.
+See §12 for how the bed got from 4,255 to 5,948 mm/s², and for the correction
+to the stiffness figure that made the earlier number wrong.
 
 Motor torque is not the constraint: an LDO 42STH48-2504AC at 0.45 N·m holding,
 derated to 60% at speed, pushes about 42 N through a 20-tooth GT2 pulley, which
@@ -269,10 +268,107 @@ The hub pulley has a **6.35 mm bore** and the TR8 screw is **8 mm**. The BOM
 already specifies an 8 mm bore pulley for the screws; the model is using the
 wrong master because that is what the hub holds. Buy the 8 mm bore part.
 
+## 12. Design changes after review
+
+### The bed was over-built, and the first fix would have made it worse
+
+The bed was a **6 mm 235 × 235 carrier plate** (895 g) carrying a **6 mm heated
+bed** (1,060 g). Both were guesses. The real Creality part is **3 mm**.
+
+The obvious move — delete the carrier, drop the bed to 3 mm — is wrong, and the
+numbers say why. Carrier stiffness computed from geometry, `k = 48EI/L³` over
+the 200 mm rail spacing:
+
+| Carrier | k | Moving mass | k_total | f | Accel |
+|---|---:|---:|---:|---:|---:|
+| 235 × 6 plate + 6 mm bed (original) | 1,751 kN/m | 2,169 g | 164.8 | 43.9 Hz | 4,255 |
+| 2 bars 40 × 3 | 293 kN/m | 1,199 g | 112.3 | 48.7 Hz | 5,243 |
+| **2 bars 35 × 5** | **521 kN/m** | **1,269 g** | **134.9** | **51.9 Hz** | **5,948** |
+| 2 bars 30 × 6 | 666 kN/m | 1,275 g | 142.9 | 53.3 Hz | 6,273 |
+| full 235 × 3 plate | 438 kN/m | 1,494 g | 128.5 | 46.7 Hz | 4,815 |
+
+Two thin 3 mm bars are **six times floppier** than the plate they replace. The
+mass saving still wins, but far less than it looks. Stiffness goes as t³, so
+going from 3 mm to 5 mm bars costs 70 g and buys 78% more carrier stiffness.
+
+**35 × 5 bars it is**, at 111 g each. The bed stack is now carrier bars (5) +
+silicone levelling spacers (2.5) + aluminium bed with bonded heater (3) +
+magnetic sheet (1) + PEI spring steel (0.5), which keeps `bed_top` at exactly
+93 mm so nothing else in the machine moves.
+
+**Correction:** the 3,219 mm/s² quoted earlier used an *assumed* 400 kN/m for
+the carrier. Computing it from the actual plate geometry gives 1,751 kN/m and
+4,255 mm/s² for the original bed. The real gain from this change is
+**4,255 → 5,948, +40%** — not the +85% that comparing against the old wrong
+number would suggest.
+
+### Board changed: Manta M8P → Octopus Pro
+
+The Manta M8P needs a CB1 or CM4 compute module in its socket, and **no
+Australian supplier stocks the CB1**. That made the single most important part
+of the BOM unbuyable.
+
+| | Manta M8P v2.0 | **Octopus Pro V1.1** |
+|---|---|---|
+| Board | $145 | **$115, in stock** |
+| Host | CB1 not stocked; CM4 ~$76 | any Raspberry Pi over USB, ~$85 |
+| Driver slots | 8 | 8 |
+| MCU | STM32H723 | STM32H723 |
+| Total | ~$221, blocked | **~$200, all in stock** |
+
+Cheaper, in stock, and the separate Pi is easier to replace or debug. It also
+solves the accelerometer: the Octopus Pro has no ADXL header, but the Pi's own
+SPI does the job, which the Manta route would have needed anyway.
+
+`printer.cfg` is rewritten against
+[BigTreeTech's Octopus Pro reference config](https://github.com/bigtreetech/BIGTREETECH-OCTOPUS-V1.0/blob/master/Firmware/Klipper/generic-bigtreetech-octopus-pro-v1.1.cfg).
+One departure, flagged in the file: BTT writes Driver3's `enable_pin` without
+the leading `!` where every other driver has one. TMC2209 enable is active low,
+so it is inverted here — check the motor actually enables before trusting it.
+
+### Considered and rejected
+
+- **Sherpa Mini + pancake motor** ($92/head) instead of the Orbiter ($105/head).
+  Saves $27 across two heads and is perhaps 20 g lighter each, but flow is
+  lower and it is a kit to assemble rather than a finished unit. Published
+  weights for both disagree wildly between sources — anywhere from 95 to 148 g
+  — so the weight argument is not solid enough to act on.
+- **CR-6 SE bed kit** (255 × 245, $55.95, in stock) instead of the 235 × 235
+  that is out of stock. It would give a slightly larger build area for $6 more,
+  but it changes `build_x` and `build_y`, and those do not yet propagate
+  downstream (§13). Worth revisiting once they do.
+
+## 13. The parametric claim only covers the frame
+
+Measured, not assumed. Driving `build_x` and `build_y` to 300 mm:
+
+| Part | Follows? |
+|---|---|
+| X beam, uprights, base, top tie, bed rails | **yes** |
+| X rail, carriage blocks, toolheads, hotends | no |
+| Y rails, bed carrier, heated bed | no |
+| Lead screws, Z plates, Z rails | no |
+| Electronics | no |
+
+The frame grows correctly and everything mounted to it stays where it was.
+The reason is simple: the frame members are rigid-jointed to a parametric
+layout skeleton, while everything added afterwards is placed at a fixed
+transform.
+
+What *does* propagate correctly is the vertical stack: `bed_top` is built from
+the real layer thicknesses, and `gantry_z = bed_top + th_drop`, so changing the
+bed construction moves the gantry to match. That is why the bed rebuild above
+kept `bed_top` at 93 mm deliberately — so the beam would not move away from
+toolheads that cannot follow it.
+
+**Do not treat this model as parametric beyond the frame** until every
+sub-assembly is jointed to the layout the way the frame members are.
+
 ## 11. Still open
 
-- The bed is the slowest axis and nothing has been done about it. It is the
-  only remaining structural gain worth having.
+- The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
+  carrier bars are the next lever, at the cost of levelling-spacer height.
+- Only the frame follows the parameters (§13).
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.

@@ -51,12 +51,14 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 |---|---:|---:|---:|---|---|
 | LDO SLR12H MGN12H rail + carriage, 350 mm Z1 | 2 | $65.45 | $130.90 | [DREMC](https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage) | verified |
 | LDO NEMA 17 42STH48-2504AC | 1 | $34.95 | $34.95 | [DREMC](https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac) | verified |
-| Creality 235x235 aluminium heated bed kit, 24 V | 1 | $49.95 | $49.95 | [DREMC](https://store.dremc.com.au/products/creality-heated-hot-bed-kit-for-ender-3-series) | verified, **out of stock** |
+| Gates 2GT 20T pulley 5 mm bore + 2 idlers | 1 | $25.90 | $25.90 | — | verified |
+| Aluminium heated bed, 235 x 235 x 3 mm, 24 V, bonded heater | 1 | $49.95 | $49.95 | [DREMC](https://store.dremc.com.au/products/creality-heated-hot-bed-kit-for-ender-3-series) | verified, **out of stock** |
 | Magnetic sheet 235x235, high-temp 3M | 1 | $11.95 | $11.95 | [DREMC](https://store.dremc.com.au/products/magnetic-sheet-with-3m-adhesive) | verified |
 | Light Satin PEI spring steel plate 235x235 | 1 | $36.45 | $36.45 | [DREMC](https://store.dremc.com.au/products/dremc-light-satin-pei-spring-steel-build-plate-3d-printers) | verified |
-| Gates 2GT 20T pulley 5 mm bore + 2 idlers | 1 | $25.90 | $25.90 | — | verified |
+| Bed carrier bars - 235 x 35 x 5 mm aluminium flat, 2 off | 1 | $25.00 | $25.00 | — | estimate |
+| Silicone levelling spacers, 4 pc | 1 | $11.00 | $11.00 | [DREMC](https://store.dremc.com.au/products/4pc-heatbed-silicone-leveling-column-for-ender-3-and-cr-10-series) | verified |
 
-**Subtotal: $290.10**
+**Subtotal: $326.10**
 
 ## E. Z axis
 
@@ -85,14 +87,15 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 
 | Part | Qty | Unit | Line | Source | Confidence |
 |---|---:|---:|---:|---|---|
-| BTT Manta M8P v2.0 control board | 1 | $145.00 | $145.00 | [DREMC](https://store.dremc.com.au/products/bigtreetech-manta-m8p-control-board-klipper-v2-0) | verified |
-| CB1 / CM4 compute module | 1 | $45.00 | $45.00 | — | estimate, **not stocked locally** |
-| BTT TMC2209 V1.3 driver, 8-pack | 1 | $79.45 | $79.45 | [DREMC](https://store.dremc.com.au/products/bigtreetech-tmc2209-v1-3-stepper-motor-driver) | verified |
-| Mean Well LRS-350-24, 24 V 350 W | 1 | $74.65 | $74.65 | [DREMC](https://store.dremc.com.au/products/mean-well-lrs-350-24-24v-350w-power-supply) | verified |
-| Omron D2F-5L endstop switch | 3 | $5.45 | $16.35 | [DREMC](https://store.dremc.com.au/products/omron-d2f-5l-switch) | verified |
-| Wiring, Wago, ferrules, IEC inlet, drag chain | 1 | $80.00 | $80.00 | — | estimate |
+| BTT Octopus Pro V1.1 (H723) - 8 driver slots, standalone | 1 | $115.00 | $115.00 | [DREMC](https://store.dremc.com.au/products/bigtreetech-octopus-pro-v1-1-h723-chip) | verified |
+| Raspberry Pi 4 (2 GB) to run Klipper, over USB | 1 | $85.00 | $85.00 | — | estimate |
+| BTT TMC2209 V1.3 drivers, 8-pack | 1 | $79.45 | $79.45 | [DREMC](https://store.dremc.com.au/products/bigtreetech-tmc2209-v1-3-stepper-motor-driver) | verified |
+| Mean Well LRS-350-24 - 24 V, 14.6 A, 350 W | 1 | $74.65 | $74.65 | [DREMC](https://store.dremc.com.au/products/mean-well-lrs-350-24-24v-350w-power-supply) | verified |
+| Omron D2F-5L endstop switch | 4 | $5.45 | $21.80 | [DREMC](https://store.dremc.com.au/products/omron-d2f-5l-switch) | verified |
+| ADXL345 accelerometer (on the Pi SPI) | 1 | $4.95 | $4.95 | [DREMC](https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291) | verified |
+| Wiring, Wago blocks, ferrules, IEC inlet, drag chain | 1 | $80.00 | $80.00 | — | estimate |
 
-**Subtotal: $440.45**
+**Subtotal: $460.85**
 
 ## Total
 
@@ -101,11 +104,11 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 | A. Frame | $238.00 |
 | B. X gantry | $252.15 |
 | C. Toolheads | $360.85 |
-| D. Y and bed | $290.10 |
+| D. Y and bed | $326.10 |
 | E. Z axis | $293.85 |
 | F. Belt stock | $59.00 |
-| G. Electronics | $440.45 |
-| **Total** | **$1934.40** |
+| G. Electronics | $460.85 |
+| **Total** | **$1990.80** |
 
 Call it **$1,900 to $2,100** once the estimated lines firm up. Anything already on
 hand comes off the top, mostly from the Frame and Electronics groups.
@@ -117,17 +120,9 @@ hand comes off the top, mostly from the Frame and Electronics groups.
 - Bed levelling hardware and a probe.
 - An enclosure.
 
-## Watch the pulley bore
-
-The Z lead screws are **8 mm**. The 20T pulley that goes on each screw must have an
-**8 mm bore**, not the 5 mm one used on the motors. The CAD model currently shows a
-6.35 mm bore pulley there, because that is the only pulley in the Fusion hub — the
-interference check flags it. The line above specifies the right part; just make sure
-you order the 8 mm bore variant.
-
 ## Known sourcing gaps
 
 - **235 × 235 24 V heated bed** — both DREMC options were out of stock on 11 Nov 2026. [Jaycar lists an equivalent](https://www.jaycar.com.au/replacement-hot-bed-plate-kit-for-ender-3-v3-ke-and-se/p/001074) around $58 but blocks automated reading, so check it yourself.
-- **CB1 / CM4 compute module** — the Manta M8P needs one to run Klipper and DREMC does not stock it. Alternative: run Klipper on a separate Pi over USB.
+- **Nothing is now unbuyable except the bed.** The board was changed from the Manta M8P to the Octopus Pro for exactly this reason — see [design-notes.md](design-notes.md) §12.
 - **Bare MGN12H carriage blocks** — the only Australian listing found is [HIWIN Precision H at $105](https://store.dremc.com.au/products/hiwin-mgn12h-carriage-block), and it is out of stock. Source overseas, or buy whole rail-and-carriage sets at $85.45.
 
