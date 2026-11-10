@@ -1,0 +1,35 @@
+sub_assembly,part,mass_g
+A - Frame,Upright 4040:1,618.9
+A - Frame,Upright 4040:2,618.9
+A - Frame,Base rail 4040:1,656.1
+A - Frame,Base rail 4040:2,656.1
+A - Frame,Base cross 2040:3,356.4
+A - Frame,Base cross 2040:4,356.4
+A - Frame,Top tie 2040:1,421.2
+B - X gantry,X beam 2040:2,421.2
+B - X gantry,X rail MGN12:1,391.9
+D - Y and bed,Bed rail 2020:1,245.3
+D - Y and bed,Bed rail 2020:2,245.3
+C - Toolhead A,X block MGN12H A1:1,55.0
+C - Toolhead A,X block MGN12H A2:1,55.0
+C - Toolhead A,Toolhead plate A:1,124.7
+C - Toolhead A,Extruder Orbiter A:1,148.0
+C - Toolhead A,Hotend V6 A:1,100.0
+C - Toolhead A,Part fan 5015 A:1,35.0
+C - Toolhead B,X block MGN12H B1:1,55.0
+C - Toolhead B,X block MGN12H B2:1,55.0
+C - Toolhead B,Toolhead plate B:1,124.7
+C - Toolhead B,Extruder Orbiter B:1,148.0
+C - Toolhead B,Hotend V6 B:1,100.0
+C - Toolhead B,Part fan 5015 B:1,35.0
+E - Z axis,Z rail MGN12 L:1,263.8
+E - Z axis,Z block MGN12H L:1,55.0
+E - Z axis,Z rail MGN12 R:1,263.8
+E - Z axis,Z block MGN12H R:1,55.0
+E - Z axis,8mm x 500mm Lead Screw:2,153.2
+E - Z axis,8mm x 500mm Lead Screw:3,153.2
+E - Z axis,8mm Acme Anti Backlash Nut Block:2,55.0
+E - Z axis,8mm Acme Anti Backlash Nut Block:3,55.0
+E - Z axis,Nema 17 Stepper Motor:2,390.0
+E - Z axis,Z carriage plate L:1,155.5
+E - Z axis,Z carriage plate R:1,155.5

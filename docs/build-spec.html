@@ -1,0 +1,983 @@
+<title>Cheap Fast IDEX</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a taught course — numbered lessons, each idea then its number, prose at reading width. */
+:root {
+  --paper: #f6f4f0; --card: #fffefc; --sunk: #efebe4;
+  --ink: #1d1b18; --ink-soft: #645f57; --rule: #ddd8cf;
+  --signal: #c2521a; --good: #2f6b4f; --warn: #8a6d12; --cold: #8a8276;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "Inter", system-ui, -apple-system, Segoe UI, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #151412; --card: #1e1c19; --sunk: #211f1b; --ink: #efebe4;
+    --ink-soft: #a8a194; --rule: #332f2a; --signal: #f0834a;
+    --good: #6fc096; --warn: #d9b64a; --cold: #8d8578; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #151412; --card: #1e1c19; --sunk: #211f1b; --ink: #efebe4;
+  --ink-soft: #a8a194; --rule: #332f2a; --signal: #f0834a;
+  --good: #6fc096; --warn: #d9b64a; --cold: #8d8578; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--body);
+  font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 820px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+}
+header.top { border-bottom: 2px solid var(--ink); padding-bottom: 24px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--signal);
+}
+h1 {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(34px, 7vw, 54px); line-height: 1.02;
+  letter-spacing: -0.025em; margin: 10px 0 14px; text-wrap: balance;
+}
+.lede { color: var(--ink-soft); margin: 0; font-size: 17px; }
+p { margin: 0 0 14px; }
+strong { font-weight: 600; }
+
+.lesson { margin-top: 52px; }
+.lesson > h2 {
+  font-family: var(--display); font-size: clamp(21px, 3.4vw, 27px);
+  font-weight: 700; letter-spacing: -0.018em; line-height: 1.15;
+  margin: 0 0 4px; text-wrap: balance;
+}
+.lnum {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--signal); display: block; margin-bottom: 7px;
+}
+.lesson > h2 + p { margin-top: 10px; }
+h3 {
+  font-family: var(--display); font-size: 17px; font-weight: 600;
+  margin: 28px 0 8px; letter-spacing: -0.01em;
+}
+
+.plain {
+  background: var(--card); border-left: 3px solid var(--signal);
+  padding: 15px 18px; margin: 18px 0;
+}
+.plain p:last-child { margin-bottom: 0; }
+.plain .tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--signal); display: block; margin-bottom: 6px;
+}
+.eq {
+  font-family: var(--mono); background: var(--sunk); padding: 13px 16px;
+  margin: 16px 0; font-size: 14.5px; overflow-x: auto; white-space: nowrap;
+}
+.eq b { color: var(--signal); font-weight: 500; }
+
+figure { margin: 24px 0; }
+figure svg { display: block; width: 100%; height: auto; max-width: 100%; }
+figcaption {
+  font-size: 13.5px; color: var(--ink-soft); margin-top: 10px;
+  padding-left: 2px; border-left: 2px solid var(--rule); padding-left: 12px;
+}
+
+.tbl { overflow-x: auto; border-top: 1px solid var(--ink); margin: 18px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 500px; }
+th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-soft); font-weight: 500;
+  text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: bottom;
+}
+td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; padding-right: 0; }
+tr.hi td { background: var(--sunk); font-weight: 500; }
+tr.hi td.n { color: var(--signal); }
+tr.dim td { color: var(--ink-soft); }
+caption {
+  caption-side: top; text-align: left; font-family: var(--mono); font-size: 10.5px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+  padding-bottom: 8px;
+}
+code {
+  font-family: var(--mono); font-size: 0.88em; background: var(--sunk);
+  padding: 1px 5px; border-radius: 2px;
+}
+.chip {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 2px 6px; border: 1px solid currentColor; white-space: nowrap;
+}
+.c-good { color: var(--good); } .c-sig { color: var(--signal); } .c-cold { color: var(--cold); }
+ul.body { margin: 0 0 14px; padding-left: 22px; }
+ul.body li { margin-bottom: 8px; }
+
+dl.gloss { margin: 0; border-top: 1px solid var(--ink); }
+dl.gloss > div { display: grid; grid-template-columns: minmax(130px, 200px) 1fr; gap: 4px 20px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+dl.gloss dt { font-family: var(--mono); font-size: 13px; font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+dl.gloss dd { margin: 0; color: var(--ink-soft); font-size: 14.5px; min-width: 0; }
+@media (max-width: 560px) { dl.gloss > div { grid-template-columns: 1fr; } }
+
+footer {
+  margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--rule);
+  font-family: var(--mono); font-size: 11px; color: var(--ink-soft); line-height: 1.7;
+}
+a { color: var(--signal); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Build notes · 10 Nov 2026 · replaces the Apr 2025 Dual 3D Printer</div>
+  <h1>Cheap Fast IDEX</h1>
+  <p class="lede">A dual-extrusion printer, direct drive, as cheap as possible and as fast as the frame allows — built on the layout you already drew. This version explains the reasoning rather than just stating it, so you can argue with the conclusions.</p>
+</header>
+
+<section class="lesson">
+  <span class="lnum">Lesson 1</span>
+  <h2>A printer is a weight on the end of a spring</h2>
+  <p>Pin a ruler to the edge of a desk, flick the free end, and it wobbles at one particular rate. Not a random rate — one specific one. Make the ruler stick out further and the wobble slows down. Stick a lump of Blu-Tack on the end and it slows down again.</p>
+  <p>Your print head is that ruler. It hangs off a belt, which hangs off brackets, which bolt to a frame. All of that flexes a little. So when a motor yanks the head sideways and then stops, the head keeps wobbling for a moment. That wobble prints as <strong>ringing</strong> — the faint repeated echo you see just after a sharp corner.</p>
+  <p>The rate it wobbles at is the <strong>natural frequency</strong>, measured in hertz (Hz, wobbles per second). It depends on exactly two things:</p>
+  <div class="eq">natural frequency = (1 ÷ 2π) × √( <b>stiffness</b> ÷ <b>mass</b> )</div>
+  <p><strong>Stiffness</strong> is how hard the structure resists being pushed out of shape, in newtons per metre (N/m) — push with so many newtons, it deflects so many metres. A high number is a rigid thing. <strong>Mass</strong> is simply the weight that's moving, in kilograms.</p>
+  <div class="plain">
+    <span class="tag">In plain terms</span>
+    <p>Stiffer frame → faster wobble → better. Heavier head → slower wobble → worse. Those are your only two levers, and the square root means you need to <em>quadruple</em> stiffness, or quarter the mass, to double the frequency.</p>
+  </div>
+  <p>Why do we want a fast wobble? Because a fast wobble dies out quickly and is easier for the firmware to cancel. That's the next two lessons.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 2</span>
+  <h2>In a chain of springs, the floppiest one wins</h2>
+  <p>This is the idea that decides your whole build, so it's worth getting properly.</p>
+  <p>The head isn't connected to the motor by one spring. It's a chain: the <strong>belt</strong> stretches a bit, the <strong>bracket</strong> holding the motor flexes a bit, the <strong>frame</strong> those bolt to bends a bit. Springs in a chain like this are called springs <em>in series</em>.</p>
+  <p>Here's the counterintuitive bit. If you hook a very stiff spring to a very floppy one, the pair is <em>floppier than the floppy one alone</em>. Pull on the chain and the floppy one does nearly all the stretching. Making the stiff one even stiffer changes almost nothing.</p>
+
+  <figure>
+    <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram: a stiff belt spring in series with a floppy bracket spring, connected to the carriage mass.">
+      <!-- wall -->
+      <rect x="18" y="55" width="12" height="110" fill="var(--ink)"/>
+      <g stroke="var(--ink)" stroke-width="2">
+        <line x1="18" y1="62" x2="6" y2="74"/><line x1="18" y1="82" x2="6" y2="94"/>
+        <line x1="18" y1="102" x2="6" y2="114"/><line x1="18" y1="122" x2="6" y2="134"/>
+        <line x1="18" y1="142" x2="6" y2="154"/><line x1="18" y1="158" x2="6" y2="170"/>
+      </g>
+      <!-- stiff spring: tight coils -->
+      <polyline points="30,110 44,110 52,88 68,132 84,88 100,132 116,88 132,132 148,88 164,132 180,88 196,132 212,88 224,110 240,110"
+                fill="none" stroke="var(--signal)" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- floppy spring: loose coils -->
+      <polyline points="240,110 258,110 272,76 312,144 352,76 392,144 428,76 450,110 468,110"
+                fill="none" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- mass -->
+      <rect x="468" y="68" width="150" height="84" fill="var(--sunk)" stroke="var(--ink)" stroke-width="2.5"/>
+      <text x="543" y="103" text-anchor="middle" font-family="Archivo, sans-serif" font-size="15" font-weight="600" fill="var(--ink)">CARRIAGE</text>
+      <text x="543" y="126" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="14" fill="var(--ink-soft)">667 g</text>
+      <!-- labels -->
+      <text x="135" y="192" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="var(--signal)">BELT</text>
+      <text x="135" y="212" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="var(--ink-soft)">400,000 N/m — very stiff</text>
+      <text x="354" y="192" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="600" fill="var(--ink)">BRACKET</text>
+      <text x="354" y="212" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="var(--ink-soft)">60,000 N/m — floppy</text>
+      <!-- result -->
+      <line x1="30" y1="234" x2="650" y2="234" stroke="var(--rule)" stroke-width="1.5"/>
+      <text x="30" y="226" font-family="Inter, sans-serif" font-size="13.5" fill="var(--ink)">
+        <tspan font-weight="600">Chain total: 52,000 N/m.</tspan>
+        <tspan fill="var(--ink-soft)"> Barely better than the bracket on its own.</tspan>
+      </text>
+    </svg>
+    <figcaption>The belt is nearly seven times stiffer than the bracket, and contributes almost nothing. Replace the belt with an infinitely rigid steel bar and you'd get 60,000 instead of 52,000 — a 15% gain. Double the bracket stiffness and you get 92,000 — a 77% gain.</figcaption>
+  </figure>
+
+  <p>This is why people's intuition about printers is usually wrong. Everyone obsesses over belt tension and carriage weight. The actual floppy link is nearly always <strong>the printed plastic bracket holding the motor or the idler pulley</strong>.</p>
+  <div class="plain">
+    <span class="tag">How we know the model is right</span>
+    <p>If you calculate using the belt alone, you predict the X axis wobbles at 123 Hz. Real bedslingers measure 32–45 Hz. The gap <em>is</em> the brackets. Once they're included, the model lands on 32.5 Hz for a printed-bracket machine — which is what an Ender 3 actually measures. That's the check that says these numbers can be trusted.</p>
+  </div>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 3</span>
+  <h2>What the wobble costs you in speed</h2>
+  <p>Modern firmware can cancel ringing. The trick is called <strong>input shaping</strong>: the firmware knows your wobble frequency, so when it commands a sharp move it splits it into two nudges, timed so the second nudge's wobble cancels the first one's. Like catching a swing at exactly the right moment to stop it dead.</p>
+  <p>It works brilliantly, but it has a price. The two nudges are spread over time, which slightly smears sharp corners. The faster you accelerate, the more smearing. And the <em>lower</em> your wobble frequency, the further apart the nudges must be, so the worse the smearing at any given acceleration.</p>
+  <p>That gives a practical ceiling on acceleration, roughly:</p>
+  <div class="eq">max acceleration (mm/s²) ≈ <b>frequency²</b> × 0.022</div>
+  <p>The square is what matters. Going from 30 Hz to 60 Hz doesn't double your acceleration — it <strong>quadruples</strong> it.</p>
+  <div class="tbl">
+  <table>
+    <caption>What frequency buys you</caption>
+    <thead><tr><th class="n">Frequency</th><th class="n">Usable acceleration</th><th>Feels like</th></tr></thead>
+    <tbody>
+      <tr><td class="n">22 Hz</td><td class="n">1,000 mm/s²</td><td>a tired old bedslinger</td></tr>
+      <tr><td class="n">33 Hz</td><td class="n">2,400 mm/s²</td><td>stock Ender 3</td></tr>
+      <tr><td class="n">45 Hz</td><td class="n">4,500 mm/s²</td><td>a good budget build</td></tr>
+      <tr class="hi"><td class="n">55 Hz</td><td class="n">6,700 mm/s²</td><td>genuinely quick</td></tr>
+      <tr><td class="n">65 Hz</td><td class="n">9,300 mm/s²</td><td>Voron territory</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>"Acceleration" in mm/s² is how hard the head can change speed. It matters more than top speed, because on a real part full of short segments and corners the head spends most of its life speeding up and slowing down and never reaches top speed at all.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 4</span>
+  <h2>Your machine, with those rules applied</h2>
+  <p>Now we can just read the answers off. Two axes move fast: <strong>X</strong> (the print head sliding along the beam) and <strong>Y</strong> (the bed sliding back and forth — a layout called a <em>bedslinger</em>, which is what you drew).</p>
+
+  <h3>The X axis — the print head</h3>
+  <div class="tbl">
+  <table>
+    <caption>X carriage, three bracket choices</caption>
+    <thead><tr><th>Head build</th><th class="n">Mass</th><th class="n">Printed brackets</th><th class="n">Ribbed + inserts</th><th class="n">Aluminium</th></tr></thead>
+    <tbody>
+      <tr><td>Your Titan + low-profile NEMA 17 <span class="chip c-good">owned</span></td><td class="n">667 g</td><td class="n">29.9 Hz</td><td class="n">44.5 Hz</td><td class="n">64.4 Hz</td></tr>
+      <tr class="dim"><td>A light geared extruder <span class="chip c-cold">would cost ~$120</span></td><td class="n">385 g</td><td class="n">39.3 Hz</td><td class="n">58.6 Hz</td><td class="n">84.7 Hz</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Read that across, not down. Buying a fancy light extruder and keeping printed brackets gets you <strong>39 Hz</strong>. Keeping the extruder you already own and making the brackets from aluminium gets you <strong>64 Hz</strong> — and costs less.</p>
+  <div class="plain">
+    <span class="tag">The main recommendation</span>
+    <p><strong>Don't buy lightweight extruders. Buy aluminium brackets.</strong> Your existing Titans and low-profile NEMA 17s are fine for direct drive. Mass is the lever everyone reaches for; stiffness is the lever that actually moves.</p>
+  </div>
+
+  <h3>The Y axis — the bed</h3>
+  <div class="tbl">
+  <table>
+    <caption>Y bed, same three bracket choices</caption>
+    <thead><tr><th>Bed build</th><th class="n">Mass</th><th class="n">Printed</th><th class="n">Ribbed</th><th class="n">Aluminium</th></tr></thead>
+    <tbody>
+      <tr><td>As you drew it — 235 bed <em>plus</em> a 185 support plate</td><td class="n">1300 g</td><td class="n">21.6 Hz</td><td class="n">32.5 Hz</td><td class="n">48.1 Hz</td></tr>
+      <tr class="hi"><td>Bed mounted straight to the rail blocks</td><td class="n">1020 g</td><td class="n">24.4 Hz</td><td class="n">36.7 Hz</td><td class="n">54.3 Hz</td></tr>
+      <tr><td>Drop to a 200 × 200 bed</td><td class="n">850 g</td><td class="n">26.7 Hz</td><td class="n">40.2 Hz</td><td class="n">59.5 Hz</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Y is slower than X in every single row</strong>, because the bed is heavier than the head. And the firmware applies one acceleration limit to the whole machine, so the machine runs at whichever axis is worse. Money spent making X faster than Y buys you nothing at all.</p>
+  <div class="plain">
+    <span class="tag">A free improvement</span>
+    <p>Your design has a 235 mm heated bed <em>and</em> a separate 185 mm support plate underneath it. Bolt the bed straight to the linear rail blocks and you delete 280 g, lifting Y by about 12%. It costs nothing and removes a part.</p>
+  </div>
+
+  <div class="tbl">
+  <table>
+    <caption>Where the whole machine lands</caption>
+    <thead><tr><th>Build</th><th class="n">X</th><th class="n">Y</th><th class="n">Machine runs at</th></tr></thead>
+    <tbody>
+      <tr><td>Printed brackets, bed as drawn</td><td class="n">2,000</td><td class="n">1,000</td><td class="n">1,000 mm/s²</td></tr>
+      <tr><td>Ribbed printed brackets, support plate deleted</td><td class="n">4,400</td><td class="n">3,000</td><td class="n">3,000 mm/s²</td></tr>
+      <tr class="hi"><td>Aluminium brackets, support plate deleted</td><td class="n">9,100</td><td class="n">6,500</td><td class="n">6,500 mm/s²</td></tr>
+      <tr><td>Aluminium + 200 mm bed + light extruders</td><td class="n">15,800</td><td class="n">7,800</td><td class="n">7,800 mm/s²</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The third row is the sweet spot: six and a half times the acceleration of the first, bought almost entirely with bracket material and one deleted part.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 5</span>
+  <h2>Your extrusion choice, checked</h2>
+  <p>You want to stay on 20-series V-slot so the parts stay reusable. Good news: the numbers say that's nearly free.</p>
+  <p>The frame is a third spring in that chain from Lesson 2. By the floppiest-link rule, it only matters if it's as floppy as the bracket. Stiffness of a beam comes from its <strong>second moment of area</strong> (symbol <em>I</em>, in cm⁴) — a number describing how the metal is distributed about the bending axis. Material far from the centre counts enormously more, which is why a tall profile stood on edge is so much stiffer than a square one.</p>
+  <div class="tbl">
+  <table>
+    <caption>Every profile, for reference — X beam 600 mm span, upright 400 mm cantilever</caption>
+    <thead><tr><th>Profile</th><th class="n">I (cm⁴)</th><th class="n">X beam stiffness</th><th class="n">Upright stiffness</th><th class="n">X frequency</th><th class="n">Accel</th></tr></thead>
+    <tbody>
+      <tr><td>2020 V-slot</td><td class="n">0.70</td><td class="n">107 kN/m</td><td class="n">23 kN/m</td><td class="n">36.5 Hz</td><td class="n">2,900</td></tr>
+      <tr class="hi"><td>2040 V-slot</td><td class="n">4.65</td><td class="n">713 kN/m</td><td class="n">150 kN/m</td><td class="n">43.0 Hz</td><td class="n">4,100</td></tr>
+      <tr class="hi"><td>2060 V-slot</td><td class="n">14.5</td><td class="n">2,223 kN/m</td><td class="n">469 kN/m</td><td class="n">44.0 Hz</td><td class="n">4,300</td></tr>
+      <tr><td>2080 V-slot</td><td class="n">32.5</td><td class="n">4,983 kN/m</td><td class="n">1,051 kN/m</td><td class="n">44.3 Hz</td><td class="n">4,300</td></tr>
+      <tr class="dim"><td>3030 T-slot</td><td class="n">3.60</td><td class="n">552 kN/m</td><td class="n">116 kN/m</td><td class="n">42.5 Hz</td><td class="n">4,000</td></tr>
+      <tr class="dim"><td>3060 T-slot</td><td class="n">22.5</td><td class="n">3,450 kN/m</td><td class="n">728 kN/m</td><td class="n">44.2 Hz</td><td class="n">4,300</td></tr>
+      <tr class="dim"><td>4040 T-slot</td><td class="n">9.00</td><td class="n">1,380 kN/m</td><td class="n">291 kN/m</td><td class="n">43.7 Hz</td><td class="n">4,200</td></tr>
+      <tr class="dim"><td>4080 T-slot</td><td class="n">50.0</td><td class="n">7,667 kN/m</td><td class="n">1,617 kN/m</td><td class="n">44.4 Hz</td><td class="n">4,300</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Read the frequency column and the profiles all look the same — 2040 gives 43.0 Hz, 4080 gives 44.4 Hz. That table assumes <em>printed</em> brackets, though, and a printed bracket is so floppy it swamps everything behind it. Once you fit the aluminium brackets from Lesson 4, the bracket stops being the worst link and the frame starts to show.</p>
+  <h3>First, a correction: 40×40 V-slot is 20-series</h3>
+  <p>You used <strong>40 × 40 V-slot</strong> for the uprights, not 2040 — and that's still 20-series hardware: the same M5 T-nuts, the same 20 mm slot pitch, the same accessories. "20-series" describes the slot, not the outside dimension, so staying reusable never meant staying small. 40×40 V-slot has an <em>I</em> of about 7.5 cm⁴ against 2040's 4.65, and a pair of 400 mm uprights gives <strong>485 kN/m</strong> rather than 301.</p>
+  <p>So your original choice was already better than what I assumed. But it turns out the extrusion was never the thing to worry about.</p>
+  <h3>Redone with aluminium brackets — and with the uprights counted</h3>
+  <p>The X beam isn't the only frame member in the chain. When the head accelerates along the beam, the whole gantry reacts, and the two Z uprights sway. They're a cantilever — fixed at the bottom, free at the top — which is a much floppier arrangement than a beam supported at both ends.</p>
+  <div class="tbl">
+  <table>
+    <caption>Same profile for beam and uprights, aluminium brackets</caption>
+    <thead><tr><th>Profile</th><th class="n">Beam</th><th class="n">Two uprights</th><th class="n">Chain total</th><th class="n">X frequency</th><th class="n">X accel</th></tr></thead>
+    <tbody>
+      <tr class="dim"><td>2020</td><td class="n">107 kN/m</td><td class="n">45 kN/m</td><td class="n">24.7 kN/m</td><td class="n">30.6 Hz</td><td class="n">2,100</td></tr>
+      <tr><td>2040</td><td class="n">713 kN/m</td><td class="n">301 kN/m</td><td class="n">72.0 kN/m</td><td class="n">52.3 Hz</td><td class="n">6,000</td></tr>
+      <tr class="hi"><td>2060</td><td class="n">2,223 kN/m</td><td class="n">938 kN/m</td><td class="n">93.6 kN/m</td><td class="n">59.6 Hz</td><td class="n">7,800</td></tr>
+      <tr><td>2080</td><td class="n">4,983 kN/m</td><td class="n">2,102 kN/m</td><td class="n">101.6 kN/m</td><td class="n">62.1 Hz</td><td class="n">8,500</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>So the profile does matter after all, once the brackets are good: 2040 → 2060 is worth <strong>30% more acceleration</strong>. But the next question is where to spend it, and the answer is not the obvious one.</p>
+  <div class="tbl">
+  <table>
+    <caption>Upgrading one member at a time</caption>
+    <thead><tr><th>Beam / uprights</th><th class="n">X frequency</th><th class="n">X accel</th><th class="n">Gain</th></tr></thead>
+    <tbody>
+      <tr><td>2040 beam / 2040 uprights</td><td class="n">52.3 Hz</td><td class="n">6,000</td><td class="n">—</td></tr>
+      <tr><td>2060 beam / 2040 uprights</td><td class="n">54.2 Hz</td><td class="n">6,500</td><td class="n">+8%</td></tr>
+      <tr class="hi"><td>2040 beam / <strong>2060 uprights</strong></td><td class="n">57.1 Hz</td><td class="n">7,200</td><td class="n">+20%</td></tr>
+      <tr><td>2060 beam / 2060 uprights</td><td class="n">59.6 Hz</td><td class="n">7,800</td><td class="n">+30%</td></tr>
+      <tr class="dim"><td>2080 beam / 2080 uprights</td><td class="n">62.1 Hz</td><td class="n">8,500</td><td class="n">+42%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">The uprights matter more than the beam</span>
+    <p>Upgrading the uprights alone buys <strong>+20%</strong>. Upgrading the beam alone buys <strong>+8%</strong>. Two 2040 uprights together give 301 kN/m against the beam's 713 — they are the floppier of the two, so by Lesson 2 they're where the gain is. Most people would have upgraded the beam.</p>
+  </div>
+  <h3>But remember what caps the machine</h3>
+  <p>Y runs at 6,500 mm/s² with aluminium brackets and the support plate deleted, and the firmware uses one limit for the whole machine. So:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Build</th><th class="n">X can do</th><th class="n">Y can do</th><th class="n">Machine runs at</th></tr></thead>
+    <tbody>
+      <tr><td>2040 beam / 2040 uprights</td><td class="n">6,000</td><td class="n">6,500</td><td class="n">6,000 — X-limited</td></tr>
+      <tr class="hi"><td>2040 beam / 2060 uprights</td><td class="n">7,200</td><td class="n">6,500</td><td class="n">6,500 — Y-limited</td></tr>
+      <tr class="dim"><td>2060 beam / 2060 uprights</td><td class="n">7,800</td><td class="n">6,500</td><td class="n">6,500 — no further gain</td></tr>
+      <tr class="dim"><td>2080 everywhere</td><td class="n">8,500</td><td class="n">6,500</td><td class="n">6,500 — no further gain</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">What to actually buy: nothing</span>
+    <ul class="body" style="margin-bottom:0">
+      <li><strong>Your 40×40 V-slot uprights are already enough.</strong> They give X 6,600 mm/s², which just clears Y's 6,500. Buying 2060 would take X to 7,200 and leave the machine at 6,500 regardless.</li>
+      <li><strong>X beam: 2040 on edge is enough</strong> — unless you later drop to a 200 mm bed, which lifts Y to 7,800 and makes a 2060 beam worth revisiting.</li>
+      <li><strong>Never 2020 for a beam or upright.</strong> Two 2020 uprights are 45 kN/m, floppier than the bracket itself, and drag the machine to 2,100 mm/s².</li>
+      <li><strong>Bed carrier: 2020 is fine</strong> — it moves, so keep it light.</li>
+    </ul>
+  </div>
+  <p>The 30- and 40-series T-slot rows in the reference table are kept for if you ever scale this design up. On this machine they'd buy nothing — and now that the uprights are settled, Lesson 10 shows what actually does.</p>
+  <p>Since every axis runs on MGN linear rails — proper steel rails with recirculating ball bearings, rather than wheels — you never need the V-groove for motion. It's purely a bonus for mounting things later, which is exactly the reusability you're after.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 6</span>
+  <h2>Motor torque, and why you don't need a NEMA 23</h2>
+  <p><strong>Torque</strong> is twisting force, measured in newton-metres (Nm). One newton-metre is a one-newton push on the end of a one-metre lever — roughly the force of holding up a 100 g apple, a metre out.</p>
+  <p>A belt motor's lever is the radius of its pulley. Your GT2 20-tooth pulley has a working radius of only <strong>6.366 mm</strong>, so the motor has a very short lever. That sounds bad but it's the opposite: a short lever means a small torque produces a large pull on the belt. It's gearing in your favour.</p>
+  <div class="eq">torque needed = <b>mass</b> × <b>acceleration</b> × <b>pulley radius</b>  (+ a bit to spin the motor's own rotor)</div>
+  <p>Work it through for the heaviest demand on the machine and the answer is almost embarrassing:</p>
+  <div class="tbl">
+  <table>
+    <caption>Torque demanded vs a standard NEMA 17's 0.45 Nm</caption>
+    <thead><tr><th>Axis</th><th>Motor</th><th class="n">Needs</th><th class="n">Spare</th><th>Have it?</th></tr></thead>
+    <tbody>
+      <tr><td>X1 — carriage A</td><td>NEMA 17, 42×40</td><td class="n">0.060 Nm</td><td class="n">7.5×</td><td><span class="chip c-good">owned</span></td></tr>
+      <tr><td>X2 — carriage B</td><td>NEMA 17, 42×40</td><td class="n">0.060 Nm</td><td class="n">7.5×</td><td><span class="chip c-good">owned</span></td></tr>
+      <tr><td>Y — bed</td><td>NEMA 17, 42×40</td><td class="n">0.044 Nm</td><td class="n">10.2×</td><td><span class="chip c-good">owned</span></td></tr>
+      <tr class="hi"><td>Z — both lead screws</td><td>NEMA 17, 42×40</td><td class="n">0.175 Nm</td><td class="n">2.6×</td><td><span class="chip c-sig">buy 1</span></td></tr>
+      <tr><td>E1 — extruder</td><td>Low-profile NEMA 17</td><td class="n">0.080 Nm</td><td class="n">5.6×</td><td><span class="chip c-good">owned</span></td></tr>
+      <tr><td>E2 — extruder</td><td>Low-profile NEMA 17</td><td class="n">0.080 Nm</td><td class="n">5.6×</td><td><span class="chip c-good">owned</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>"NEMA 17" is just a mounting standard — it means a 42 × 42 mm faceplate, nothing about power. NEMA 23 means 57 × 57 mm.</p>
+  <p>The hardest-working axis on the whole printer is Z, lifting the gantry on two lead screws, and it asks for <strong>0.175 Nm</strong>. A NEMA 23 delivers 1.0–2.0 Nm. That's six to eleven times more than the worst case anywhere on the machine, for an extra ~700 g of motor and about 2.8 amps — which is more current than a TMC2209 driver chip can give, so you'd have to buy external drivers as well. On a build where the goal is cheap, it's spending money to gain nothing.</p>
+  <div class="plain">
+    <span class="tag">Answer to your question</span>
+    <p>No NEMA 23. Keep the single NEMA 17 belt-linking both lead screws, exactly as you have it — it has 2.6× margin, which is healthy. You own five of the six motors you need; buy one standard NEMA 17.</p>
+  </div>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 7</span>
+  <h2>Why motors go weak when they spin fast</h2>
+  <p>A spinning motor acts as a generator, pushing back a voltage of its own against the supply. This is <strong>back-EMF</strong> (electromotive force — just an old word for voltage). The faster it spins, the harder it pushes back.</p>
+  <p>Your power supply has to overcome that back-voltage before any current can flow into the coils, and current is what makes torque. When back-EMF approaches your supply voltage, current stops flowing and the motor goes limp — no matter how beefy it is.</p>
+  <div class="tbl">
+  <table>
+    <caption>Voltage left over after back-EMF ("headroom")</caption>
+    <thead><tr><th class="n">Head speed</th><th class="n">Motor rpm</th><th class="n">Back-EMF</th><th class="n">on 12 V</th><th class="n">on 24 V</th><th class="n">on 36 V</th></tr></thead>
+    <tbody>
+      <tr><td class="n">200 mm/s</td><td class="n">300</td><td class="n">11.0 V</td><td class="n">1.0 V</td><td class="n">13.0 V</td><td class="n">25.0 V</td></tr>
+      <tr class="hi"><td class="n">300 mm/s</td><td class="n">450</td><td class="n">16.5 V</td><td class="n">−4.5 V</td><td class="n">7.5 V</td><td class="n">19.5 V</td></tr>
+      <tr><td class="n">400 mm/s</td><td class="n">600</td><td class="n">22.0 V</td><td class="n">−10.0 V</td><td class="n">2.0 V</td><td class="n">14.0 V</td></tr>
+      <tr><td class="n">500 mm/s</td><td class="n">750</td><td class="n">27.5 V</td><td class="n">−15.5 V</td><td class="n">−3.5 V</td><td class="n">8.5 V</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A negative number means the motor is generating more voltage than you're feeding it — it simply cannot go that fast. On <strong>12 V you run out at about 250 mm/s</strong>. On 24 V you reach roughly 400 mm/s, which is past what the frame can use anyway.</p>
+  <div class="plain">
+    <span class="tag">Decision</span>
+    <p><strong>24 V.</strong> It is the cheapest single thing you can do for speed. 36 V would go further but costs more and narrows your board options for no benefit you could actually use.</p>
+  </div>
+  <h3>Power supply size</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>What draws power</th><th class="n">Watts</th></tr></thead>
+    <tbody>
+      <tr><td>Heated bed, 235 × 235</td><td class="n">199</td></tr>
+      <tr><td>Two hotends, 40 W each</td><td class="n">80</td></tr>
+      <tr><td>Six stepper motors</td><td class="n">60</td></tr>
+      <tr><td>Cooling fans</td><td class="n">25</td></tr>
+      <tr><td>Controller and single-board computer</td><td class="n">15</td></tr>
+      <tr class="hi"><td>Total</td><td class="n">379 W — that's 15.8 A at 24 V</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A 24 V 500 W supply leaves 32% spare. The bed is over half the total, so a smaller bed later would let you drop to 400 W.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 8</span>
+  <h2>What IDEX actually is, and what it costs</h2>
+  <p><strong>IDEX</strong> stands for Independent Dual EXtruder. Two complete print heads sit on the same beam, each with its own motor and its own belt, so either can move while the other sits parked at the end.</p>
+  <p>Compare that to the <strong>E3D Chimera</strong> in your current design, which is one block with two nozzles side by side, both always moving together. The idle nozzle drags over your print and dribbles on it. IDEX parks the idle nozzle off to the side instead, which is the main reason it gives cleaner dual-colour results.</p>
+  <p>IDEX also unlocks <strong>duplicate mode</strong>: both heads print the same object at the same time, two copies in the time of one. That's a genuine throughput win rather than a convenience.</p>
+  <p>The cost is beam length. Both heads need to reach the whole bed, and both need somewhere to park clear of it:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Measurement</th><th class="n">Value</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>Bed width</td><td class="n">235 mm</td><td>your existing bed</td></tr>
+      <tr><td>Carriage width</td><td class="n">65 mm</td><td>a compact direct-drive head</td></tr>
+      <tr><td>Travel needed</td><td class="n">385 mm</td><td>bed + both parking spots</td></tr>
+      <tr class="hi"><td>MGN12 rail length</td><td class="n">450 → buy 500 mm</td><td>your longest is 350 mm</td></tr>
+      <tr><td>X beam length</td><td class="n">~600 mm</td><td>plus both motor mounts</td></tr>
+      <tr><td>Build volume</td><td class="n">235 × 235 × 250</td><td>single head</td></tr>
+      <tr><td>Duplicate mode</td><td class="n">85 mm per copy</td><td>two at once</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Your 390 mm beam is simply too short for this. A ~600 mm length of 2040 or 2060 fixes it.</p>
+  <h3>Why direct drive was the right call</h3>
+  <p><strong>Direct drive</strong> means the motor that pushes filament sits on the moving head. <strong>Bowden</strong> means it sits on the frame and pushes filament down a long tube. Bowden gives a lighter head, but the filament squashes inside that tube like a spring, so when you command a retraction the nozzle responds late and vaguely.</p>
+  <p>For dual extrusion that matters more than usual, because precise retraction is exactly what stops the parked nozzle oozing. You chose direct drive, and Lesson 4 shows the mass penalty barely costs you anything once the brackets are aluminium. It's the right call.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 9</span>
+  <h2>Making the brackets: mill them, or buy them?</h2>
+  <p>Before the cost question, something that changes what "a stiff bracket" even means.</p>
+  <p>Take a 3 mm aluminium plate, 70 mm wide, sticking out 40 mm. Push on it two different ways:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>How the load hits it</th><th class="n">Stiffness</th></tr></thead>
+    <tbody>
+      <tr><td>Across the face — bending it like a diving board</td><td class="n">509 kN/m</td></tr>
+      <tr class="hi"><td>In the plate's own plane — pushing along it edge-on</td><td class="n">500× stiffer</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Same plate, same metal, same bolts. The only difference is which way the force arrives. Think of a sheet of paper: floppy flat, but almost impossible to squash edge-on.</p>
+  <div class="plain">
+    <span class="tag">So "aluminium bracket" was shorthand</span>
+    <p>What Lesson 4 really wants is <strong>a bracket that isn't loaded in bending</strong>. A cheap 3 mm bought plate, turned the right way, beats a thick milled block turned the wrong way. Orientation matters more than material or thickness.</p>
+    <p>Design every motor and idler mount so the belt pulls <em>along</em> the plate, not across it. Standard V-slot motor plates are already designed this way — the motor bolts to the face and the belt runs in the plate's plane. Use at least two bolts into the extrusion, with proper T-nuts; past that point the bolted joint is the limit, not the plate, which lands you around the 150 kN/m "aluminium" column.</p>
+  </div>
+
+  <h3>Now the cost question</h3>
+  <p>CNC Kitchen measured an A350 — <em>stiffer</em> than your A250 — cutting 4 mm aluminium at 250 mm/min with a 0.3 mm stepdown, with heavy chatter. Taking that as the optimistic case for a 70 × 40 × 6 mm bracket with six holes:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Step</th><th class="n">Time</th></tr></thead>
+    <tbody>
+      <tr><td>20 passes round the perimeter</td><td class="n">17.6 min</td></tr>
+      <tr><td>Six holes</td><td class="n">3.8 min</td></tr>
+      <tr><td>Workholding, probing, tool change, tabs, cleanup</td><td class="n">30 min</td></tr>
+      <tr class="hi"><td>Per bracket</td><td class="n">51 min, supervised</td></tr>
+      <tr class="hi"><td>Ten brackets</td><td class="n">8.6 hours</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="tbl">
+  <table>
+    <caption>Four ways to get ten brackets</caption>
+    <thead><tr><th>Option</th><th class="n">Parts cost</th><th class="n">Your time</th><th>Catch</th></tr></thead>
+    <tbody>
+      <tr><td>Mill on the Snapmaker</td><td class="n">~$100</td><td class="n">8.6 h</td><td>chatter finish, broken end mills, ten setups</td></tr>
+      <tr><td>Maker Store plates</td><td class="n">~$145</td><td class="n">0.5 h</td><td>dearest, but local and known to fit</td></tr>
+      <tr class="hi"><td>AliExpress plates</td><td class="n">~$55</td><td class="n">0.5 h</td><td>2–5 week shipping, QC lottery</td></tr>
+      <tr><td>Laser cut custom, AU</td><td class="n">~$160</td><td class="n">1.0 h</td><td>any shape, single piece, ~5 business days</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Milling costs roughly what the plates cost — the 6061 stock is ~$50 and you'll get through three or more carbide single-flute end mills at ~$15 each — and then asks for <strong>8.6 hours of supervised machine time</strong> on top, to produce parts with a worse finish and less accuracy than stamped plates. The A250 isn't rigid enough for aluminium to be pleasant; it's a job it can do, not one it's good at.</p>
+  <div class="plain">
+    <span class="tag">Answer</span>
+    <p><strong>Buy the plates and design around them.</strong> Your existing model already uses this ecosystem — Easy Build Plate 3×6, V-Slot Gantry Plate 20 mm, Threaded Rod Plate NEMA 17, Black Angle Corner Connector are all standard catalogue parts. Carry on doing that.</p>
+    <p>AliExpress for the standard shapes since it's your preference and it's a third of the price; order early and order spares, because the shipping is the real cost. Maker Store for anything you need this week or need to be certain fits.</p>
+    <p>For the two or three brackets where no standard plate works, <strong>draw them as flat 2D profiles and have them laser cut</strong> rather than milled. Ferracut in Dandenong takes DXF uploads and cuts aluminium up to 12 mm — about half an hour from you. A single-piece laser-cut bracket is stiffer than bolting two plates together, and you skip the 8.6 hours.</p>
+  </div>
+  <p>Keep the Snapmaker's CNC for one-offs you need the same day, and for the jobs it's genuinely good at — wood, acrylic, carbon fibre.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 10</span>
+  <h2>How it all bolts together — and where I had this wrong</h2>
+  <p>You pushed back on this and you were right. I went back into the assembly and read it properly this time: every occurrence, every transform, every fastener position. Several things I told you earlier were wrong, and the correction changes the whole recommendation.</p>
+
+  <div class="plain">
+    <span class="tag">Corrections</span>
+    <ul class="body">
+      <li>The assembly has <strong>294 occurrences</strong>, not 77. (77 is just the Frame's child count — I quoted a sub-total as the whole.)</li>
+      <li>It has <strong>153 fasteners</strong>, not 140.</li>
+      <li>It records <strong>2 joints and 4 rigid groups</strong> across all 294 occurrences, with <strong>0 user parameters</strong> and a 539-item timeline. Position is held by captured snapshots, not constraints.</li>
+      <li>And the big one: <strong>the upright feet are already reinforced.</strong> I said they weren't.</li>
+    </ul>
+  </div>
+
+  <h3>What the feet actually do</h3>
+  <p>Each upright is a 40 × 40 V-slot sitting on a 40 × 40 base rail, and each foot carries:</p>
+  <ul class="body">
+    <li><strong>4 × M5 blind screws</strong> up through the base rail's top wall into the four tapped bores of the upright — a 2 × 2 pattern at ±10 mm, which is exactly the 4040's four cell centres. All four are used.</li>
+    <li><strong>2 × 90° joining plates</strong> on the outer face, 4 mm thick, 10 M5 screws between them. All four plates in the design are at the upright feet — not "all up in the Z assembly" as I claimed.</li>
+  </ul>
+
+  <h3>Why blind joining is the strong option — your instinct was correct</h3>
+  <p>A bolted butt joint is not a hinge with a spring in it. Once the bolts are preloaded, the two end faces are clamped together, and the joint behaves as <em>effectively rigid</em> right up until the moment that tries to pull the faces apart exceeds the clamping force. That is called <em>gapping</em>, and until it happens the joint is as stiff as solid metal.</p>
+  <p>Four M5 bolts at ±10 mm, preloaded to even a conservative 2.5 kN each, resist gapping up to roughly <strong>130 N·m</strong>. The moment this machine actually applies at an upright foot — the toolhead at 1.42 kg accelerating hard, 350 mm up — is about <strong>3 N·m</strong>. You are a factor of forty inside the limit. The joint never gaps, never slips, and never becomes the floppy spring I modelled it as.</p>
+  <p>My earlier figure of 91 kN/m effectively modelled a <em>single centre bolt</em>. That is the case where blind joining is genuinely weak, and it is where the "always use corner brackets" folklore comes from. With all four bores used, it does not apply.</p>
+
+  <div class="tbl">
+  <table>
+    <caption>Same 40 × 40 uprights, 350 mm, four ways of fixing the bottom — corrected</caption>
+    <thead><tr><th>How the upright meets the base</th><th class="n">Pair stiffness</th><th class="n">X frequency</th><th class="n">Machine accel</th><th class="n">Gain</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><strong>4 blind bolts — what you drew</strong></td><td class="n">478 kN/m</td><td class="n">40.1 Hz</td><td class="n">3,546</td><td class="n">—</td></tr>
+      <tr><td>Plus a gusset on the loaded face</td><td class="n">636 kN/m</td><td class="n">41.0 Hz</td><td class="n">3,719</td><td class="n">+5%</td></tr>
+      <tr><td>Plus gussets on both loaded faces</td><td class="n">670 kN/m</td><td class="n">41.2 Hz</td><td class="n">3,747</td><td class="n">+6%</td></tr>
+      <tr class="dim"><td>A perfectly rigid, welded foot</td><td class="n">724 kN/m</td><td class="n">41.4 Hz</td><td class="n">3,787</td><td class="n">+7%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Read the last column. Even replacing the foot with a <em>weld</em> buys 7%. I previously told you this joint was worth +51% and that it outweighed everything in Lesson 5. <strong>It is worth almost nothing.</strong> Forget the eight corner brackets; do not buy them.</p>
+
+  <h3>So where does the speed actually go? Back to Lesson 2</h3>
+  <p>The floppiest spring wins, and once the foot is modelled correctly the floppiest spring is the one Lesson 4 already pointed at — <strong>the toolhead mount</strong>. A 576 g plate hanging off a <em>single</em> MGN12H block is roughly 141 kN/m, against 513 for the belt and 478 for the gantry. It is three times floppier than anything else in the chain, so it sets the answer on its own.</p>
+  <div class="tbl">
+  <table>
+    <caption>Changing the mount, with the foot left exactly as you drew it</caption>
+    <thead><tr><th>Toolhead build</th><th class="n">Mass</th><th class="n">X frequency</th><th class="n">Machine accel</th><th class="n">Gain</th></tr></thead>
+    <tbody>
+      <tr><td>1 × MGN12H + 576 g plate — as drawn</td><td class="n">1.42 kg</td><td class="n">40.1 Hz</td><td class="n">3,546</td><td class="n">—</td></tr>
+      <tr><td>2 × MGN12H, same heavy plate</td><td class="n">1.47 kg</td><td class="n">47.7 Hz</td><td class="n">5,019</td><td class="n">+42%</td></tr>
+      <tr><td>2 × MGN12H + 300 g aluminium plate</td><td class="n">1.14 kg</td><td class="n">54.1 Hz</td><td class="n">6,471</td><td class="n">+83%</td></tr>
+      <tr class="hi"><td><strong>2 × MGN12H, IDEX carriage ~900 g</strong></td><td class="n">0.90 kg</td><td class="n">60.9 Hz</td><td class="n">8,197</td><td class="n">+131%</td></tr>
+      <tr><td>2 × MGN12H, light IDEX ~750 g</td><td class="n">0.75 kg</td><td class="n">66.7 Hz</td><td class="n">9,836</td><td class="n">+177%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">The corrected headline</span>
+    <p>Adding a <strong>second MGN12H block</strong> under each carriage is worth <strong>+42% on its own</strong>, costs about $8, and needs no change to the frame at all. Every foot-related modification put together is worth 7%. <strong>Spend the effort on the carriage, not the corners.</strong></p>
+  </div>
+
+  <div class="plain">
+    <span class="tag">Which machine these numbers describe</span>
+    <p>Everything in this lesson is <strong>your existing design as drawn</strong> — the 1.42 kg Chimera head on one block. Lesson 4 costs the <em>rebuild</em>, with a 667 g IDEX carriage, and lands at 6,500 mm/s². In the rebuild the second block still helps X, but the machine is then limited by <strong>Y, the bed</strong>, so X gains past 6,500 are wasted. Fix the carriage because it is cheap and it unblocks X; after that, every further gain comes from the bed.</p>
+  </div>
+
+  <h3>Two things that are genuinely wrong at the feet</h3>
+  <p>The joint type is right. The detailing is not.</p>
+  <div class="tbl">
+  <table>
+    <caption>Thread engagement, M5 into 6063 aluminium (2.2 mm wall under the head)</caption>
+    <thead><tr><th>Screw</th><th class="n">Engagement</th><th class="n">Thread strip load</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>M5 × 8 — <strong>what the model uses</strong></td><td class="n">5.8 mm</td><td class="n">6.8 kN</td><td><span class="chip c-warn">too short</span> below the preload you want</td></tr>
+      <tr><td>M5 × 12</td><td class="n">9.8 mm</td><td class="n">11.5 kN</td><td>marginal — just under 2 × diameter</td></tr>
+      <tr class="hi"><td><strong>M5 × 16</strong></td><td class="n">13.8 mm</td><td class="n">16.3 kN</td><td><span class="chip c-good">correct</span> comfortably past 2 × diameter</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <ul class="body">
+    <li><strong>Every blind screw in the model is an M5 × 8.</strong> Through a 2.2 mm wall that leaves 5.8 mm of thread in aluminium — below the rule of thumb of two diameters, and below the preload the joint needs to stay clamped. Preload is the entire reason a blind joint is stiff, so this is the one detail that could turn your good joint into my bad one. <strong>Use M5 × 16 at the feet.</strong> It is the cheapest fix in this document.</li>
+    <li><strong>Both gussets are on the same face.</strong> They sit on the outer X face of each upright, so they resist the upright tipping in <em>Y</em>. The toolhead accelerates in <em>X</em>, which tips the uprights the other way — the plane the gussets do nothing for. They are not harmful and they help the Z-lift loads, but do not count them as X stiffness. Given the table above, it is not worth moving them.</li>
+  </ul>
+
+  <h3>What the model does not fasten at all</h3>
+  <p>The Frame (64 fasteners), X axis (43) and Z axis (40) are reasonably detailed. Two areas are not, so when you rebuild you will be designing these joints rather than copying them:</p>
+  <ul class="body">
+    <li><strong>The whole Y axis — zero fasteners.</strong> Not one screw in the entire sub-assembly: nothing holding the Y motor mount, the pulley bracket, the bed support plate, the MGN blocks or the bed-levelling hardware. Roughly 20 missing.</li>
+    <li><strong>The toolhead — four.</strong> Two M3 screws and two M3 nuts, inside one Titan. The carriage plate, both NEMA 17s and both extruder bodies are floating. Another 20 or so.</li>
+    <li><strong>The Z top motor has three M4 screws</strong>, where a NEMA 17 has four mounting holes.</li>
+  </ul>
+
+  <h3>Making it easier to assemble</h3>
+  <ul class="body">
+    <li><strong>Drop-in T-nuts everywhere. Never sliding ones.</strong> The single biggest assembly-ease win. A sliding T-nut has to be threaded in from the open end <em>before</em> you close that extrusion off — forget one and you dismantle the frame to add it. You already use 32 ball-spring nuts; replace the 10 sliding ones too.</li>
+    <li><strong>Buy M5 in 8, 12, 16 and 20 mm.</strong> M5 × 8 is right for a T-nut under a 3 mm plate and wrong for almost everything else. The feet need 16.</li>
+    <li><strong>Keep a ball-end hex driver.</strong> The blind screws go in down a long clearance hole inside the base rail's slot, at an angle a straight key will not reach.</li>
+    <li><strong>Build the X beam as a complete unit on the bench</strong> — rail, both carriages, both motors, idlers, belts — then lift it onto the Z carriages as one piece.</li>
+    <li><strong>Count your T-nuts into each extrusion before you close a corner.</strong> Write the number on masking tape. Add two spares per slot.</li>
+    <li><strong>Torque the blind screws properly, in a cross pattern</strong>, like a wheel. Preload is what makes this joint work; an under-torqued blind bolt really is the floppy hinge I wrongly described.</li>
+  </ul>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 11</span>
+  <h2>What to buy</h2>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Item</th><th class="n">Qty</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>V-slot motor + idler plates, bought not milled</td><td class="n">~10</td><td><strong>highest-value item</strong> — Lessons 2, 4 and 9. AliExpress; spares too</td></tr>
+      <tr><td>Standard NEMA 17</td><td class="n">1</td><td>you have 3 of the 4 standard motors needed</td></tr>
+      <tr><td>MGN12 rail, 500 mm</td><td class="n">1</td><td>the X axis; you already own the blocks</td></tr>
+      <tr><td>Control board with 6+ drivers — BTT Manta M8P + CB1</td><td class="n">1</td><td>board and computer in one, cheaper than separate</td></tr>
+      <tr><td>TMC2209 stepper drivers</td><td class="n">6</td><td>one per motor</td></tr>
+      <tr><td>24 V 500 W power supply</td><td class="n">1</td><td>Lesson 7</td></tr>
+      <tr><td>V6-class hotends</td><td class="n">2</td><td>IDEX needs two separate heads; a Chimera can't be split</td></tr>
+      <tr><td>GT2 belt, idlers, 20T pulley</td><td class="n">2nd set</td><td>the second X axis</td></tr>
+      <tr class="hi"><td>MGN12H carriage blocks — a second one per carriage</td><td class="n">2</td><td><strong>+42% acceleration on the machine as drawn</strong> — Lesson 10. About $8 each and no frame change</td></tr>
+      <tr class="hi"><td>M5 × 16 button screws, for the upright feet</td><td class="n">8</td><td>the model uses M5 × 8, which leaves only 5.8 mm of thread in aluminium — Lesson 10</td></tr>
+      <tr class="hi"><td>Drop-in / ball-spring M5 T-nuts</td><td class="n">60+</td><td>replaces the 10 sliding ones; buy well over what you count</td></tr>
+      <tr><td>M5 button screws — 8, 12, 16 and 20 mm</td><td class="n">assortment</td><td>8 mm alone will not reach through a bracket stack</td></tr>
+      <tr><td>2040 V-slot — <strong>480 mm</strong> X beam, base perimeter</td><td class="n">—</td><td>480 mm is derived in the model, not guessed — Lesson 13. Seconds from work; uprights you already have</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Surplus:</strong> the E3D Chimera is worth selling — it's the opposite of IDEX. So is the 576 g carriage plate.</p>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 12</span>
+  <h2>Build order, and the step people skip</h2>
+  <div class="tbl">
+  <table>
+    <thead><tr><th class="n">#</th><th>Step</th><th>Why here</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td>Frame — your 40×40 V-slot uprights, 2040 base, tied at the top, <strong>all four blind bores used at every foot, with M5 × 16, torqued in a cross pattern</strong></td><td>the blind joint is the right one; it just needs enough thread and enough preload — Lesson 10</td></tr>
+      <tr><td class="n">2</td><td>Belt-linked dual lead-screw Z, lifting the gantry</td><td>carries over from your design unchanged</td></tr>
+      <tr><td class="n">3</td><td>Bed carrier — bed straight onto the rail blocks</td><td>it's the limiting axis; fix it first</td></tr>
+      <tr><td class="n">4</td><td>X beam with <em>one</em> carriage, aluminium brackets</td><td>prove it as a single-extruder printer</td></tr>
+      <tr class="hi"><td class="n">5</td><td>Measure the resonance. Compare to this report.</td><td>the step people skip</td></tr>
+      <tr><td class="n">6</td><td>Second carriage, second hotend, IDEX config</td><td>only once step 5 agrees</td></tr>
+      <tr><td class="n">7</td><td>Nozzle offset calibration and prime tower tuning</td><td>the fiddliest part of commissioning</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Step 5 takes an hour. You stick an accelerometer on the head, the firmware shakes the axis and tells you its frequency. If it comes back well below the aluminium column, something is flexing that shouldn't be — and finding that with one carriage on the beam is far easier than with two.</p>
+  <h3>Three things that bite IDEX builds</h3>
+  <ul class="body">
+    <li><strong>The two carriages won't match.</strong> They sit at different distances from their motors, so their belts are different lengths and they ring at different frequencies. The firmware lets you set a different correction per carriage for X, but the Y setting must be identical for both. Keep the two belt paths as close to mirror images as you can.</li>
+    <li><strong>The parked nozzle still oozes</strong>, just away from your part. You'll want a prime tower — a small sacrificial pillar printed alongside, where each nozzle wipes itself clean before returning.</li>
+    <li><strong>Two nozzles means two sets of offsets.</strong> You probe with one head, then measure how far the second sits from it in X, Y and Z. Set aside an evening; this is the part that tests patience.</li>
+  </ul>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 13</span>
+  <h2>The model, rebuilt so it can actually be changed</h2>
+  <p>The old assembly could not be flexed. It had <strong>0 user parameters, 2 joints and 539 timeline items</strong> for 294 occurrences, with position held by captured snapshots instead of constraints — so changing one dimension changed nothing else. That blocks every other improvement in this document, so it was the first thing to fix.</p>
+  <p>There is now a new parametric frame model alongside it. The old one is untouched.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>&nbsp;</th><th class="n">Old assembly</th><th class="n">New frame model</th></tr></thead>
+    <tbody>
+      <tr><td>User parameters</td><td class="n">0</td><td class="n">18</td></tr>
+      <tr><td>Timeline items</td><td class="n">539</td><td class="n">16</td></tr>
+      <tr><td>Sketches fully constrained</td><td class="n">—</td><td class="n">8 of 8</td></tr>
+      <tr class="hi"><td>Change the build volume and the frame follows</td><td class="n">no</td><td class="n">yes</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The numbers that drive it</h3>
+  <p>You set the build volume; the frame sizes itself. The one worth understanding is the X beam, because IDEX is what makes it long:</p>
+  <p class="mono" style="font-size:0.95em"><code>x_beam_len = build_x + 2 × carriage_w + 2 × park_gap + 2 × end_allow</code></p>
+  <p>That is the build area, plus a whole carriage parked clear at each end, plus the gap that keeps a parked nozzle off your print, plus room for a motor and an idler. At 230 mm build it comes to <strong>480 mm</strong> — not the ~600 mm I guessed earlier. A 500 mm MGN12 rail fits it exactly.</p>
+  <p>This is the real cost of IDEX, and now you can see it move: widen a carriage from 60 to 75 mm and the beam grows to 510 mm and the whole frame with it. The other drivers are <code>build_y</code> (the frame is <code>2 × build_y + 60</code> deep, because a bedslinger needs to swing the bed its full depth), <code>upright_h</code>, and <code>p40</code> / <code>p20</code> for the profile faces.</p>
+
+  <h3>It uses your real V-slot profiles, not boxes</h3>
+  <p>Your hub already holds the genuine OpenBuilds V-slot parts, in the <code>Extrusion</code> folder of the old project. The problem is they're fixed lengths — 300, 350, 390 mm — and this frame needs 480, 500 and 530. So rather than insert a wrong-length bar, I took the <strong>real cross-section off the end face of each part</strong> and re-drew it natively, then extruded it to the parametric length.</p>
+  <p>You get the true profile — every slot, every internal web — with a length that still follows the parameters. The traced sections came out within <strong>0.003 mm²</strong> of the originals:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Profile</th><th class="n">Section area</th><th class="n">Curves traced</th><th>Tapped end bores</th></tr></thead>
+    <tbody>
+      <tr><td>40 × 40 V-slot</td><td class="n">458.46 mm²</td><td class="n">164</td><td><strong>four</strong>, Ø4.6, at (±10, ±10)</td></tr>
+      <tr><td>20 × 40 V-slot</td><td class="n">299.99 mm²</td><td class="n">112</td><td>two, Ø4.2, at (0, ±10)</td></tr>
+      <tr><td>20 × 20 V-slot</td><td class="n">171.40 mm²</td><td class="n">69</td><td><span class="chip c-warn">one</span>, Ø4.2, dead centre</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">The real geometry settles Lesson 10</span>
+    <p>The 4040's four bores sit at exactly <strong>(±10, ±10)</strong> — the 20 mm pattern the blind-joint calculation assumed, confirmed off your actual part rather than from a catalogue. Your uprights land on all four, which is why that joint is strong.</p>
+    <p>It also shows where blind joining <em>is</em> weak. The 2020 has a <strong>single central bore</strong> — that is precisely the one-bolt case my wrong 91 kN/m figure described. Blind-bolting a 2020 end gives you almost no moment resistance. On 2020 members, use a corner bracket; on the 4040 uprights, don't bother.</p>
+  </div>
+
+  <h3>How it holds together</h3>
+  <p>Fusion occurrence positions aren't parametric on their own — only lengths are. The first attempt proved it: driving the uprights to 620 mm grew them correctly but left the top tie stranded at its old height. So each real part is now fixed by a <strong>rigid joint</strong> to the parametric layout body underneath it. Move a parameter, the layout moves, the joints drag the real extrusions with them.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>&nbsp;</th><th class="n">Old assembly</th><th class="n">New model</th></tr></thead>
+    <tbody>
+      <tr><td>User parameters</td><td class="n">0</td><td class="n">29</td></tr>
+      <tr><td>Timeline items</td><td class="n">539</td><td class="n">83</td></tr>
+      <tr><td>Joints</td><td class="n">2</td><td class="n">10</td></tr>
+      <tr><td>Real extrusion parts</td><td class="n">—</td><td class="n">10 (4.48 kg)</td></tr>
+      <tr class="hi"><td>Change the build volume and the frame follows</td><td class="n">no</td><td class="n">yes</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>Verified by flexing, not by looking.</strong> Uprights to 620, build to 300 × 300, carriage to 80 — the extrusions changed length, the top tie rode up to 660–680, the envelope tracked every step, and everything returned exactly to 480 × 530 × 560 with a clean timeline. Worst placement error anywhere: <strong>0.010 mm</strong>, which is the rounding on the profile's outer corners.</p>
+  <p>Two things worth knowing about how it's built. The six profile sketches are <em>traced</em> real geometry, so they aren't dimensioned — position comes from the joints instead, which is why the layout bodies stay in the file (hidden). And the 20 × 40 members needed their joint angle set explicitly: a rigid joint between two flat faces picks its own rotation about the face normal, and on a non-square profile it lands 90° out.</p>
+
+  <h3>Organised by sub-assembly</h3>
+  <p>The model is now grouped the way the machine is built and the way Lesson 15 prices it: <strong>A &ndash; Frame</strong> (7 parts, 3.59 kg), <strong>B &ndash; X gantry</strong>, <strong>D &ndash; Y and bed</strong>, plus empty containers waiting for <strong>C &ndash; Toolhead A</strong>, <strong>C &ndash; Toolhead B</strong>, <strong>E &ndash; Z axis</strong> and <strong>G &ndash; Electronics</strong>. Two toolheads get separate components rather than one mirrored pair, because on an IDEX they genuinely differ &mdash; belt side, cable routing, park position.</p>
+  <p>Regrouping is the kind of change that quietly breaks a parametric model, so it was re-flexed afterwards: <code>upright_h</code> at 620, 440 and back to 500 moved the top tie to 660&ndash;680, 480&ndash;500 and 540&ndash;560, with the envelope tracking and a clean 100-item timeline. All ten rigid joints survived the move.</p>
+
+  <h3>What is not in it yet</h3>
+  <ul class="body">
+    <li><strong>Z axis</strong> — the belt-linked dual lead screw you want to keep, plus the Z rails and carriages.</li>
+    <li><strong>The two IDEX carriages</strong>, with two MGN12H blocks each — the change Lesson 10 says is worth +42%.</li>
+    <li><strong>Motors, belts, idlers and the bed-levelling hardware.</strong></li>
+    <li><strong>Nothing was changed in your original.</strong> It was opened read-only throughout.</li>
+  </ul>
+  <div class="plain">
+    <span class="tag">Saved</span>
+    <p>It is now in your hub as <strong>IDEX Frame &ndash; Parametric Rebuild</strong>, in the Dual 3D Printer project, alongside the original. Lesson 14 covers what happens to it next.</p>
+  </div>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 14</span>
+  <h2>Making it real: STEP parts, and the mass error that hid in plain sight</h2>
+  <p>The frame model is saved and parametric. The next job is replacing the remaining blocks with real parts — and that turned up a mistake worth leading with.</p>
+
+  <div class="plain">
+    <span class="tag">Correction — the frame is 4.5 kg, not 13 kg</span>
+    <p>Every component in the new model inherited Fusion's default material, <strong>Steel</strong>. The geometry was right; the density was 7,850 kg/m³ instead of 2,700. That inflated the frame by a factor of 2.9 — the 12.99 kg I quoted was really <strong>4.48 kg</strong>.</p>
+    <p>It did not touch any acceleration figure, because those are driven by the <em>toolhead</em> mass, which came from the old assembly. But it would have poisoned every mass number from here on. It is now Aluminum 6061 throughout, and it checks out: the 2020 reads <strong>0.463 kg/m</strong> against OpenBuilds' published 0.47.</p>
+  </div>
+
+  <h3>The layout skeleton weighed 144 kg</h3>
+  <p>The hidden layout bodies — the parametric jig the real parts are jointed to — were steel too, and being blocks rather than profiles they came to <strong>143.8 kg</strong>. Any mass query on the assembly was meaningless.</p>
+  <p>A jig should not weigh anything, so it now carries a one-off material, <em>LAYOUT – massless</em>, at 1 kg/m³. The whole skeleton is 18 g: visible to joints, invisible to the scales. This is the cheap version of the right answer — the pure fix is parameter-driven construction planes with joint origins on them, which carry no mass at all, but that is a rebuild of all ten joints for 18 g.</p>
+
+  <h3>Seven rules I am building the rest to</h3>
+  <ol class="body">
+    <li><strong>Use STEP for shape, never for mass.</strong> A stepper motor STEP file is a block with a shaft. It has no iron, copper or magnet inside, so its computed mass is pure fiction. Import the shape, then override the component mass with the datasheet figure. Same for the hotend and the heated bed. This is free and it is the single biggest accuracy gain available.</li>
+    <li><strong>Link parts, don't paste them.</strong> Insert from the hub as a linked external component. One update fixes every instance, the timeline stays short, and the file stays small.</li>
+    <li><strong>Watch the triangle count.</strong> The E3D V6 STEP in your Drive is <strong>51 MB</strong>. A hotend at full fidelity will make the assembly crawl. Use it once to check clearances, then substitute a simplified body with the real mass.</li>
+    <li><strong>STEP has no parameters — so cut it.</strong> A STEP rail is one fixed length. Insert it and add a parametric cut at the end, which is what happens in reality anyway. Don't re-trace it the way I did for the extrusions; that was only necessary because no 480 mm part existed.</li>
+    <li><strong>Don't model 153 fasteners as solids.</strong> They contribute nothing to stiffness and bloat everything. Model <em>one of each type</em>, properly, so the bill of materials is real and screw length is checkable — which is exactly how the M5 × 8 defect in Lesson 10 was found — and leave the rest as holes.</li>
+    <li><strong>Re-joint part-to-part once positions settle.</strong> Everything currently hangs off the layout. That is right for a skeleton, but it means the model cannot tell you whether two parts actually touch. Joint the real parts to each other and interference checks start meaning something.</li>
+    <li><strong>Appearances last, but do them.</strong> Anodised grey for extrusion, raw aluminium for plates, steel for rails and fasteners. Five minutes, and it is the difference between a screenshot you can read and a black silhouette.</li>
+  </ol>
+
+  <h3>Where the CAD comes from — nearly all of it is free</h3>
+  <p>I searched your PC, your Drive and your Fusion hub. The <strong>OpenBuilds STEP Parts Library 1.5</strong> is already sitting in your Drive, alongside the various-hardware set and a lot of loose STEP. These are <em>standard models</em>, not parts you own — they save drawing time, not money. What the parts actually cost is Lesson 15.</p>
+  <div class="tbl">
+  <table>
+    <caption>Sourcing the CAD, not the parts</caption>
+    <thead><tr><th>Part</th><th>Where it comes from</th><th class="n">Cost</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>NEMA 17 stepper</td><td><code>Nema 17 Stepper Motor.step</code> — your Drive, OpenBuilds library</td><td class="n">free</td></tr>
+      <tr class="hi"><td>8 mm lead screw + ACME nut block</td><td><code>8mm x 500mm lead screw.stp</code>, <code>8mm Acme Anti Backlash Nut Block.step</code> — your Drive</td><td class="n">free</td></tr>
+      <tr class="hi"><td>GT2 20T pulley and idlers</td><td><code>GT2_20T_5mmBore_10mmBelt v3.f3d</code> — native Fusion, better than STEP</td><td class="n">free</td></tr>
+      <tr class="hi"><td>NEMA 17 motor mount plate</td><td><code>Motor Mount Plate Nema 17.step</code> — your Drive</td><td class="n">free</td></tr>
+      <tr class="hi"><td>Corner connectors, threaded-rod plates</td><td><code>Black Angle Corner Connector.stp</code> — your Drive. Needed for the <em>2020</em> ends, per Lesson 13</td><td class="n">free</td></tr>
+      <tr><td>E3D V6 hotend</td><td><code>V6_BETA2_Apr2025.step</code> — your Drive. Simplify on import, see rule 3</td><td class="n">free</td></tr>
+      <tr><td>Titan extruders, V-slot, plates</td><td>already in your Fusion hub, from the original assembly</td><td class="n">free</td></tr>
+      <tr><td>M5 screws, T-nuts, bearings</td><td><strong>Fusion's built-in McMaster-Carr insert</strong> — real geometry, correct threads, in-app, no download</td><td class="n">free</td></tr>
+      <tr class="hi"><td>MGN12 rail + MGN12H block</td><td>the one real gap. Check your hub's <em>Rails</em> folder first; otherwise the free dimensionally-accurate STEP on MakerWorld, or HIWIN's own CAD portal</td><td class="n">free</td></tr>
+      <tr><td>Heated bed, bed carrier plate</td><td>don't source these — they are flat plates. Model them, and override the bed's mass to the real figure</td><td class="n">—</td></tr>
+      <tr><td>Flexible coupler, KFL08 bearing block</td><td>TraceParts or GrabCAD if not in the OpenBuilds set</td><td class="n">free</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>No CAD on that list costs money. The only genuine gap is the MGN12 pair, and a free accurate STEP exists for it — HIWIN's own files are famously over-detailed, so the community redraw is arguably the better choice here under rule 3.</p>
+
+  <div class="plain">
+    <span class="tag">One thing the picture shows that the numbers didn't</span>
+    <p>With the frame rendered properly, the <strong>X beam sits at z 120</strong> — below the bed, passing straight through it. That is not a modelling bug; it is where the current parameters put it, because the Z axis does not exist yet to carry it. It resolves when the Z carriages go in, but it is worth knowing the frame model is not yet a buildable machine.</p>
+  </div>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 15</span>
+  <h2>The bill of materials — every major part, priced</h2>
+  <p>Grouped by sub-assembly, because that is how the machine gets built and how the model should be organised. Quantities come from the parametric model, not from guesswork. Prices are <strong>AUD including GST</strong>, read live from each supplier on <strong>11 November 2026</strong>.</p>
+
+  <div class="plain">
+    <span class="tag">How to read the price column</span>
+    <p><span class="chip c-good">verified</span> means I read the price and stock off the supplier's own live product data. <span class="chip c-warn">estimate</span> means I could not get a firm figure and the number is my own — treat those as placeholders, not quotes. Nothing here is a quote; stock moves.</p>
+  </div>
+
+  <h3>A — Frame · $238</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>4040 V-slot black — 2 × 500 uprights, 2 × 530 base rails (2.06 m)</td><td class="n">1</td><td class="n">$90.00</td><td class="n">$90.00</td><td><a href="https://rmcomponents.com.au/products/copy-of-2020-silver-t-slot-aluminium-profile-20-series">RM Components</a> · 458.5 mm², 1.24 kg/m <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>2040 V-slot black — 2 × 480 top tie &amp; X beam, 2 × 400 base cross (1.76 m)</td><td class="n">1</td><td class="n">$40.00</td><td class="n">$40.00</td><td><a href="https://rmcomponents.com.au/products/2040-black-v-slot-aluminium-profile-20-series">RM Components</a> · 300.0 mm² <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>2020 V-slot black — 2 × 530 bed rails (1.06 m)</td><td class="n">1</td><td class="n">$15.00</td><td class="n">$15.00</td><td><a href="https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series">RM Components</a> · 171.4 mm², 0.463 kg/m <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>M5 drop-in T-nuts, 20 pc</td><td class="n">4</td><td class="n">$8.00</td><td class="n">$32.00</td><td><a href="https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts">DREMC</a> · hammer-head, in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Angle corner connector — <em>2020 ends only</em>, per Lesson 13</td><td class="n">8</td><td class="n">$4.50</td><td class="n">$36.00</td><td>the 2020's single central bore needs one; the 4040 feet do not <span class="chip c-warn">estimate</span></td></tr>
+      <tr class="hi"><td>M5 button screws — 8, 12, <strong>16</strong> and 20 mm</td><td class="n">1</td><td class="n">$25.00</td><td class="n">$25.00</td><td>the feet need 16 mm, per Lesson 10 <span class="chip c-warn">estimate</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>B — X gantry and IDEX carriages · $252</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>MGN12H rail + 1 carriage, <strong>500 mm</strong>, Z1 preload, stainless</td><td class="n">1</td><td class="n">$85.45</td><td class="n">$85.45</td><td><a href="https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage">DREMC / LDO SLR12H</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr class="hi"><td>Extra MGN12H carriage blocks — 2 per carriage is the <strong>+42%</strong> change</td><td class="n">3</td><td class="n">$15.00</td><td class="n">$45.00</td><td>AliExpress — see the warning below <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>NEMA 17, 48 mm, 2.5 A — one per toolhead</td><td class="n">2</td><td class="n">$34.95</td><td class="n">$69.90</td><td><a href="https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac">DREMC / LDO 42STH48-2504AC</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Gates 2GT 20T pulley, 5 mm bore, 6 mm belt</td><td class="n">2</td><td class="n">$11.00</td><td class="n">$22.00</td><td><a href="https://store.dremc.com.au/products/ldo-2gt-pulleys">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Gates 2GT 20T toothed idler, 6 mm, 5 mm ID</td><td class="n">4</td><td class="n">$7.45</td><td class="n">$29.80</td><td><a href="https://store.dremc.com.au/products/ldo-gt2-2gt-20t-toothed-idler-6mm-wide">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">Correction to Lesson 10 — the $8 block</span>
+    <p>Lesson 10 says a second MGN12H block is "about $8". That is an <strong>AliExpress</strong> price. At Australian retail the only bare MGN12H block I found is the <a href="https://store.dremc.com.au/products/hiwin-mgn12h-carriage-block">HIWIN Precision H at $105</a>, and it is out of stock. The +42% is still the best value change on the machine, but buy the blocks overseas or buy whole rail-and-carriage sets at $85 each. <strong>The gain is real; the $8 is not an Australian price.</strong></p>
+  </div>
+
+  <h3>C — Toolheads (× 2) · $361</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>V6 hotend, pre-assembled, 24 V</td><td class="n">2</td><td class="n">$45.00</td><td class="n">$90.00</td><td><a href="https://store.dremc.com.au/products/v6-hotend-pre-assembled-compatible-for-prusa-i3-mk3-s-trianglelab">DREMC / Trianglelab</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr class="hi"><td>Orbiter v2.5 extruder, motor included — <strong>~140 g vs the Titan's ~350 g</strong></td><td class="n">2</td><td class="n">$105.45</td><td class="n">$210.90</td><td><a href="https://store.dremc.com.au/products/ldo-orbiter-v2-5-extruder">DREMC / LDO</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>5015 blower fan 24 V — part cooling</td><td class="n">2</td><td class="n">$19.50</td><td class="n">$39.00</td><td><a href="https://store.dremc.com.au/products/5015-24v-blower-fan-by-dremc">DREMC</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>4010 axial fan 24 V — heatsink</td><td class="n">2</td><td class="n">$8.00</td><td class="n">$16.00</td><td>DREMC universal fan kit <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>ADXL345 accelerometer — input shaping, moved between heads</td><td class="n">1</td><td class="n">$4.95</td><td class="n">$4.95</td><td><a href="https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291">DREMC</a> <span class="chip c-good">verified</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The extruder choice is the whole argument of Lesson 10 turned into a purchase. Your Titans are heavy and sit on the moving head; an Orbiter is roughly 200 g lighter <em>each</em>, which is most of the way from the 1.42 kg head to the ~900 g one worth <strong>+131%</strong>. Sell the Titans and the Chimera.</p>
+
+  <h3>D — Y axis and bed · $290</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>MGN12H rail + carriage, <strong>350 mm</strong>, Z1</td><td class="n">2</td><td class="n">$65.45</td><td class="n">$130.90</td><td><a href="https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage">DREMC / LDO</a> · 235 travel + block + margin <span class="chip c-good">verified</span></td></tr>
+      <tr><td>NEMA 17, 48 mm, 2.5 A</td><td class="n">1</td><td class="n">$34.95</td><td class="n">$34.95</td><td><a href="https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Aluminium heated bed kit, 235 × 235, 24 V</td><td class="n">1</td><td class="n">$49.95</td><td class="n">$49.95</td><td><a href="https://store.dremc.com.au/products/creality-heated-hot-bed-kit-for-ender-3-series">DREMC / Creality legacy Ender 3</a> · <span class="chip c-cold">out of stock</span> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Magnetic sheet 235 × 235, high-temp 3M adhesive</td><td class="n">1</td><td class="n">$11.95</td><td class="n">$11.95</td><td><a href="https://store.dremc.com.au/products/magnetic-sheet-with-3m-adhesive">DREMC</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Light Satin PEI spring steel plate, 235 × 235</td><td class="n">1</td><td class="n">$36.45</td><td class="n">$36.45</td><td><a href="https://store.dremc.com.au/products/dremc-light-satin-pei-spring-steel-build-plate-3d-printers">DREMC</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>2GT 20T pulley + 2 toothed idlers</td><td class="n">1</td><td class="n">$25.90</td><td class="n">$25.90</td><td>DREMC / LDO, as above <span class="chip c-good">verified</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The bed kit is the one line with no in-stock Australian source today. Both DREMC options are out of stock; <a href="https://www.jaycar.com.au/replacement-hot-bed-plate-kit-for-ender-3-v3-ke-and-se/p/001074">Jaycar lists an equivalent</a> around $58 but blocked me from reading the page, so check it yourself. The 235 × 235 Ender-3 bed is the right size and by far the cheapest way to get a 24 V bed of this footprint.</p>
+
+  <h3>E — Z axis, belt-linked dual lead screw · $294</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>TR8 lead screw / ACME, 500 mm</td><td class="n">2</td><td class="n">$27.50</td><td class="n">$55.00</td><td><a href="https://rmcomponents.com.au/products/copy-of-t8-8mm-lead-screw-please-select-the-length-you-require-1">RM Components</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>POM anti-backlash nut, TR8×8</td><td class="n">2</td><td class="n">$5.55</td><td class="n">$11.10</td><td><a href="https://store.dremc.com.au/products/dremc-pom-lead-screw-nuts-with-anti-backlash-nut">DREMC</a> · square or rounded <span class="chip c-good">verified</span></td></tr>
+      <tr><td>MGN12H rail + carriage, <strong>400 mm</strong>, Z1 — on the upright inner faces</td><td class="n">2</td><td class="n">$69.45</td><td class="n">$138.90</td><td><a href="https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>NEMA 17 — one motor drives both screws</td><td class="n">1</td><td class="n">$34.95</td><td class="n">$34.95</td><td><a href="https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>2GT 20T pulley, <strong>8 mm bore</strong> — one on each screw</td><td class="n">2</td><td class="n">$11.00</td><td class="n">$22.00</td><td><a href="https://store.dremc.com.au/products/ldo-2gt-pulleys">DREMC / LDO</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>2GT 20T pulley, 5 mm bore — on the motor</td><td class="n">1</td><td class="n">$11.00</td><td class="n">$11.00</td><td>as above <span class="chip c-good">verified</span></td></tr>
+      <tr><td>2GT 20T toothed idler — belt-link tensioning</td><td class="n">2</td><td class="n">$7.45</td><td class="n">$14.90</td><td>as above <span class="chip c-good">verified</span></td></tr>
+      <tr><td>F688Z flange bearing 8×16×5 (2 pc) — screw top support</td><td class="n">1</td><td class="n">$6.00</td><td class="n">$6.00</td><td><a href="https://store.dremc.com.au/products/f688z-flange-deep-groove-ball-bearing-8x16x5mm">DREMC</a> <span class="chip c-good">verified</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Belt-linking the two screws off one motor is the layout you said you like, and it is the right call: it costs one motor and one driver rather than two, and it cannot lose sync the way two independent Z motors can.</p>
+
+  <h3>F — Belt stock · $59</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>Gates Powergrip RF 2GT, 6 mm wide, <strong>6 m</strong> — covers X × 2, Y and the Z link</td><td class="n">1</td><td class="n">$59.00</td><td class="n">$59.00</td><td><a href="https://store.dremc.com.au/products/gates-powergrip®-rf-2gt-6mm-timing-belt">DREMC / Gates</a> · 2 m $23, 6 m $59, 10 m $89 <span class="chip c-good">verified</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The 2 m roll is $23 but the two X loops alone are about 2.2 m. Buy the 6 m; genuine Gates reinforced belt is one of the few places where the brand genuinely matters at speed.</p>
+
+  <h3>G — Electronics · $440</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Unit</th><th class="n">Line</th><th>Source &amp; spec</th></tr></thead>
+    <tbody>
+      <tr><td>BTT Manta M8P v2.0 — 8 driver slots, STM32H723</td><td class="n">1</td><td class="n">$145.00</td><td class="n">$145.00</td><td><a href="https://store.dremc.com.au/products/bigtreetech-manta-m8p-control-board-klipper-v2-0">DREMC</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>CB1 or Raspberry Pi CM4 — the Manta needs one to run Klipper</td><td class="n">1</td><td class="n">$45.00</td><td class="n">$45.00</td><td><span class="chip c-cold">not stocked at DREMC</span> — source separately, or use a standalone Pi over USB <span class="chip c-warn">estimate</span></td></tr>
+      <tr><td>TMC2209 V1.3 drivers, 8-pack</td><td class="n">1</td><td class="n">$79.45</td><td class="n">$79.45</td><td><a href="https://store.dremc.com.au/products/bigtreetech-tmc2209-v1-3-stepper-motor-driver">DREMC</a> · 5-pack $49.45, 8-pack $79.45 <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Mean Well LRS-350-24 — 24 V, 14.6 A, 350 W</td><td class="n">1</td><td class="n">$74.65</td><td class="n">$74.65</td><td><a href="https://store.dremc.com.au/products/mean-well-lrs-350-24-24v-350w-power-supply">DREMC</a> · in stock <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Omron D2F-5L endstop switch</td><td class="n">3</td><td class="n">$5.45</td><td class="n">$16.35</td><td><a href="https://store.dremc.com.au/products/omron-d2f-5l-switch">DREMC</a> <span class="chip c-good">verified</span></td></tr>
+      <tr><td>Wiring, Wago blocks, ferrules, IEC inlet, drag chain</td><td class="n">1</td><td class="n">$80.00</td><td class="n">$80.00</td><td>not itemised yet <span class="chip c-warn">estimate</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">Six motors, eight slots</span>
+    <p>IDEX needs <strong>six</strong> steppers: X1, X2, Y, Z (one motor, belt-linked to both screws) and two extruders. The M8P v2.0 has eight driver slots, so there is room for a second Z motor later if you ever abandon the belt link. Six 2209s would be a 5-pack plus a single; the 8-pack is $19 more and leaves spares, which is the better buy.</p>
+  </div>
+
+  <h3>What it comes to</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Sub-assembly</th><th class="n">Subtotal</th><th>Confidence</th></tr></thead>
+    <tbody>
+      <tr><td>A — Frame</td><td class="n">$238</td><td>mostly estimated; extrusion is priced by length</td></tr>
+      <tr><td>B — X gantry and IDEX carriages</td><td class="n">$252</td><td>verified except the extra rail blocks</td></tr>
+      <tr><td>C — Toolheads (× 2)</td><td class="n">$361</td><td>verified</td></tr>
+      <tr><td>D — Y axis and bed</td><td class="n">$290</td><td>verified; bed out of stock</td></tr>
+      <tr><td>E — Z axis</td><td class="n">$294</td><td>verified</td></tr>
+      <tr><td>F — Belt stock</td><td class="n">$59</td><td>verified</td></tr>
+      <tr><td>G — Electronics</td><td class="n">$440</td><td>verified except the CB1 and wiring</td></tr>
+      <tr class="hi"><td><strong>Total</strong></td><td class="n"><strong>$1,934</strong></td><td>AUD inc. GST, 11 Nov 2026</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Call it <strong>$1,900 to $2,100</strong> once the estimated lines firm up. Anything you already have — extrusion, motors, rails, fasteners — comes straight off the top, and the frame and electronics groups are where most of that would land.</p>
+
+  <div class="plain">
+    <span class="tag">What this BOM does not yet cover</span>
+    <ul class="body">
+      <li><strong>Every screw and T-nut.</strong> The counts exist in the old model (153 fasteners) but they are not priced individually; the frame group carries a single assortment line instead.</li>
+      <li><strong>Printed parts.</strong> Motor mounts, idler brackets, belt clamps, the carriage bodies, the Z nut blocks. Free to make, but they have to be designed — that is the next modelling job, not a purchase.</li>
+      <li><strong>Bed levelling.</strong> Springs or silicone spacers, and a probe if you want mesh levelling. A Cartographer v4 is $75.45 if you do.</li>
+      <li><strong>The enclosure</strong>, if you want ABS later.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Reference</span>
+  <h2>Glossary</h2>
+  <dl class="gloss">
+    <div><dt>Back-EMF</dt><dd>Voltage a spinning motor generates against its own supply. Rises with speed; when it meets the supply voltage, the motor stops making torque.</dd></div>
+    <div><dt>Bedslinger</dt><dd>A printer where the bed moves back and forth for the Y axis, rather than the head. Cheap, and what you drew.</dd></div>
+    <div><dt>Bowden</dt><dd>Filament drive mounted on the frame, pushing through a tube to the nozzle. Light head, vague retraction.</dd></div>
+    <div><dt>Direct drive</dt><dd>Filament drive mounted on the moving head. Heavier, but crisp retraction.</dd></div>
+    <div><dt>Duplicate mode</dt><dd>Both IDEX heads printing the same part simultaneously — two copies in one print time.</dd></div>
+    <div><dt>GT2</dt><dd>The standard toothed belt profile for printers, 2 mm between teeth.</dd></div>
+    <div><dt>IDEX</dt><dd>Independent Dual EXtruder. Two heads on one beam, each moving separately.</dd></div>
+    <div><dt>Input shaping</dt><dd>Firmware splitting a sharp move into two timed nudges that cancel each other's ringing.</dd></div>
+    <div><dt>Klipper</dt><dd>Printer firmware that runs on a small Linux computer. Does the maths for input shaping; the reason high speeds are achievable at all.</dd></div>
+    <div><dt>MGN12</dt><dd>A 12 mm steel linear rail with a ball-bearing block riding on it. Far more rigid than plastic wheels.</dd></div>
+    <div><dt>NEMA 17 / 23</dt><dd>Motor mounting standards — a 42 mm or 57 mm square faceplate. Says nothing about power.</dd></div>
+    <div><dt>Natural frequency</dt><dd>The rate a structure wobbles at when disturbed. Higher is better. Set by stiffness ÷ mass.</dd></div>
+    <div><dt>Newton-metre (Nm)</dt><dd>Unit of twisting force. Roughly: holding a 100 g apple on the end of a 1 m stick.</dd></div>
+    <div><dt>Resonance / ringing</dt><dd>The visible echo after a sharp corner, caused by the head still wobbling.</dd></div>
+    <div><dt>Second moment of area (I)</dt><dd>How a beam's metal is distributed about its bending axis, in cm⁴. Bigger means stiffer. Material far from the centre counts hugely more.</dd></div>
+    <div><dt>Springs in series</dt><dd>Springs in a chain. The floppiest one dominates the result.</dd></div>
+    <div><dt>Stiffness (k)</dt><dd>Force needed per unit of deflection, in N/m. Bigger means more rigid.</dd></div>
+    <div><dt>TMC2209</dt><dd>A common, cheap, quiet stepper driver chip. Comfortable up to about 2 A.</dd></div>
+    <div><dt>T-slot / V-slot</dt><dd>Two extrusion groove shapes. V-slot's angled groove also acts as a wheel track; T-slot doesn't. With linear rails you don't need either, so it's about reusability.</dd></div>
+  </dl>
+</section>
+
+<footer>
+  Workings — torque at a GT2 20T pitch radius of 6.366 mm, rotor inertia 54 g·cm², 90% drivetrain efficiency · resonance from belt stiffness ≈ 400 kN/m in series with bracket stiffness of 25 / 60 / 150 kN/m for printed, ribbed and aluminium, and with frame stiffness from 48EI/L³ (beam) and 3EI/L³ (upright) at E = 69 GPa · acceleration ceiling ≈ f² × 0.022 · back-EMF at Ke ≈ 0.35 V/(rad/s) · model validated against a measured Ender 3 at ~32 Hz.<br>
+  References — Zidex (drdflo.com), Ashtar K/D (xyzdims.com), Sigron IDEX (OpenBuilds), Klipper dual_carriage and Resonance Compensation documentation.
+</footer>
+</div>
