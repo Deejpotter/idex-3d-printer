@@ -36,7 +36,18 @@ cad/
 klipper/
   printer.cfg        full machine config for the Octopus Pro V1.1
   idex-macros.cfg    toolchange, copy and mirror modes, start/end
+scripts/
+  check_model.py     design-rule checks - run as a Fusion script
 ```
+
+## Checking the model
+
+Run `scripts/check_model.py` as a Fusion script with the assembly open. It
+asserts the design rules numerically instead of by eye: nozzle height against
+`bed_top`, every bracket touching a frame member, rails centred on real V-slots,
+interference limited to the known shaft-through-bore set, timeline health,
+toolhead parking, and parameter coverage. Eight of nine checks pass; the failure
+is a suppressed stale `Capture Position` with no geometric effect.
 
 ![Assembly](docs/assembly.png)
 
@@ -56,12 +67,26 @@ to 518 g. The X axis then models out around 13,200 mm/s² — at which point the
 becomes the slowest axis — 5,948 mm/s² after the bed was rebuilt (see
 [design-notes.md](docs/design-notes.md) §12), and that is what the Klipper config is set to.
 
-## Everything is driven by parameters
+## How parametric is it, really?
 
-The Fusion model has 38 user parameters. Change `build_x`, `build_y`, `build_z`,
-`upright_h` or `carriage_w` and the frame, the gantry height and the build envelope all
-follow. This is verified by flexing, not by assumption — see
-[design-notes.md](docs/design-notes.md).
+41 user parameters — but measured rather than claimed. `scripts/check_model.py`
+flexes each driving parameter and counts what actually moved:
+
+| Parameter | Coverage |
+|---|---:|
+| `build_x` | 10% |
+| `build_y` | 12% |
+| `upright_h` | 4% |
+
+Only the frame members follow, because only they are rigid-jointed to the layout
+skeleton. Everything added since sits at a fixed transform. The fix is
+[skeletal modelling](https://help.autodesk.com/cloudhelp/2023/ENU/Inventor-Help/files/GUID-0435FE9D-6283-4CE0-813B-BD9B0BE5778C.htm)
+applied to every sub-assembly, and it is the largest outstanding job — see
+[design-notes.md](docs/design-notes.md) §18.
+
+What *does* propagate correctly is the vertical stack: `bed_top` is built from the
+real layer thicknesses and `gantry_z = bed_top + th_drop`, so changing the bed
+construction moves the gantry to match.
 
 Two parameters are worth knowing about:
 

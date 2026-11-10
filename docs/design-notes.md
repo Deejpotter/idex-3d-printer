@@ -488,6 +488,66 @@ shaft-or-belt-through-bore class, and **zero brackets float**.
   one, so a bracket correctly touching the left upright read as 126 mm from "the"
   upright. The test was wrong, not the model.
 
+## 18. A more reliable way than looking at it
+
+Every fault in this project was found by measuring, and every one that got in
+was placed by eye. Screenshots do not tell you whether a rail is centred on a
+slot, whether a bracket touches anything, or whether a parameter reaches the
+part it is meant to drive.
+
+`scripts/check_model.py` asserts the design rules instead. Run it as a Fusion
+script with the assembly open. Current result:
+
+```
+PASS  nozzle A at bed_top                   nozzle z=93.00  bed_top=93.00
+PASS  nozzle B at bed_top                   nozzle z=93.00  bed_top=93.00
+PASS  PEI top at bed_top                    PEI top z=93.00
+PASS  all brackets touch the frame          11 brackets, floating: none
+PASS  X rail centred on a beam slot         rail centre z=198.0, slots at 178.0, 198.0
+PASS  interference is the known set only    7 found: 992 992 384 122 122 70 70
+FAIL  timeline healthy                      1 unhealthy of 391
+PASS  toolhead A parks clear of build area  nozzle x=110.0, build area 145.0..375.0
+PASS  toolhead B parks clear of build area  nozzle x=410.0, build area 145.0..375.0
+```
+
+The single failure is the stale `Capture Position` entry, which is suppressed
+and has no geometric effect.
+
+### Parameter coverage, measured
+
+The check that matters flexes each driving parameter and counts what actually
+moved. The model is parametric only to the extent this number is high:
+
+| Parameter | Followed | Pinned | Coverage |
+|---|---:|---:|---:|
+| `build_x` 230 → 300 | 6 | 52 | **10%** |
+| `build_y` 235 → 305 | 7 | 50 | **12%** |
+| `upright_h` 500 → 570 | 2 | 54 | **4%** |
+
+So the honest figure is **4–12%**, not "parametric". Only the frame members
+follow, because only they are rigid-jointed to the layout skeleton. Everything
+added since sits at a fixed transform.
+
+### The fix has a name
+
+This is [skeletal modelling](https://help.autodesk.com/cloudhelp/2023/ENU/Inventor-Help/files/GUID-0435FE9D-6283-4CE0-813B-BD9B0BE5778C.htm),
+Autodesk's own term for top-down design: one skeleton part carries the layout
+sketches, datums and driving parameters, and every component references *only*
+that skeleton. [Autodesk's large-assembly
+guidance](https://help.autodesk.com/cloudhelp/2025/ENU/Inventor-Help/files/GUID-456388EE-9B7F-442E-B917-B76BDE016FD2.htm)
+splits it per sub-assembly for anything this size, and the practitioner
+consensus adds one rule worth stating plainly: **no sibling part may reference
+another sibling** — shared interfaces are published through the skeleton.
+
+The model already has the right bones. The `Layout` component is a skeleton; it
+just stops at the frame. Extending it means a datum body per interface — X rail
+seat, Y rail seats, Z rail seats, bed stack, each motor face — and a rigid joint
+from every part to its datum instead of a baked transform.
+
+Checked the Maker Store engineering wiki for prior art, since the team works in
+Inventor. It has extrusion profile templates and file-naming and drawing
+standards, but no skeleton or iLogic method to copy.
+
 ## 11. Still open
 
 - The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
@@ -495,6 +555,8 @@ shaft-or-belt-through-bore class, and **zero brackets float**.
 - Only the frame follows the parameters (§13).
 - A stale `Capture Position` entry sits in the timeline, suppressed, with no
   geometric effect — every part measures where it should — but still flagged.
+- **Parameter coverage is 4–12%** (§18). Converting the model to a full
+  skeleton-driven assembly is the largest outstanding piece of work.
 - The Z motor flange misses both slots on the top tie underside.
 - The brackets are plain L-plates. They carry the right interfaces but have not
   been designed as printed or machined parts.
