@@ -29,10 +29,14 @@ Result:
 |---|---|---|---|
 | Original: 1 block, 1.42 kg toolhead | 1.42 kg | 40.0 Hz | 3,541 mm/s² |
 | This design: 2 blocks, 518 g toolhead | 0.518 kg | 77.5 Hz | 13,259 mm/s² |
-| Y axis (the bed) | 1.83 kg | 41.6 Hz | **3,823 mm/s²** |
+| Y axis (the bed) | 2.18 kg | 38.2 Hz | **3,219 mm/s²** |
 
-**The bed is now the slowest axis.** `max_accel` in `printer.cfg` is set to 3,800
+**The bed is now the slowest axis.** `max_accel` in `printer.cfg` is set to 3,200
 for that reason. Raising it means stiffening the bed, not the gantry.
+
+The bed mass is measured off the completed model (carrier plate + heated bed +
+four MGN12H blocks), not estimated. The earlier estimate of 1.83 kg gave
+3,824 mm/s²; the real 2.18 kg is 19% heavier and costs 16% of the acceleration.
 
 Motor torque is not the constraint: an LDO 42STH48-2504AC at 0.45 N·m holding,
 derated to 60% at speed, pushes about 42 N through a 20-tooth GT2 pulley, which
@@ -176,6 +180,15 @@ OpenBuilds' published 0.47 kg/m, and the 4040 upright at 500 mm computes 618.9 g
 - A rigid joint between two planar faces picks its own rotation about the face
   normal. On a non-square profile it lands 90° out; set `JointInput.angle`
   explicitly and search 0/90/180/270.
+- `occurrences.addExistingComponent(component, matrix)` applies the matrix
+  **relative to the previous occurrence of that component**, so a list of
+  placements accumulates. Add at identity and set `transform2` afterwards.
+- `snapshots.add()` silently reverts the transform of some referenced
+  occurrences — it did for every NEMA 17 while leaving the pulleys alone. The
+  fix is to wrap the part in a native component and transform the wrapper.
+- A sketch on `xZConstructionPlane` has its second axis along **−Z**, so a
+  feature placed at +z lands at −z and cuts nothing. The failed cut leaves an
+  unhealthy "No target body!" feature in the timeline.
 
 ## 9. Commissioning — before the first print
 
@@ -195,11 +208,68 @@ Nothing in `klipper/printer.cfg` has run on hardware. In order:
    Y. If the measured numbers are far off, the machine is not built as drawn —
    find out why before raising `max_accel`.
 
-## 10. Still open
+## 10. What the completed model added
 
-- The Z motor has no mount modelled; it floats above the top tie.
-- The X motors, idlers, belts and pulleys are not modelled.
-- The bed carrier, levelling hardware and Y motor mount are not modelled.
-- The bed is the slowest axis and nothing has been done about it.
+Everything in the machine is now modelled: X motors, idlers, belts and mounts;
+the Y rails, blocks, bed carrier, heated bed, motor, idler and belt; the Z belt
+link, screw bearing blocks and motor; and the electronics bay behind the frame.
+
+| Sub-assembly | Parts | Mass |
+|---|---:|---:|
+| A — Frame | 7 | 3,684 g |
+| B — X gantry | 16 | 1,745 g |
+| C — Toolhead A | 6 | 518 g |
+| C — Toolhead B | 6 | 518 g |
+| D — Y and bed | 17 | 3,811 g |
+| E — Z axis | 26 | 1,921 g |
+| G — Electronics | 2 | 2,291 g |
+| **Total** | **80 bodies** | **14.51 kg** |
+
+Overall envelope with motors and the electronics bay: 556 × 583 × 598 mm.
+
+Real parts inserted from the hub: both lead screws, both anti-backlash nut
+blocks, four NEMA 17 motors, six GT2 pulleys, five GT2 idlers and four 688ZZ
+bearings. Everything else is native geometry.
+
+**No clean free STEP exists for three parts.** The MGN12H carriage block, the
+Orbiter v2.5 and the V6 are all modelled as simplified solids carrying a
+density chosen to hit the datasheet mass:
+
+- The hub's own MGN12H models are **1,027 and 1,186 bodies** — every ball
+  modelled. Unusable in an assembly that needs six of them.
+- Searching turned up only paid marketplace STEP or community redraws of
+  uncertain provenance for all three. A wrong STEP is worse than an honest
+  simplified solid with the right envelope and the right mass.
+
+### Interference after completion
+
+Eleven overlaps remain, and every one is a part that would have a bore in
+reality, modelled as solid:
+
+| Count | Volume | What |
+|---:|---:|---|
+| 4 | 4,320 mm³ | carriage blocks passing through the rails they would wrap |
+| 2 | 992 mm³ | lead screw through its pulley — **see below** |
+| 1 | 384 mm³ | Z motor shaft through its pulley |
+| 4 | 70–122 mm³ | belt runs tangent to pulleys and idlers |
+
+Fifteen others were fixed: the X motor pulleys fouled their own mount plates,
+both X idlers and the Y idler fouled their brackets, and the Z screw bearing
+blocks had no bore. All now corrected.
+
+**The lead screw / pulley overlap is a real finding, not a simplification.**
+The hub pulley has a **6.35 mm bore** and the TR8 screw is **8 mm**. The BOM
+already specifies an 8 mm bore pulley for the screws; the model is using the
+wrong master because that is what the hub holds. Buy the 8 mm bore part.
+
+## 11. Still open
+
+- The bed is the slowest axis and nothing has been done about it. It is the
+  only remaining structural gain worth having.
+- Bed levelling hardware (springs or silicone spacers) is not modelled.
+- Belt clamps where the belts meet the carriages are not modelled.
+- Wiring and drag chain are not modelled.
+- No printed part has been designed. The brackets in the model are plain plates
+  standing in for parts that still have to be drawn.
 - `safe_distance` and the park positions are derived from the model, not measured.
 - No source in Australia currently stocks the 235 × 235 24 V heated bed.

@@ -5,7 +5,8 @@ around a parametric Fusion 360 model rather than a pile of guesses. This repo ho
 the model exports, the engineering analysis, a priced bill of materials and the
 Klipper configuration.
 
-**Status: design. Nothing has been built yet.**
+**Status: design complete, nothing built.** Every sub-assembly is modelled:
+frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 
 | | |
 |---|---|
@@ -16,7 +17,8 @@ Klipper configuration.
 | Z | One motor, belt-linked to two TR8×8 lead screws |
 | Electronics | BTT Manta M8P V2.0 + CB1, 6 × TMC2209, 24 V |
 | Toolhead mass | 518 g each (modelled) |
-| Frame mass | 4.48 kg; whole modelled assembly 7.80 kg |
+| Moving bed mass | 2.18 kg (modelled) |
+| Frame mass | 4.48 kg; complete modelled machine **14.51 kg**, 80 bodies |
 | Estimated cost | ~A$1,934 inc. GST |
 
 ## What's here
@@ -27,8 +29,8 @@ docs/
   design-notes.md    engineering findings, corrections, and what is still unverified
   bom.md             bill of materials with supplier links and AUD prices
 cad/
-  idex-frame-assembly.f3d    Fusion archive (open this one to edit)
-  idex-frame-assembly.step   portable STEP export
+  idex-printer-assembly.f3d    Fusion archive (open this one to edit)
+  idex-printer-assembly.step   portable STEP export
   parameters.csv             the 38 driving parameters
   mass-report.csv            per-part mass
 klipper/
@@ -49,7 +51,7 @@ The starting point was an existing dual-extruder design that modelled out at abo
 Titan extruders and Chimera hotend with Orbiter v2.5 direct drives and separate V6
 hotends, and putting **two** carriage blocks under each toolhead, takes the moving mass
 to 518 g. The X axis then models out around 13,200 mm/s² — at which point the **bed**
-becomes the slowest axis at about 3,800 mm/s², and that is what the Klipper config is
+becomes the slowest axis at about 3,200 mm/s², and that is what the Klipper config is
 set to.
 
 ## Everything is driven by parameters

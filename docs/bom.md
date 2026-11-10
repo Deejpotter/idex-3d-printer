@@ -117,6 +117,14 @@ hand comes off the top, mostly from the Frame and Electronics groups.
 - Bed levelling hardware and a probe.
 - An enclosure.
 
+## Watch the pulley bore
+
+The Z lead screws are **8 mm**. The 20T pulley that goes on each screw must have an
+**8 mm bore**, not the 5 mm one used on the motors. The CAD model currently shows a
+6.35 mm bore pulley there, because that is the only pulley in the Fusion hub — the
+interference check flags it. The line above specifies the right part; just make sure
+you order the 8 mm bore variant.
+
 ## Known sourcing gaps
 
 - **235 × 235 24 V heated bed** — both DREMC options were out of stock on 11 Nov 2026. [Jaycar lists an equivalent](https://www.jaycar.com.au/replacement-hot-bed-plate-kit-for-ender-3-v3-ke-and-se/p/001074) around $58 but blocks automated reading, so check it yourself.
