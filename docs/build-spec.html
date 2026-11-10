@@ -986,11 +986,11 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
     <tbody>
       <tr class="dim"><td>X — the original design</td><td class="n">1.42 kg</td><td class="n">40.0 Hz</td><td class="n">3,541</td></tr>
       <tr><td>X — this design</td><td class="n">0.518 kg</td><td class="n">77.5 Hz</td><td class="n">13,259</td></tr>
-      <tr class="hi"><td><strong>Y — the bed</strong></td><td class="n">1.83 kg</td><td class="n">41.6 Hz</td><td class="n"><strong>3,823</strong></td></tr>
+      <tr class="hi"><td><strong>Y — the bed</strong></td><td class="n">2.18 kg</td><td class="n">38.2 Hz</td><td class="n"><strong>3,219</strong></td></tr>
     </tbody>
   </table>
   </div>
-  <p>X has enormous headroom it cannot use, because Klipper has one global <code>max_accel</code>. The config is set to <strong>3,800</strong> — the bed's number. Every further gain now comes from the bed, exactly as Lesson 4 predicted it eventually would.</p>
+  <p>X has enormous headroom it cannot use, because Klipper has one global <code>max_accel</code>. The config is set to <strong>3,200</strong> — the bed's number. Every further gain now comes from the bed, exactly as Lesson 4 predicted it eventually would.</p>
   <p>Motor torque is not the constraint: 0.45 N·m derated to 60% through a 20T pulley is 42 N, which is 82,000 mm/s² on the toolhead and 23,000 on the bed. The structure binds first in both cases.</p>
 
   <h3>A clash the interference check found</h3>
@@ -1017,6 +1017,77 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
     <li>X motors, idlers, belts and pulleys are not modelled.</li>
     <li>Bed carrier, levelling hardware and the Y motor mount are not modelled.</li>
     <li>Every printed part — motor mounts, idler brackets, belt clamps, carriage bodies, Z nut mounts. Free to make, but they have to be drawn.</li>
+  </ul>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 17</span>
+  <h2>The complete machine — and why three parts stay simplified</h2>
+  <p>Every sub-assembly is now modelled: X motors, idlers, belts and mounts; the Y rails, blocks, bed carrier, heated bed, motor and belt; the Z belt link, screw bearing blocks and motor; and an electronics bay behind the frame. <strong>80 bodies, 14.51 kg.</strong></p>
+
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Sub-assembly</th><th class="n">Parts</th><th class="n">Mass</th></tr></thead>
+    <tbody>
+      <tr><td>A — Frame</td><td class="n">7</td><td class="n">3,684 g</td></tr>
+      <tr><td>B — X gantry</td><td class="n">16</td><td class="n">1,745 g</td></tr>
+      <tr><td>C — Toolhead A</td><td class="n">6</td><td class="n">518 g</td></tr>
+      <tr><td>C — Toolhead B</td><td class="n">6</td><td class="n">518 g</td></tr>
+      <tr><td>D — Y and bed</td><td class="n">17</td><td class="n">3,811 g</td></tr>
+      <tr><td>E — Z axis</td><td class="n">26</td><td class="n">1,921 g</td></tr>
+      <tr><td>G — Electronics</td><td class="n">2</td><td class="n">2,291 g</td></tr>
+      <tr class="hi"><td><strong>Total</strong></td><td class="n"><strong>80</strong></td><td class="n"><strong>14.51 kg</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Real STEP where it exists — and an honest no where it doesn't</h3>
+  <p>Inserted from your hub as real geometry: <strong>four NEMA 17 motors, six GT2 pulleys, five GT2 idlers, four 688ZZ bearings, both TR8 lead screws and both anti-backlash nut blocks.</strong></p>
+  <p>Three parts could not be done that way, and it is worth being plain about it rather than quietly shipping something dubious:</p>
+  <div class="plain">
+    <span class="tag">No clean free STEP exists for these</span>
+    <ul class="body">
+      <li><strong>MGN12H carriage block.</strong> Your hub has two — at <strong>1,027 and 1,186 bodies</strong>. Every ball is modelled. The machine needs six of them; that is the over-detail trap from Lesson 14 in its purest form.</li>
+      <li><strong>Orbiter v2.5 and the V6 hotend.</strong> Searching turned up only paid marketplace STEP or community redraws of uncertain provenance. Your 51 MB V6 file is the same problem from the other direction.</li>
+    </ul>
+    <p>So all three stay as simplified solids with the right envelope and a density chosen to hit the datasheet mass. <strong>A wrong STEP is worse than an honest block.</strong> If you want them real, the route is to buy one of each and measure it, not to download a stranger's guess.</p>
+  </div>
+
+  <h3>What completing it changed</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Was</th><th>Is</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td><code>max_accel</code> 3,800</td><td><strong>3,200</strong></td><td>the moving bed measures <strong>2,175 g</strong> against my 1,831 g estimate — 19% heavier, costing 16% of the acceleration</td></tr>
+      <tr><td>Y shaper prediction 42 Hz</td><td>38 Hz</td><td>same cause</td></tr>
+      <tr><td>Z screw pulley: whatever fits</td><td><strong>8 mm bore</strong></td><td>the hub pulley is 6.35 mm and the screw is 8 mm — the interference check caught it</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The bed mass is the one that matters. It was an estimate standing in for a part that did not exist yet; now it is measured, and the machine is 16% slower than Lesson 16 claimed. That number will not move again unless the bed does.</p>
+
+  <h3>Interference: 26 found, 15 real, 11 by design</h3>
+  <p>Completing the machine threw up 26 overlaps. Fifteen were genuine mistakes and are fixed:</p>
+  <ul class="body">
+    <li>Both <strong>X motor pulleys fouled their own mount plates</strong> — the pulley sat where the plate was. Pulleys moved out; plates given a Ø23 clearance bore for the motor's pilot boss.</li>
+    <li>Both <strong>X idlers and the Y idler fouled their brackets.</strong> Brackets moved back.</li>
+    <li>The <strong>Z screw bearing blocks had no bore at all</strong> — solid blocks with a lead screw through them.</li>
+  </ul>
+  <p>The remaining eleven are all parts that would carry a bore in reality: carriage blocks wrapping rails (4 × 4,320 mm³), shafts through pulleys (3), and belt runs tangent to pulleys (4 × 70–122 mm³). Those are deliberate. <strong>Any twelfth would be a fault.</strong></p>
+
+  <h3>Three Fusion traps, recorded so they cost nobody else a morning</h3>
+  <ul class="body">
+    <li><code>addExistingComponent(component, matrix)</code> applies the matrix <strong>relative to the previous occurrence of that component</strong>. A list of placements silently accumulates — the second part lands at the sum of both positions. Add at identity, set <code>transform2</code> afterwards.</li>
+    <li><code>snapshots.add()</code> <strong>reverts the transform of some referenced occurrences.</strong> It did it to every NEMA 17 while leaving the pulleys alone, three times, with no error. The fix is to wrap the part in a native component and move the wrapper.</li>
+    <li>A sketch on <code>xZConstructionPlane</code> has its second axis along <strong>−Z</strong>. A hole placed at +z lands at −z and cuts nothing, leaving an unhealthy "No target body!" feature behind.</li>
+  </ul>
+  <p>All three produce wrong geometry <em>without raising an error</em>, which is the worst kind. Verified by reading world positions back from <code>root.allOccurrences</code> after every placement — never trusting that a call did what it said.</p>
+
+  <h3>Still open</h3>
+  <ul class="body">
+    <li><strong>The bed is the slowest axis</strong> and nothing has been done about it. It is the only structural gain left worth having.</li>
+    <li>No printed part has been designed. The brackets in the model are plain plates standing in for parts that still have to be drawn.</li>
+    <li>Belt clamps, bed levelling hardware, wiring and drag chain.</li>
   </ul>
 </section>
 
