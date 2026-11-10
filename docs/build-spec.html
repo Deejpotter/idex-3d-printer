@@ -1323,6 +1323,144 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 20</span>
+  <h2>Finding the real dimensions, and landing every bracket</h2>
+  <p>Research first, then the drawings, then the model. In that order, because the last two turns proved what happens otherwise.</p>
+
+  <h3>What the search actually turned up</h3>
+  <div class="tbl">
+  <table>
+    <caption>Every remaining stand-in, and where its dimensions came from</caption>
+    <thead><tr><th>Part</th><th>Source</th><th>What it gave</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>Orbiter v2.5</td><td><strong>Measured from a real STEP</strong> &mdash; the A4T Orbiter extruder adapter on GitHub</td><td>2 &times; M3 clearance &Oslash;3.4 at <strong>37.0 mm centres</strong>, filament bore &Oslash;4.4 between them</td></tr>
+      <tr><td>E3D V6</td><td>RepRap wiki groove-mount convention</td><td>&Oslash;16 boss, <strong>&Oslash;12 groove &times; 4.64 wide</strong>, heatsink &Oslash;22.3 &times; 26</td></tr>
+      <tr><td>NEMA 17</td><td>NEMA standard</td><td>42.3 square, <strong>31.0 &times; 31.0</strong> bolt pattern, &Oslash;22 pilot boss</td></tr>
+      <tr><td>MGN12 / MGN12H</td><td>HIWIN datasheet</td><td>rail 12 &times; 8 on 25 pitch; block 27 &times; 45.4 &times; 13, M3 on 20 &times; 20</td></tr>
+      <tr><td>5015 blower</td><td>SOFASCO sDB5015 drawing</td><td>51.5 &times; 51.5 &times; 15, 2 &times; &Oslash;4.0</td></tr>
+      <tr class="dim"><td>Octopus Pro</td><td>BTT publish a STEP &mdash; but it is <strong>24 MB and 113,000 points</strong></td><td>rejected on rule 3; board modelled at its published 160 &times; 100</td></tr>
+      <tr class="dim"><td>Mean Well LRS-350-24</td><td>Mean Well datasheet</td><td>215 &times; 115 &times; 30</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="plain">
+    <span class="tag">The one real find</span>
+    <p>No vendor publishes the Orbiter&rsquo;s hole pattern, and no official CAD exists for it. But the Armchair Heavy Industries A4T toolhead ships a 203 KB STEP of its <em>Orbiter adapter</em> &mdash; and an adapter is nothing but the interface. Importing it and reading the cylinder axes gave two &Oslash;3.4 holes at exactly y&nbsp;=&nbsp;0, x&nbsp;=&nbsp;&minus;17.50 and +19.50, with the &Oslash;4.4 filament bore at the origin. That is the pattern, measured rather than guessed, and it is <strong>asymmetric</strong> &mdash; 17.5 one side, 19.5 the other.</p>
+  </div>
+  <p>The Octopus STEP is worth a note. It exists, it is official, and it is <strong>unusable</strong>: 24 MB and 113,000 points for a part that contributes nothing but an outline and four holes. That is exactly the trap Lesson 14 rule 3 was written for, and the right answer is to take the dimensions and draw a clean board.</p>
+<svg class="sec" viewBox="0 0 732 607" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Section D - toolhead plate, mounting pattern (front)">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+<text class="ti" x="54" y="26">Section D - toolhead plate, mounting pattern (front)</text>
+<rect class="alu2" x="80.0" y="59.2" width="572.0" height="494.0"/>
+<text class="pl2" x="85.2" y="85.2">toolhead plate</text>
+<rect class="blk" x="152.8" y="98.2" width="140.4" height="130.0"/>
+<circle class="hole" cx="171.0" cy="215.2" r="7.8"/>
+<circle class="hole" cx="171.0" cy="111.2" r="7.8"/>
+<circle class="hole" cx="275.0" cy="215.2" r="7.8"/>
+<circle class="hole" cx="275.0" cy="111.2" r="7.8"/>
+<rect class="blk" x="438.8" y="98.2" width="140.4" height="130.0"/>
+<circle class="hole" cx="457.0" cy="215.2" r="7.8"/>
+<circle class="hole" cx="457.0" cy="111.2" r="7.8"/>
+<circle class="hole" cx="561.0" cy="215.2" r="7.8"/>
+<circle class="hole" cx="561.0" cy="111.2" r="7.8"/>
+<text class="nt" x="85.2" y="116.4">MGN12H x2, M3 on 20 x 20, blocks 55 apart</text>
+<circle class="hole" cx="275.0" cy="345.2" r="8.8"/>
+<line class="ctr" x1="264.0" y1="345.2" x2="286.0" y2="345.2"/>
+<line class="ctr" x1="275.0" y1="334.2" x2="275.0" y2="356.2"/>
+<circle class="hole" cx="467.4" cy="345.2" r="8.8"/>
+<line class="ctr" x1="456.4" y1="345.2" x2="478.4" y2="345.2"/>
+<line class="ctr" x1="467.4" y1="334.2" x2="467.4" y2="356.2"/>
+<circle class="bore" cx="366.0" cy="345.2" r="11.4"/>
+<line class="ctr" x1="357.0" y1="345.2" x2="375.0" y2="345.2"/>
+<line class="ctr" x1="366.0" y1="336.2" x2="366.0" y2="354.2"/>
+<text class="ok" x="85.2" y="407.6">Orbiter v2.5 - measured from the A4T adapter STEP</text>
+<line class="dim" x1="275" y1="386.80000000000007" x2="467.40000000000003" y2="386.80000000000007" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="371.2" y="401.8">37.0</text>
+<line class="dim" x1="275" y1="433.6" x2="366" y2="433.6" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="320.5" y="448.6">17.5</text>
+<line class="dim" x1="366" y1="433.6" x2="467.40000000000003" y2="433.6" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="416.7" y="448.6">19.5</text>
+<line class="dim" x1="223" y1="74.80000000000001" x2="509" y2="74.80000000000001" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="366.0" y="68.8">55.0 block pitch</text>
+<line class="dim" x1="80" y1="43.60000000000002" x2="652" y2="43.60000000000002" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="366.0" y="37.6">110.0</text>
+<line class="dim" x1="672.8000000000001" y1="553.2" x2="672.8000000000001" y2="59.200000000000045" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="679.8" y="309.7" text-anchor="start">95.0</text>
+<text class="nt" x="392.0" y="353.0">filament 4.4</text>
+</svg>
+
+<svg class="sec" viewBox="0 0 722 493" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Section E - V6 groove mount (left) and NEMA 17 face (right)">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+<text class="ti" x="54" y="26">Section E - V6 groove mount (left) and NEMA 17 face (right)</text>
+<rect class="alu2" x="168.4" y="262.0" width="116.0" height="135.2"/>
+<text class="nt" x="171.5" y="253.7">V6 heatsink 22.3 dia</text>
+<rect class="good" x="184.8" y="236.0" width="83.2" height="26.0"/>
+<rect class="sunk2" x="195.2" y="211.9" width="62.4" height="24.1"/>
+<rect class="good" x="184.8" y="189.2" width="83.2" height="22.7"/>
+<line class="dim" x1="184.78" y1="178.8" x2="267.98" y2="178.8" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="226.4" y="172.8">16.0 boss</text>
+<line class="dim" x1="195.18" y1="418" x2="257.58000000000004" y2="418" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="226.4" y="433.0">12.0 groove</text>
+<line class="dim" x1="280.20000000000005" y1="236" x2="280.20000000000005" y2="211.872" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="287.2" y="227.4" text-anchor="start">4.64</text>
+<line class="dim" x1="147.60000000000002" y1="397.2" x2="147.60000000000002" y2="262" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="140.6" y="333.1" text-anchor="end">26.0</text>
+<text class="ok" x="59.2" y="158.0">E3D V6 groove mount - RepRap standard</text>
+<rect class="alu" x="449.2" y="177.2" width="220.0" height="220.0"/>
+<circle class="bore" cx="559.2" cy="287.2" r="57.2"/>
+<circle class="hole" cx="478.6" cy="367.8" r="8.8"/>
+<circle class="hole" cx="478.6" cy="206.6" r="8.8"/>
+<circle class="hole" cx="639.8" cy="367.8" r="8.8"/>
+<circle class="hole" cx="639.8" cy="206.6" r="8.8"/>
+<line class="dim" x1="478.58000000000004" y1="158" x2="639.7800000000001" y2="158" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="559.2" y="152.0">31.0</text>
+<line class="dim" x1="449.2" y1="418" x2="669.16" y2="418" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="559.2" y="433.0">42.3</text>
+<line class="dim" x1="688.4" y1="367.82" x2="688.4" y2="206.62" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="695.4" y="290.7" text-anchor="start">31.0</text>
+<text class="ok" x="444.0" y="132.0">NEMA 17 face - 22 dia pilot boss, 4 x M3</text>
+</svg>
+  <h3>Every bracket now lands on a real slot</h3>
+  <p>Twelve brackets floated. All twelve are now attached &mdash; ten bolt directly to a frame member over a measured slot, and the other two sit on an electronics panel that does.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Bracket</th><th>Was</th><th>Bolts to</th></tr></thead>
+    <tbody>
+      <tr><td>X motor mounts (2)</td><td class="n">20 mm clear</td><td>beam top / underside, slot y = 216</td></tr>
+      <tr><td>X idler brackets (2)</td><td class="n">18 mm clear</td><td>beam top / underside, slot y = 216</td></tr>
+      <tr><td>Y motor mount</td><td class="n">46 mm clear</td><td>base cross front face, slots z = 10 and 30</td></tr>
+      <tr><td>Y idler bracket</td><td class="n">8 mm clear</td><td>base cross back face, slots z = 10 and 30</td></tr>
+      <tr><td>Z screw blocks (4)</td><td class="n">6 mm clear</td><td>upright and base rail inner faces</td></tr>
+      <tr><td>PSU and control board</td><td class="n">2 mm clear</td><td>a new electronics panel, itself bolted to the base cross</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Each one is now an L-bracket: a foot that lies flat on a frame face over a slot, a web, and a plate carrying the part. The webs are <strong>split either side of the pulleys</strong> they have to reach past &mdash; the first attempt put a solid web straight through the X pulleys and idlers, which the interference check caught immediately.</p>
+
+  <div class="plain">
+    <span class="tag">The loop that mattered</span>
+    <p>Landing the brackets created <strong>six new clashes</strong> at once: both motor mounts through their own pulleys, both idler brackets through their idlers, the Y motor through its own mounting plate, and the rebuilt Z screw blocks losing the bores they used to have. Every one was found by measurement, not by looking. Interference is back to <strong>seven</strong>, all of them the original shaft-or-belt-through-bore class.</p>
+  </div>
+
+  <h3>Where it stands</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Sub-assembly</th><th class="n">Parts</th><th class="n">Mass</th></tr></thead>
+    <tbody>
+      <tr><td>A &mdash; Frame</td><td class="n">7</td><td class="n">3,684 g</td></tr>
+      <tr><td>B &mdash; X gantry</td><td class="n">16</td><td class="n">1,780 g</td></tr>
+      <tr><td>C &mdash; Toolheads (2)</td><td class="n">12</td><td class="n">1,012 g</td></tr>
+      <tr><td>D &mdash; Y and bed</td><td class="n">23</td><td class="n">2,938 g</td></tr>
+      <tr><td>E &mdash; Z axis</td><td class="n">26</td><td class="n">1,935 g</td></tr>
+      <tr><td>G &mdash; Electronics</td><td class="n">3</td><td class="n">1,765 g</td></tr>
+      <tr class="hi"><td><strong>Total</strong></td><td class="n"><strong>90 bodies</strong></td><td class="n"><strong>13.13 kg</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>One honest blemish: a stale <em>Capture Position</em> entry sits in the timeline, left over from moving referenced occurrences. It is suppressed and has no geometric effect &mdash; every part measures where it should and interference is clean &mdash; but it is still flagged, and pretending otherwise would be the same mistake as everything else in this lesson.</p>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">

@@ -433,14 +433,71 @@ a closed structure rather than through a silicone puck.
 
 Moving bed mass is now 1,344 g, up from 1,269 g for the spine and clamp.
 
+## 16. Where every remaining dimension came from
+
+| Part | Source | What it gave |
+|---|---|---|
+| **Orbiter v2.5** | **measured from a real STEP** — the A4T Orbiter extruder adapter, Armchair Heavy Industries, GitHub | 2 × M3 clearance Ø3.4 at **37.0 mm centres** (x −17.50 and +19.50, both y 0), filament bore Ø4.4 at the origin |
+| E3D V6 | RepRap wiki groove-mount convention | Ø16 boss, **Ø12 groove × 4.64 wide**, heatsink Ø22.3 × 26 |
+| NEMA 17 | NEMA standard | 42.3 square, **31.0 × 31.0** bolt pattern, Ø22 pilot boss |
+| MGN12 / MGN12H | HIWIN datasheet | rail 12 × 8 on 25 pitch; block 27 × 45.4 × 13, M3 on 20 × 20 |
+| 5015 blower | SOFASCO sDB5015 drawing | 51.5 × 51.5 × 15, 2 × Ø4.0 |
+| Octopus Pro | BTT publish an official STEP — **24 MB, 113,000 points** | rejected; board drawn at its published 160 × 100 |
+| Mean Well LRS-350-24 | Mean Well datasheet | 215 × 115 × 30 |
+
+No vendor publishes the Orbiter's hole pattern and no official CAD exists. But the
+A4T toolhead ships a 203 KB STEP of its *Orbiter adapter*, and an adapter is
+nothing but the interface. Importing it and reading the cylinder axes gave the
+pattern exactly — and it is **asymmetric**, 17.5 mm one side of the filament bore
+and 19.5 mm the other.
+
+The Octopus STEP is worth recording as a negative result: official, correct, and
+**unusable** at 24 MB for a part that contributes an outline and four holes. That
+is the trap §rule 3 was written for.
+
+## 17. Every bracket now lands on a slot
+
+| Bracket | Was | Bolts to |
+|---|---:|---|
+| X motor mounts (2) | 20 mm clear | beam top / underside, slot y = 216 |
+| X idler brackets (2) | 18 mm clear | beam top / underside, slot y = 216 |
+| Y motor mount | 46 mm clear | base cross front face, slots z = 10 and 30 |
+| Y idler bracket | 8 mm clear | base cross back face, slots z = 10 and 30 |
+| Z screw blocks (4) | 6 mm clear | upright and base rail inner faces |
+| PSU and control board | 2 mm clear | a new electronics panel, itself bolted to the base cross |
+
+Each is an L-bracket: a foot lying flat on a frame face over a measured slot, a
+web, and a plate carrying the part. The webs are **split either side of the
+pulleys** they reach past — the first attempt drove a solid web straight through
+the X pulleys and idlers.
+
+Landing them created six new clashes at once: both motor mounts through their own
+pulleys, both idler brackets through their idlers, the Y motor through its own
+plate, and the rebuilt Z screw blocks losing the bores they had. All found by
+measurement. **Interference is back to seven**, all the original
+shaft-or-belt-through-bore class, and **zero brackets float**.
+
+### Two bugs worth recording
+
+- `'Y motor mount'` also starts with `'Y motor'`. A prefix match meant to move the
+  motor moved the mount too, translating a part already in absolute coordinates by
+  a further (260, 480, 42) and parking it 480 mm outside the machine. Caught by
+  rendering, not by any check — which is an argument for always looking at the
+  picture as well as the numbers.
+- A float test that keyed frame members by name collapsed the two uprights into
+  one, so a bracket correctly touching the left upright read as 126 mm from "the"
+  upright. The test was wrong, not the model.
+
 ## 11. Still open
 
 - The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
   carrier bars are the next lever, at the cost of levelling-spacer height.
 - Only the frame follows the parameters (§13).
-- Twelve brackets do not touch the frame (§14). They need designing against the
-  interface schedule, not placing by coordinate.
+- A stale `Capture Position` entry sits in the timeline, suppressed, with no
+  geometric effect — every part measures where it should — but still flagged.
 - The Z motor flange misses both slots on the top tie underside.
+- The brackets are plain L-plates. They carry the right interfaces but have not
+  been designed as printed or machined parts.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.
