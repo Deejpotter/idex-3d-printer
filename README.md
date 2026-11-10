@@ -40,6 +40,8 @@ klipper/
 
 ![Assembly](docs/assembly.png)
 
+![Toolhead](docs/toolhead.png)
+
 Open `docs/build-spec.html` in a browser — it is the readable version of everything
 below.
 

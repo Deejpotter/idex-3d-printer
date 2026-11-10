@@ -236,22 +236,29 @@ Orbiter v2.5 and the V6 are all modelled as simplified solids carrying a
 density chosen to hit the datasheet mass:
 
 - The hub's own MGN12H models are **1,027 and 1,186 bodies** — every ball
-  modelled. Unusable in an assembly that needs six of them.
+  modelled. Unusable in an assembly that needs ten of them. Both the rail and
+  the block are instead drawn from the HIWIN MGN12 datasheet: a 14-point rail
+  section with ball grooves and top chamfers, and a proper C-section block.
+  The rail section computes **0.694 kg/m** against HIWIN's published ~0.72,
+  which is the check that the profile is right.
 - Searching turned up only paid marketplace STEP or community redraws of
   uncertain provenance for all three. A wrong STEP is worse than an honest
   simplified solid with the right envelope and the right mass.
 
 ### Interference after completion
 
-Eleven overlaps remain, and every one is a part that would have a bore in
-reality, modelled as solid:
+Seven overlaps remain, and every one is a shaft or belt meeting a part that
+would carry a bore in reality:
 
 | Count | Volume | What |
 |---:|---:|---|
-| 4 | 4,320 mm³ | carriage blocks passing through the rails they would wrap |
 | 2 | 992 mm³ | lead screw through its pulley — **see below** |
 | 1 | 384 mm³ | Z motor shaft through its pulley |
 | 4 | 70–122 mm³ | belt runs tangent to pulleys and idlers |
+
+The four 4,320 mm³ rail/block overlaps are gone: the carriage blocks are now
+modelled as the C-section they actually are, so they wrap the rail instead of
+passing through it.
 
 Fifteen others were fixed: the X motor pulleys fouled their own mount plates,
 both X idlers and the Y idler fouled their brackets, and the Z screw bearing
@@ -270,6 +277,7 @@ wrong master because that is what the hub holds. Buy the 8 mm bore part.
 - Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.
 - No printed part has been designed. The brackets in the model are plain plates
-  standing in for parts that still have to be drawn.
+  standing in for parts that still have to be drawn, and the carriage and Z
+  plates are solid rectangles that would really carry cutouts and hole patterns.
 - `safe_distance` and the park positions are derived from the model, not measured.
 - No source in Australia currently stocks the 235 × 235 24 V heated bed.
