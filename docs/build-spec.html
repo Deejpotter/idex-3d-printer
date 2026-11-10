@@ -951,6 +951,76 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 16</span>
+  <h2>Z axis and toolheads — and what modelling them changed</h2>
+  <p>The Z axis and both toolheads are now in the model. Three things came out of it that no amount of arithmetic on paper would have caught.</p>
+
+  <div class="plain">
+    <span class="tag">The nozzle was 68 mm inside the bed</span>
+    <p>The gantry height had been a placeholder: <code>gantry_z = base_h + 60 mm</code>, set before any toolhead existed. The moment a real toolhead was modelled — rail block, plate, extruder, hotend — the nozzle landed at z 25 with the bed surface at z 93.</p>
+    <p>It is now <strong><code>gantry_z = bed_top + th_drop</code></strong>, where <code>th_drop</code> (75 mm) is the beam underside to the nozzle tip. The gantry height is an output of the toolhead, not a choice. This is the clearest single argument for modelling before buying.</p>
+  </div>
+
+  <h3>Where the two carriage blocks go, settled properly</h3>
+  <p>Lesson 10 said "two MGN12H blocks". It did not say <em>where</em>, and the two options are not equivalent.</p>
+  <p>The toolhead's mass sits about 40 mm forward of the rail. Accelerating along X at that offset makes a moment about <strong>Z</strong>. Two blocks separated along X resist it with a force couple. Two blocks separated along Z — one rail above the other on the beam face — <strong>cannot make a couple about Z at all</strong>, so they do nothing for the dominant mode, however appealing the arrangement looks.</p>
+  <p>So the blocks go in line along X. The catch is that the carriage grows to 100 mm and the beam grows with it, and beam stiffness falls as 1/L³:</p>
+  <div class="tbl">
+  <table>
+    <caption>Choosing the arrangement — at the 1.14 kg toolhead used for the decision</caption>
+    <thead><tr><th>Arrangement</th><th class="n">Beam</th><th class="n">k total</th><th class="n">Accel</th><th class="n">Gain</th></tr></thead>
+    <tbody>
+      <tr class="dim"><td>1 block</td><td class="n">480</td><td class="n">89.8</td><td class="n">4,411</td><td class="n">—</td></tr>
+      <tr class="hi"><td><strong>2 blocks in line</strong></td><td class="n">520</td><td class="n">122.6</td><td class="n">6,021</td><td class="n">+37%</td></tr>
+      <tr><td>2 blocks in line, generous ends</td><td class="n">560</td><td class="n">113.4</td><td class="n">5,569</td><td class="n">+26%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>At 560 mm a third of the gain is handed straight back to the longer beam. Trimming <code>end_allow</code> from 50 to 30 mm holds it at 520. The frame is 520 mm wide instead of 480 as a direct consequence of the second block — that is the real price, not the $8.</p>
+
+  <h3>The bed is now the slowest axis</h3>
+  <p>The built toolhead models out at <strong>518 g</strong> — lighter than the 900 g target, because the Orbiter and a V6 on a 6 mm plate is simply a small thing. Running the chain with the measured mass:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Axis</th><th class="n">Moving mass</th><th class="n">Frequency</th><th class="n">Accel</th></tr></thead>
+    <tbody>
+      <tr class="dim"><td>X — the original design</td><td class="n">1.42 kg</td><td class="n">40.0 Hz</td><td class="n">3,541</td></tr>
+      <tr><td>X — this design</td><td class="n">0.518 kg</td><td class="n">77.5 Hz</td><td class="n">13,259</td></tr>
+      <tr class="hi"><td><strong>Y — the bed</strong></td><td class="n">1.83 kg</td><td class="n">41.6 Hz</td><td class="n"><strong>3,823</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>X has enormous headroom it cannot use, because Klipper has one global <code>max_accel</code>. The config is set to <strong>3,800</strong> — the bed's number. Every further gain now comes from the bed, exactly as Lesson 4 predicted it eventually would.</p>
+  <p>Motor torque is not the constraint: 0.45 N·m derated to 60% through a 20T pulley is 42 N, which is 82,000 mm/s² on the toolhead and 23,000 on the bed. The structure binds first in both cases.</p>
+
+  <h3>A clash the interference check found</h3>
+  <p>The Z carriage block and the lead screw overlapped by 4.5 mm in X. Moving the screws inboard to x 60 and 460 and widening the Z plates to 80 mm cleared it. Interference now reports <strong>four overlaps of exactly 4320 mm³</strong> — which is 45 × 12 × 8, the simplified carriage blocks passing through the rails they would really wrap. That is the intended simplification; any <em>other</em> number would be a fault.</p>
+
+  <h3>What is real and what is simplified</h3>
+  <ul class="body">
+    <li><strong>Real hub parts:</strong> both TR8 lead screws, both anti-backlash nut blocks, the Z motor.</li>
+    <li><strong>Simplified with a mass override:</strong> carriage blocks (55 g), Orbiter extruders (148 g), V6 hotends (100 g), 5015 fans (35 g). Rule 1 from Lesson 14 proved itself immediately — the NEMA 17's own STEP geometry computes <strong>520 g</strong> against a real 390 g, because a STEP file has no iron, copper or magnets in it. Every such part now carries a density chosen to hit the datasheet mass.</li>
+    <li><strong>Real materials:</strong> frame, rails and plates. The hub's own MGN12H block was rejected — it has <strong>1,027 bodies</strong>, which is precisely the over-detail trap.</li>
+  </ul>
+
+  <h3>It is all on GitHub now</h3>
+  <p>Published at <strong>github.com/Deejpotter/idex-3d-printer</strong>, public: the Fusion archive and a STEP export, the parameter and mass tables as CSV, this write-up, the design notes, the priced BOM, and a complete Klipper configuration.</p>
+  <p>The Klipper config is worth a word. Every pin assignment is taken <em>verbatim</em> from BigTreeTech's own reference config for the Manta M8P V2.0 — none of it is invented. Six motors: X, Y, Z, <code>dual_carriage</code> for the second X, and two extruders, leaving two slots free. There are macros for toolchange, and for copy and mirror modes, which are the reason to build IDEX at all.</p>
+  <div class="plain">
+    <span class="tag">It has never run on hardware</span>
+    <p>Every PID value is a placeholder, every endstop position comes from the model rather than a measurement, and <code>safe_distance: 110</code> assumes the carriage plates are the width they are drawn. The design notes carry a nine-step commissioning order — motor directions with <code>FORCE_MOVE</code> before homing, endstops with <code>QUERY_ENDSTOPS</code> before any homing move. Work through it before the first print.</p>
+  </div>
+
+  <h3>Still missing</h3>
+  <ul class="body">
+    <li>The Z motor has no mount; it floats above the top tie.</li>
+    <li>X motors, idlers, belts and pulleys are not modelled.</li>
+    <li>Bed carrier, levelling hardware and the Y motor mount are not modelled.</li>
+    <li>Every printed part — motor mounts, idler brackets, belt clamps, carriage bodies, Z nut mounts. Free to make, but they have to be drawn.</li>
+  </ul>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
