@@ -986,11 +986,11 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
     <tbody>
       <tr class="dim"><td>X — the original design</td><td class="n">1.42 kg</td><td class="n">40.0 Hz</td><td class="n">3,541</td></tr>
       <tr><td>X — this design</td><td class="n">0.518 kg</td><td class="n">77.5 Hz</td><td class="n">13,259</td></tr>
-      <tr class="hi"><td><strong>Y — the bed</strong></td><td class="n">2.18 kg</td><td class="n">38.2 Hz</td><td class="n"><strong>3,219</strong></td></tr>
+      <tr class="hi"><td><strong>Y — the bed</strong></td><td class="n">1.27 kg</td><td class="n">51.9 Hz</td><td class="n"><strong>5,948</strong></td></tr>
     </tbody>
   </table>
   </div>
-  <p>X has enormous headroom it cannot use, because Klipper has one global <code>max_accel</code>. The config is set to <strong>3,200</strong> — the bed's number. Every further gain now comes from the bed, exactly as Lesson 4 predicted it eventually would.</p>
+  <p>X has enormous headroom it cannot use, because Klipper has one global <code>max_accel</code>. The config is set to <strong>5,900</strong> — the bed's number. Every further gain now comes from the bed, exactly as Lesson 4 predicted it eventually would.</p>
   <p>Motor torque is not the constraint: 0.45 N·m derated to 60% through a 20T pulley is 42 N, which is 82,000 mm/s² on the toolhead and 23,000 on the bed. The structure binds first in both cases.</p>
 
   <h3>A clash the interference check found</h3>
@@ -1089,6 +1089,62 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
     <li>No printed part has been designed. The brackets in the model are plain plates standing in for parts that still have to be drawn.</li>
     <li>Belt clamps, bed levelling hardware, wiring and drag chain.</li>
   </ul>
+</section>
+
+<section class="lesson">
+  <span class="lnum">Lesson 18</span>
+  <h2>Two design changes the model paid for</h2>
+  <p>Polishing the model turned up two things worth changing in the machine itself, not just in the drawing.</p>
+
+  <h3>The bed was over-built — and the obvious fix was wrong</h3>
+  <p>The bed was a <strong>6 mm 235 × 235 carrier plate</strong> (895 g) carrying a <strong>6 mm heated bed</strong> (1,060 g). Both were guesses; the real Creality part is <strong>3 mm</strong>. The obvious move — bin the carrier, drop the bed to 3 mm — looks like it halves the moving mass.</p>
+  <p>It would also have made the machine <em>slower than it looks</em>, because stiffness goes as thickness cubed. Computing the carrier from geometry rather than guessing it:</p>
+  <div class="tbl">
+  <table>
+    <caption>Bed carrier options, k = 48EI/L³ over the 200 mm rail spacing</caption>
+    <thead><tr><th>Carrier</th><th class="n">k</th><th class="n">Moving mass</th><th class="n">f</th><th class="n">Accel</th></tr></thead>
+    <tbody>
+      <tr class="dim"><td>235 × 6 plate + 6 mm bed — as drawn</td><td class="n">1,751</td><td class="n">2,169 g</td><td class="n">43.9 Hz</td><td class="n">4,255</td></tr>
+      <tr><td>2 bars 40 × 3</td><td class="n">293</td><td class="n">1,199 g</td><td class="n">48.7 Hz</td><td class="n">5,243</td></tr>
+      <tr class="hi"><td><strong>2 bars 35 × 5</strong></td><td class="n">521</td><td class="n">1,269 g</td><td class="n">51.9 Hz</td><td class="n">5,948</td></tr>
+      <tr><td>2 bars 30 × 6</td><td class="n">666</td><td class="n">1,275 g</td><td class="n">53.3 Hz</td><td class="n">6,273</td></tr>
+      <tr><td>Full 235 × 3 plate</td><td class="n">438</td><td class="n">1,494 g</td><td class="n">46.7 Hz</td><td class="n">4,815</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Two 3 mm bars are <strong>six times floppier</strong> than the plate they replace. Going from 3 mm to 5 mm bars costs 70 g and buys 78% more carrier stiffness — easily the best trade on the table. The stack is now bars (5) + silicone levelling spacers (2.5) + aluminium bed with bonded heater (3) + magnetic sheet (1) + PEI steel (0.5), which keeps <code>bed_top</code> at exactly 93 mm so the gantry does not move away from toolheads that cannot follow it.</p>
+  <div class="plain">
+    <span class="tag">Correction</span>
+    <p>The 3,219 mm/s² in Lesson 17 used an <em>assumed</em> 400 kN/m for the carrier. Computed from the actual plate it is 1,751 kN/m, so the original bed was really <strong>4,255 mm/s²</strong>. The gain from this change is <strong>+40%</strong>, not the +85% that comparing against the old wrong number would suggest.</p>
+  </div>
+
+  <h3>The control board could not actually be bought</h3>
+  <p>The Manta M8P needs a CB1 or CM4 in its socket, and <strong>no Australian supplier stocks the CB1</strong>. That made the single most important line in the BOM unbuyable — the kind of thing a bill of materials is supposed to catch.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>&nbsp;</th><th>Manta M8P v2.0</th><th>Octopus Pro V1.1</th></tr></thead>
+    <tbody>
+      <tr><td>Board</td><td>$145</td><td><strong>$115, in stock</strong></td></tr>
+      <tr><td>Host</td><td>CB1 not stocked; CM4 ~$76</td><td>any Raspberry Pi over USB, ~$85</td></tr>
+      <tr><td>Drivers / MCU</td><td>8 / STM32H723</td><td>8 / STM32H723</td></tr>
+      <tr class="hi"><td><strong>Total</strong></td><td>~$221, blocked</td><td><strong>~$200, all in stock</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Cheaper, available, and the separate Pi is easier to replace or debug. It also solves the accelerometer — the Octopus Pro has no ADXL header, but the Pi's own SPI does the job. <code>printer.cfg</code> is rewritten against BigTreeTech's own Octopus Pro reference config, with one departure flagged in the file: BTT writes Driver3's <code>enable_pin</code> without the leading <code>!</code> that every other driver has. TMC2209 enable is active low, so it is inverted — worth checking the motor actually enables before trusting it.</p>
+
+  <h3>Considered and rejected</h3>
+  <ul class="body">
+    <li><strong>Sherpa Mini + pancake motor</strong> ($92/head) instead of the Orbiter ($105). Saves $27 across both heads, but flow is lower and it is a kit rather than a finished unit. Published weights disagree wildly between sources — 95 g to 148 g for the same parts — so the weight argument is not solid enough to act on.</li>
+    <li><strong>CR-6 SE bed kit</strong> (255 × 245, $55.95, and actually in stock). A bigger build area for $6 more, but it changes <code>build_x</code> and <code>build_y</code>, which do not yet propagate. Worth revisiting once they do.</li>
+  </ul>
+
+  <h3>The parametric claim only covers the frame</h3>
+  <p>Measured rather than assumed. Driving <code>build_x</code> and <code>build_y</code> to 300 mm: <strong>the frame follows — and nothing added after it does.</strong> The frame members are rigid-jointed to a parametric layout skeleton; everything since is placed at a fixed transform.</p>
+  <p>What does propagate is the vertical stack: <code>bed_top</code> is built from the real layer thicknesses and <code>gantry_z = bed_top + th_drop</code>, which is exactly why the bed rebuild above was engineered to keep <code>bed_top</code> at 93 mm. Until every sub-assembly is jointed the way the frame is, <strong>do not treat this model as parametric beyond the frame.</strong></p>
+
+  <h3>And the rails finally look like rails</h3>
+  <p>M3 mounting holes on HIWIN's 25 mm pitch — 21, 18 and 14 per rail — plus the 20 × 20 pattern on each carriage block. Verified by <em>material removed</em>, not by looking: <code>OffsetStartDefinition</code> on a cut extrude silently produces "No target body" and leaves the part untouched, which is how three earlier attempts passed without cutting anything. The holes are cut as separate tool bodies and combined instead.</p>
 </section>
 
 <section class="lesson">
