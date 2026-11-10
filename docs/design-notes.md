@@ -364,11 +364,83 @@ toolheads that cannot follow it.
 **Do not treat this model as parametric beyond the frame** until every
 sub-assembly is jointed to the layout the way the frame members are.
 
+## 14. The mounting audit
+
+Interference checking says no two parts share space. It says nothing about
+whether they can be **bolted together**. Measuring where the V-slots actually
+are, by probing the traced profiles point by point:
+
+| Interface | Slot centres | Rail centre | Verdict |
+|---|---:|---:|---|
+| Z rails on the 4040 upright face | 10.0 and 30.0 | 20.0 | **could not be bolted** |
+| X rail on the 2040 beam face | 178.0 and 198.0 | 188.0 | **could not be bolted** |
+| Y rails on the 2020 bed rails | 160.0 | 160.0 | correct |
+| Upright feet into the base rail | 10.0 and 30.0 | 10.0, 30.0 | correct |
+| Z motor onto the top tie underside | 255.0 and 275.0 | 238.0 | misses both |
+
+A 2020 face has **one** slot, dead centre. A 40 mm face has **two**, at ±10 from
+centre, with nothing between them. Centring a 12 mm rail on a 40 mm face — which
+is what looks right — puts it exactly where there is no slot. The Y rails were
+fine only because they happen to sit on 2020.
+
+Both rails have been moved onto the measured slot centres (x 30/490, z 198), and
+the carriage blocks and belt A with them.
+
+### Twelve brackets float
+
+Asking whether each bracket touches any frame member at all:
+
+| Bracket | Clearance to nearest frame member |
+|---|---:|
+| X motor mounts (2) | 20 mm |
+| X idler brackets (2) | 18 mm |
+| Y motor mount | 46 mm |
+| Y idler bracket | 8 mm |
+| Z screw blocks (4) | 6 mm |
+| PSU and control board | 2 mm |
+
+Every one is hanging in space. They were placed to be in the right *place* and
+nothing checked they could be *attached*. They are placeholders for printed
+parts that do not exist yet, but the model should not pretend otherwise.
+
+## 15. Can the heated bed bolt to the carriages? No.
+
+6061 grows 23.6 µm/m/K. From 20 °C to 100 °C:
+
+| Span | Growth |
+|---|---:|
+| Between the two rail centres (200 mm) | **0.378 mm** |
+| Between the two carrier bars (105 mm) | 0.198 mm |
+| Across the full bed (235 mm) | 0.444 mm |
+
+The bed plate's axial stiffness is `EA/L` = 243 kN/mm, so holding back 0.378 mm
+takes **92 kN**. Nothing survives that — the plate bows or the carriages are
+destroyed. An MGN12 carriage is a preloaded ball bearing with microns of
+clearance; it has no business absorbing a third of a millimetre.
+
+**So the bed is never bolted to the blocks.** The stack is bed → silicone
+spacers → carrier bars → blocks, and the spacers are the compliant element.
+Each takes half the growth, 0.189 mm of shear. An M3 through a 4.5 mm clearance
+hole gives 0.75 mm of float per side, which is ample.
+
+### What the audit did find
+
+The two carrier bars were **independent** — nothing tied them together in Y,
+which is the driving direction, except the bed sitting on compliant spacers.
+Pull on the belt and the pair racks. Added: a **spine between the bars making an
+H-frame** (66 g) and a **belt clamp on the spine** (9 g), so belt load goes into
+a closed structure rather than through a silicone puck.
+
+Moving bed mass is now 1,344 g, up from 1,269 g for the spine and clamp.
+
 ## 11. Still open
 
 - The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
   carrier bars are the next lever, at the cost of levelling-spacer height.
 - Only the frame follows the parameters (§13).
+- Twelve brackets do not touch the frame (§14). They need designing against the
+  interface schedule, not placing by coordinate.
+- The Z motor flange misses both slots on the top tie underside.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.

@@ -1148,6 +1148,181 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 19</span>
+  <h2>The mounting audit &mdash; and why the drawings should have come first</h2>
+  <p>Three questions, and the honest answers are no, no, and not yet.</p>
+
+  <style>
+    .sec{width:100%;height:auto;margin:14px 0 6px;color:var(--ink-soft);background:var(--sunk);border:1px solid var(--rule);border-radius:6px}
+    .sec text{font:11px ui-sans-serif,system-ui,sans-serif;fill:var(--ink-soft)}
+    .sec .ti{font-size:12px;font-weight:650;fill:var(--ink)}
+    .sec .dt{font-size:10.5px;fill:var(--signal);text-anchor:middle}
+    .sec .pl{font-size:10px;fill:var(--ink);text-anchor:middle}
+    .sec .pl2{font-size:10px;fill:var(--ink)}
+    .sec .nt{font-size:10px;fill:var(--ink-soft)}
+    .sec .warn{font-size:10.5px;fill:var(--warn)}
+    .sec .ok{font-size:10.5px;fill:var(--good)}
+    .sec .dim{stroke:var(--signal);stroke-width:1}
+    .sec .ctr{stroke:var(--signal);stroke-width:.7;stroke-dasharray:7 3 2 3;opacity:.85}
+    .sec .alu{fill:var(--rule);stroke:var(--ink-soft);stroke-width:1;opacity:.55}
+    .sec .alu2{fill:var(--rule);stroke:var(--ink-soft);stroke-width:1;opacity:.8}
+    .sec .slot{fill:var(--sunk);stroke:var(--ink-soft);stroke-width:.8}
+    .sec .bad{fill:var(--warn);stroke:var(--warn);stroke-width:1;opacity:.45}
+    .sec .good{fill:var(--good);stroke:var(--good);stroke-width:1;opacity:.55}
+    .sec .blk{fill:var(--ink-soft);stroke:var(--ink-soft);opacity:.4}
+    .sec .sil{fill:var(--cold);opacity:.6}
+    .sec .bed{fill:var(--ink-soft);opacity:.55}
+    .sec .mag{fill:var(--cold);opacity:.4}
+    .sec .pei{fill:var(--signal);opacity:.5}
+  </style>
+
+  <h3>1. No, I had not checked a single mounting point</h3>
+  <p>I had checked <em>interference</em> &mdash; that no two parts occupy the same space. That is not the same as checking that things can be bolted together. So I measured where the V-slots actually are, probing the real traced profiles point by point.</p>
+  <div class="tbl">
+  <table>
+    <caption>Measured slot centres against where the rails actually sit</caption>
+    <thead><tr><th>Interface</th><th class="n">Slot centres</th><th class="n">Rail centre</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>Z rails on the 4040 upright face</td><td class="n">10.0 and 30.0</td><td class="n">20.0</td><td><span class="chip c-warn">cannot be bolted</span> lands between both slots</td></tr>
+      <tr class="hi"><td>X rail on the 2040 beam face</td><td class="n">178.0 and 198.0</td><td class="n">188.0</td><td><span class="chip c-warn">cannot be bolted</span> lands between both slots</td></tr>
+      <tr><td>Y rails on the 2020 bed rails</td><td class="n">160.0</td><td class="n">160.0</td><td><span class="chip c-good">correct</span></td></tr>
+      <tr><td>Upright feet into the base rail</td><td class="n">10.0 and 30.0</td><td class="n">10.0, 30.0</td><td><span class="chip c-good">correct</span> matches the four tapped bores</td></tr>
+      <tr><td>Z motor onto the top tie underside</td><td class="n">255.0 and 275.0</td><td class="n">238.0</td><td><span class="chip c-warn">misses both</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A 2020 face has <strong>one</strong> slot, dead centre. A 40&nbsp;mm face has <strong>two</strong>, at &plusmn;10 from centre, and nothing in between. Centring a 12&nbsp;mm rail on a 40&nbsp;mm face &mdash; which is what looks right &mdash; puts it exactly where there is no slot. That is why the Y rails are fine and the X and Z rails are not: the Y rails happen to sit on 2020.</p>
+
+  <div class="plain">
+    <span class="tag">And it is worse than that</span>
+    <p>I then asked whether each bracket touches any frame member at all. <strong>Twelve of them float.</strong> Both X motor mounts (20&nbsp;mm clear), both X idler brackets (18&nbsp;mm), the Y motor mount (46&nbsp;mm), the Y idler bracket (8&nbsp;mm), all four Z screw blocks (6&nbsp;mm), and the PSU and control board (2&nbsp;mm). Every one is hanging in space. They were placed to be in the right <em>place</em>, and nothing ever checked they could be <em>attached</em>.</p>
+  </div>
+
+  <h3>2. No &mdash; and the design does not, but the audit found one more fix</h3>
+  <p>Bolting a heated plate rigidly across two parallel rails is a classic over-constraint failure. 6061 grows 23.6&nbsp;&micro;m per metre per kelvin, and the bed goes from 20&nbsp;&deg;C to 100&nbsp;&deg;C:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Span</th><th class="n">Growth at &Delta;T = 80&nbsp;K</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>Between the two rail centres (200&nbsp;mm)</td><td class="n">0.378 mm</td></tr>
+      <tr><td>Between the two carrier bars (105&nbsp;mm)</td><td class="n">0.198 mm</td></tr>
+      <tr><td>Across the full bed (235&nbsp;mm)</td><td class="n">0.444 mm</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Held back rigidly, that 0.378&nbsp;mm needs <strong>92&nbsp;kN</strong> &mdash; the plate&rsquo;s axial stiffness is 243&nbsp;kN/mm. Nothing survives it: the bed bows, or the carriages are destroyed. An MGN12 carriage is a preloaded ball bearing with microns of clearance; it has no business absorbing a third of a millimetre.</p>
+  <p>So: <strong>never bolt the bed to the blocks.</strong> The design already doesn&rsquo;t &mdash; the stack is bed &rarr; silicone spacers &rarr; carrier bars &rarr; blocks, and the spacers are the compliant element. Each takes half the growth, 0.189&nbsp;mm of shear, and an M3 through a 4.5&nbsp;mm clearance hole gives 0.75&nbsp;mm of float per side. Ample.</p>
+  <div class="plain">
+    <span class="tag">The fix the audit did find</span>
+    <p>The two carrier bars are <strong>independent</strong>. Nothing ties them together in Y except the bed sitting on compliant spacers &mdash; and Y is the driving direction. Pull on the belt and the pair racks. They need a <strong>spine between them, making an H-frame, with the belt clamp on the spine</strong>, so belt load goes into a closed structure instead of through a silicone puck.</p>
+  </div>
+
+  <h3>3. Yes &mdash; the drawings should have come first</h3>
+  <p>Every one of these faults is the same mistake: geometry placed by coordinate, with nothing checking it against the thing it bolts to. A dimensioned interface section catches all of them in minutes, because you cannot draw a rail on a 40&nbsp;mm face without drawing the slots too.</p>
+  <p>So here they are, generated from the measured geometry rather than drawn by eye. Amber is as-drawn, green is corrected.</p>
+<svg class="sec" viewBox="0 0 524 441" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Section A - Z rail on the 4040 upright front face (plan)">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+<text class="ti" x="54" y="26">Section A - Z rail on the 4040 upright front face (plan)</text>
+<rect class="alu" x="126.8" y="90.4" width="208.0" height="208.0"/>
+<text class="pl" x="230.8" y="197.9">4040 upright</text>
+<rect class="slot" x="160.6" y="298.4" width="36.4" height="20.8"/>
+<line class="ctr" x1="178.8" y1="282.4" x2="178.8" y2="335.2"/>
+<rect class="slot" x="264.6" y="298.4" width="36.4" height="20.8"/>
+<line class="ctr" x1="282.8" y1="282.4" x2="282.8" y2="335.2"/>
+<rect class="bad" x="199.6" y="298.4" width="62.4" height="41.6"/>
+<text class="warn" x="59.2" y="360.8">MGN12 rail as drawn - centre x=20, lands between both slots</text>
+<rect class="good" x="251.6" y="345.2" width="62.4" height="26.0"/>
+<text class="ok" x="59.2" y="384.2">corrected - centre x=30, over the inboard slot</text>
+<line class="dim" x1="126.8" y1="74.80000000000001" x2="334.8" y2="74.80000000000001" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="230.8" y="68.8">40.0</text>
+<line class="dim" x1="178.8" y1="280.2" x2="282.8" y2="280.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="230.8" y="274.2">20.0 slot pitch</text>
+<line class="dim" x1="355.6" y1="340" x2="355.6" y2="298.4" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="362.6" y="322.7" text-anchor="start">8.0 rail</text>
+<text class="dt" x="230.8" y="323.2" text-anchor="middle">no slot here</text>
+</svg>
+
+<svg class="sec" viewBox="0 0 514 524" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Section B - X rail on the 2040 beam front face (looking along X)">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+<text class="ti" x="54" y="26">Section B - X rail on the 2040 beam front face (looking along X)</text>
+<rect class="alu" x="1302.0" y="116.4" width="104.0" height="208.0"/>
+<text class="pl2" x="1312.4" y="230.8">2040 X beam</text>
+<rect class="slot" x="212.6" y="1198.0" width="36.4" height="0.0"/>
+<line class="ctr" x1="230.8" y1="1182.0" x2="230.8" y2="1214.0"/>
+<rect class="slot" x="1283.8" y="254.2" width="18.2" height="36.4"/>
+<rect class="slot" x="1283.8" y="150.2" width="18.2" height="36.4"/>
+<line class="ctr" x1="1250.0" y1="272.4" x2="1343.6" y2="272.4"/>
+<line class="ctr" x1="1250.0" y1="168.4" x2="1343.6" y2="168.4"/>
+<rect class="bad" x="1260.4" y="189.2" width="41.6" height="62.4"/>
+<text class="warn" x="59.2" y="366.0">MGN12 rail as drawn - centre z=188, between both slots</text>
+<rect class="good" x="1218.8" y="137.2" width="41.6" height="62.4"/>
+<text class="ok" x="59.2" y="407.6">corrected - centre z=198, over the upper slot</text>
+<line class="dim" x1="1426.8" y1="324.4" x2="1426.8" y2="116.39999999999998" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="1433.8" y="223.9" text-anchor="start">40.0</text>
+<line class="dim" x1="1374.8" y1="272.4" x2="1374.8" y2="168.39999999999998" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="1381.8" y="223.9" text-anchor="start">20.0</text>
+<line class="dim" x1="1302" y1="345.2" x2="1406" y2="345.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="1354.0" y="360.2">20.0</text>
+</svg>
+
+<svg class="sec" viewBox="0 0 472 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Section C - Y rail and bed stack (looking along Y)">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z" fill="currentColor"/></marker></defs>
+<text class="ti" x="54" y="26">Section C - Y rail and bed stack (looking along Y)</text>
+<rect class="alu" x="168.4" y="251.6" width="104.0" height="104.0"/>
+<text class="pl" x="220.4" y="307.1">2020</text>
+<rect class="slot" x="202.2" y="251.6" width="36.4" height="18.2"/>
+<line class="ctr" x1="220.4" y1="230.8" x2="220.4" y2="334.8"/>
+<rect class="good" x="189.2" y="210.0" width="62.4" height="41.6"/>
+<rect class="blk" x="150.2" y="142.4" width="140.4" height="67.6"/>
+<text class="pl" x="220.4" y="179.7">MGN12H</text>
+<rect class="alu2" x="129.4" y="116.4" width="257.4" height="26.0"/>
+<text class="pl" x="258.1" y="132.9">carrier bar 35 x 5</text>
+<rect class="sil" x="194.4" y="103.4" width="52.0" height="13.0"/>
+<rect class="bed" x="129.4" y="87.8" width="257.4" height="15.6"/>
+<text class="pl" x="258.1" y="99.1">bed 3 mm</text>
+<rect class="mag" x="129.4" y="82.6" width="257.4" height="5.2"/>
+<rect class="pei" x="129.4" y="80.0" width="257.4" height="2.6"/>
+<line class="dim" x1="111.2" y1="251.60000000000002" x2="111.2" y2="210.00000000000003" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="104.2" y="234.3" text-anchor="end">8</text>
+<line class="dim" x1="85.2" y1="210.00000000000003" x2="85.2" y2="142.40000000000003" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="78.2" y="179.7" text-anchor="end">13</text>
+<line class="dim" x1="407.6" y1="142.40000000000003" x2="407.6" y2="116.40000000000003" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="414.6" y="132.9" text-anchor="start">5</text>
+<line class="dim" x1="407.6" y1="116.40000000000003" x2="407.6" y2="103.40000000000003" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="414.6" y="113.4" text-anchor="start">2.5</text>
+<line class="dim" x1="355.6" y1="103.40000000000003" x2="355.6" y2="80" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="348.6" y="95.2" text-anchor="end">4.5</text>
+<text class="nt" x="418.0" y="108.6">silicone spacer</text>
+<text class="nt" x="418.0" y="82.6">magnet 1 + PEI 0.5</text>
+<text class="ok" x="56.6" y="360.8">bed_top = 93.0, fixed - gantry_z follows it</text>
+<line class="dim" x1="168.4" y1="373.8" x2="272.4" y2="373.8" marker-start="url(#ar)" marker-end="url(#ar)"/>
+<text class="dt" x="220.4" y="388.8">20.0</text>
+</svg>
+  <h3>The interface schedule</h3>
+  <p>This is what should have existed before any of it was modelled.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Joint</th><th>Mating faces</th><th class="n">Datum</th><th>Fastener</th><th>State</th></tr></thead>
+    <tbody>
+      <tr><td>Upright foot &rarr; base rail</td><td>4040 end &rarr; 4040 top</td><td class="n">x 10, 30</td><td>4 &times; M5 &times; 16 blind</td><td><span class="chip c-good">ok</span></td></tr>
+      <tr><td>Y rail &rarr; bed rail</td><td>MGN12 base &rarr; 2020 top</td><td class="n">x 160</td><td>M3 at 25 pitch into T-nuts</td><td><span class="chip c-good">ok</span></td></tr>
+      <tr><td>Y block &rarr; carrier bar</td><td>block top &rarr; bar underside</td><td class="n">20 &times; 20</td><td>4 &times; M3</td><td><span class="chip c-good">ok</span></td></tr>
+      <tr><td>Carrier bar &rarr; bed</td><td>via silicone spacers</td><td class="n">4 points</td><td>M3 through 4.5 clearance</td><td><span class="chip c-good">ok</span></td></tr>
+      <tr><td>X block &rarr; toolhead plate</td><td>block face &rarr; plate back</td><td class="n">20 &times; 20</td><td>4 &times; M3 each</td><td><span class="chip c-good">ok</span></td></tr>
+      <tr class="hi"><td>Z rail &rarr; upright</td><td>MGN12 base &rarr; 4040 face</td><td class="n">x 30 / 490</td><td>M3 at 25 pitch into T-nuts</td><td><span class="chip c-warn">move 10 mm</span></td></tr>
+      <tr class="hi"><td>X rail &rarr; beam</td><td>MGN12 base &rarr; 2040 face</td><td class="n">z 198</td><td>M3 at 25 pitch into T-nuts</td><td><span class="chip c-warn">move 10 mm</span></td></tr>
+      <tr class="hi"><td>Carrier bar &rarr; carrier bar</td><td>spine tying both bars</td><td class="n">&mdash;</td><td>4 &times; M4</td><td><span class="chip c-warn">does not exist</span></td></tr>
+      <tr class="hi"><td>Y belt &rarr; carrier</td><td>clamp on the spine</td><td class="n">&mdash;</td><td>2 &times; M3</td><td><span class="chip c-warn">does not exist</span></td></tr>
+      <tr class="hi"><td>Both X motor mounts and idler brackets, Y motor mount, Y idler, four Z screw blocks, PSU, control board</td><td>&mdash;</td><td class="n">&mdash;</td><td>&mdash;</td><td><span class="chip c-cold">float, 2&ndash;46 mm clear</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>And no, there still are not real models for everything</h3>
+  <p>Correct. Real geometry from your hub: four NEMA 17s, six GT2 pulleys, five idlers, four 688ZZ bearings, both lead screws, both nut blocks. Drawn from datasheets: the MGN12 rail and carriage, which check out at 0.694&nbsp;kg/m against HIWIN&rsquo;s 0.72. <strong>Everything else is a stand-in</strong> &mdash; the Orbiter, the V6, the blower, every bracket, the PSU and the board. The brackets were always going to be, because they do not exist as parts yet. The rest is a sourcing problem rather than a modelling one, and it is listed honestly rather than dressed up as finished.</p>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
