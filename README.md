@@ -19,7 +19,7 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Toolhead mass | 518 g each (modelled) |
 | Moving bed mass | 1.34 kg (modelled) |
 | Frame mass | 3.68 kg; complete modelled machine **13.42 kg**, 88 parts (92 occurrences, all tied) |
-| Estimated cost | **A$2,250 inc. GST**, A$1,917 of it verified against live listings |
+| Estimated cost | **A$2,250 inc. GST** all-new and all-brand; **~A$1,014** reusing your motors, bed and extruders and buying generic — same speed. See [budget-build.md](docs/budget-build.md) |
 
 ## What's here
 
@@ -30,6 +30,7 @@ docs/
   bom.md             bill of materials with supplier links and AUD prices
   bom.json           BOM source: prices, links, stock, cut lengths, 24 V loads
   skeleton-plan.md   how the model was made skeleton-driven
+  budget-build.md    getting it under A$1,000, and what each cut costs in speed
 cad/
   idex-printer-assembly.f3d    Fusion archive (open this one to edit)
   idex-printer-assembly.step   portable STEP export
