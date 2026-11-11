@@ -49,3 +49,8 @@ x_rail_inset,( x_beam_len - x_rail_length ) / 2,10.000,[DERIVED] gap from beam e
 bed_plate_x,255 mm,255.000,"[PART] bought heated plate width - CR-6 SE assembly, 24 V 270 W"
 bed_plate_y,245 mm,245.000,[PART] bought heated plate depth
 sheet_sz,bed_sz,235.000,[DERIVED] magnetic sheet and PEI size - a stocked square size >= bed_sz
+z_mount_t,6 mm,6.000,[PART] Z motor mount plate thickness
+nema_bolt,31 mm,31.000,"[PART] NEMA 17 bolt pattern, square"
+z_mount_w,nema_bolt + 29 mm,60.000,[DERIVED] Z motor mount plate width
+z_mount_d,76 mm,76.000,[DERIVED] Z motor mount plate depth - motor bolts to the second top-tie slot
+z_mount_y,( frame_d - p40 ) / 2 + 2 mm,247.000,"[DERIVED] Z motor mount plate centre, Y"

@@ -15,7 +15,8 @@ Checks
   1  nozzle tip of each toolhead sits exactly on bed_top
   2  the print surface really is at bed_top
   3  every bracket touches at least one frame member
-  4  each rail is centred on a measured V-slot, not between two
+  4  each rail is centred on a measured V-slot, not between two, and the
+     Z motor mount's bolts land on real top-tie slots
   5  interference is only the known shaft-through-bore set
   6  the timeline is healthy
   7  each toolhead parks clear of the build area
@@ -43,7 +44,8 @@ P = adsk.core.Point3D.create
 FRAME = ('Upright 4040', 'Base rail 4040', 'Base cross 2040',
          'Top tie 2040', 'X beam 2040', 'Bed rail 2020')
 BRACKETS = ('X motor mount', 'X idler bracket', 'Y motor mount',
-            'Y idler bracket', 'Z screw block', 'Electronics panel')
+            'Y idler bracket', 'Z screw block', 'Electronics panel',
+            'Z motor mount')
 
 # the overlaps that are a shaft or a belt meeting a part that would carry a
 # bore in reality. Any value not on this list is a fault.
@@ -198,6 +200,30 @@ def run(_context):
                 chk(sfx + 'X rail centred on a beam slot',
                     any(abs(xc - s) < 0.3 for s in centres),
                     'rail centre z=%.1f, slots at %s' % (xc, ['%.1f' % s for s in centres]))
+
+            # 4b - the Z motor mount's M5 holes must land on top-tie slots.
+            # The motor's own 31 mm flange pattern never could: the slots are
+            # 20 mm apart, which is why this bracket exists at all.
+            tie = next((ao.item(i) for i in range(ao.count)
+                        if ao.item(i).name.split(':')[0] == 'Top tie 2040'
+                        and ao.item(i).bRepBodies.count), None)
+            zm = next((ao.item(i) for i in range(ao.count)
+                       if ao.item(i).name.split(':')[0] == 'Z motor mount'
+                       and ao.item(i).bRepBodies.count), None)
+            if tie and zm:
+                tb = tie.bRepBodies.item(0).boundingBox
+                slots = slot_centres(tie, lambda v: P(pv('frame_w') / 20.0, v / 10.0,
+                                                      (tb.minPoint.z * 10 + 1.0) / 10.0),
+                                     tb.minPoint.y * 10, tb.maxPoint.y * 10)
+                ys = sorted({round(f.geometry.origin.y * 10, 1)
+                             for f in zm.bRepBodies.item(0).faces
+                             if f.geometry.objectType.endswith('Cylinder')
+                             and abs(f.geometry.radius * 10 - 2.75) < 0.05})
+                off = [y for y in ys if not any(abs(y - sc) < 1.0 for sc in slots)]
+                chk(sfx + 'Z motor mount bolts land on top-tie slots',
+                    ys and not off,
+                    '%d M5 holes at y=%s, slots at %s' % (
+                        len(ys), ys, ['%.1f' % sc for sc in slots]))
 
             # 5 - interference is only what we signed off
             ents = adsk.core.ObjectCollection.create()

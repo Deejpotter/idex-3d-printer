@@ -18,7 +18,7 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Electronics | BTT Octopus Pro V1.1 + Raspberry Pi, 6 × TMC2209, 24 V |
 | Toolhead mass | 518 g each (modelled) |
 | Moving bed mass | 1.34 kg (modelled) |
-| Frame mass | 4.48 kg; complete modelled machine **13.41 kg**, 87 bodies |
+| Frame mass | 4.48 kg; complete modelled machine ~13.6 kg, 92 parts |
 | Estimated cost | **A$2,250 inc. GST**, A$1,917 of it verified against live listings |
 
 ## What's here
@@ -49,11 +49,11 @@ scripts/
 
 Run `scripts/check_model.py` as a Fusion script with the assembly open. It
 asserts the design rules numerically instead of by eye: nozzle height against
-`bed_top`, every bracket touching a frame member, lead screws seated, rails
-centred on real V-slots, interference limited to the known shaft-through-bore
+`bed_top`, every bracket touching a frame member, lead screws seated, rails and
+the Z motor mount's bolts on measured V-slots, interference limited to the known shaft-through-bore
 set, timeline health, toolhead parking, every part tied to the skeleton, every
 parameter driving something, driver ranges, a BOM check line that measures every
-cut length and carriage block in the model, and a 24 V power budget. **15 of 15 pass.** Set `FLEX_CASES` to re-run the
+cut length and carriage block in the model, and a 24 V power budget. **16 of 16 pass.** Set `FLEX_CASES` to re-run the
 geometry rules with `build_x`, `build_y` or `upright_h` changed.
 
 ![Assembly](docs/assembly.png)

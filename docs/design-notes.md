@@ -748,7 +748,7 @@ centred on the beam.
 
 ### The checks that would have caught all of it
 
-Three new numeric checks, bringing `check_model.py` to **15 of 15 at nominal
+Four new numeric checks, bringing `check_model.py` to **16 of 16 at nominal
 size**:
 
 - **Check 11 now counts carriage blocks** — rails' carriages plus the extras
@@ -758,6 +758,7 @@ size**:
 - **Check 12 is a 24 V power budget**, see below.
 - A driver rule now says the bought heated plate must be at least as big as the
   sheets, so growing the build past the bought bed fails up front.
+- **Check 4b** puts the Z motor mount's bolts on real top-tie slots (below).
 
 Checks 10, 11 and 12 moved into a `rules()` function that the flex loop calls
 too, so a size change is now asked the buying questions as well as the geometric
@@ -772,6 +773,39 @@ ones. That is what turned up the real size envelope:
 So **230 × 235 is not an arbitrary build volume: it is the largest this parts
 list allows.** The binding constraint is the 500 mm rail and the 235 mm sheet,
 not the frame.
+
+### The Z motor had no mount, and could not have had one
+
+The last open geometric fault. The Z motor sat with its top face against the
+top tie's underside, bolted to nothing: the tie's slots are at y = 255 and 275,
+and a NEMA 17's bolt pattern is 31 mm square, so **no rotation or offset of the
+motor can put two of its four bolts on two slots 20 mm apart.** Every other
+motor in the machine already had a bracket; this one was the exception.
+
+So it gets one: `Z motor mount`, a 60 × 76 × 6 mm plate against the tie
+underside, carrying
+
+- four M3 clearance holes on the motor's `nema_bolt` pattern and a Ø23 pilot
+  bore for its boss, with the motor hanging underneath, and
+- four M5 clearance holes at y = 255 and 275 — **on the slots**, measured.
+
+Both its sketches are fully constrained and every hole position is an expression
+on `frame_d`, `p40`, `p20`, `z_mount_y` and `nema_bolt`, so the bolts stay on
+the slots when the frame changes.
+
+Adding a 6 mm plate under the tie pushes the motor down 6 mm, and the Z link
+belt has to follow or it will not run true. The three skeleton planes that
+carry the Z belt plane — the motor, the three pulleys, the two idlers and the
+two belt runs — now subtract `z_mount_t`, so all eight parts dropped together
+and nothing else moved. That is the whole point of the skeleton: one thickness
+parameter, eight parts, one edit.
+
+**Check 4b** measures it: the M5 hole axes against the slot centres found by
+walking the tie's underside. It reported the holes 2.8 mm off on the first run,
+which was the check's own fault — it read a point on the hole's surface instead
+of the axis, and 2.8 mm is the hole radius plus rounding. Worth recording,
+because a check that is wrong in the pessimistic direction is the kind you
+believe.
 
 ### The 24 V supply does not fit
 
@@ -810,9 +844,9 @@ single supply still fails.
   is the 8 mm bore variant, which is now in the BOM; the model still shows the
   stand-in.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
-- The Z motor flange misses both slots on the top tie underside.
-- The brackets are plain L-plates. They carry the right interfaces but have not
-  been designed as printed or machined parts.
+- The brackets are plain plates. They carry the right interfaces — every one of
+  them now lands on a measured slot — but have not been designed as printed or
+  machined parts.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.
