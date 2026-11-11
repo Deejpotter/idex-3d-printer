@@ -1,91 +1,63 @@
-sub_assembly,part,mass_g
-A - Frame,Upright 4040:1,618.9
-A - Frame,Upright 4040:2,618.9
-A - Frame,Base rail 4040:1,655.2
-A - Frame,Base rail 4040:2,655.2
-A - Frame,Base cross 2040:3,356.4
-A - Frame,Base cross 2040:4,356.4
-A - Frame,Top tie 2040:1,421.2
-B - X gantry,X beam 2040:2,421.2
-B - X gantry,pulley gt2 6.35 bore:2,15.3
-B - X gantry,pulley gt2 6.35 bore:3,15.3
-B - X gantry,GT2 idler pulley (5 mm bore) v1:2,7.4
-B - X gantry,GT2 idler pulley (5 mm bore) v1:3,7.4
-B - X gantry,Nema 17 Stepper Motor:4,390.0
-B - X gantry,Nema 17 Stepper Motor:5,390.0
-B - X gantry,Belt B upper:1,5.1
-B - X gantry,Belt B lower:1,5.1
-B - X gantry,MGN12 rail X:2,334.9
-B - X gantry,Belt A upper:1,5.1
-B - X gantry,Belt A lower:1,5.1
-B - X gantry,X motor mount A:1,46.2
-B - X gantry,X motor mount B:1,46.2
-B - X gantry,X idler bracket A:1,37.1
-B - X gantry,X idler bracket B:1,35.1
-D - Y and bed,Bed rail 2020:1,245.3
-D - Y and bed,Bed rail 2020:2,245.3
-D - Y and bed,pulley gt2 6.35 bore:4,15.3
-D - Y and bed,GT2 idler pulley (5 mm bore) v1:4,7.4
-D - Y and bed,Nema 17 Stepper Motor:6,390.0
-D - Y and bed,MGN12 rail Y:2,301.4
-D - Y and bed,MGN12 rail Y:3,301.4
-D - Y and bed,MGN12H block:8,53.5
-D - Y and bed,MGN12H block:9,53.5
-D - Y and bed,MGN12H block:10,53.5
-D - Y and bed,MGN12H block:11,53.5
-D - Y and bed,Heated bed 255x245:1,588.3
-D - Y and bed,Magnetic sheet:1,90.0
-D - Y and bed,PEI spring steel:1,215.0
-D - Y and bed,Bed carrier bar F:1,111.0
-D - Y and bed,Bed carrier bar R:1,111.0
-D - Y and bed,Bed levelling spacers:1,8.0
-D - Y and bed,Y belt clamp:1,59.4
-D - Y and bed,Bed carrier spine:1,32.4
-D - Y and bed,Y motor mount:1,67.8
-D - Y and bed,Y idler bracket:1,37.2
-D - Y and bed,Y belt run 1:1,4.5
-D - Y and bed,Y belt run 2:1,4.5
-C - Toolhead A,Toolhead plate A:1,158.2
-C - Toolhead A,MGN12H block:2,53.5
-C - Toolhead A,MGN12H block:3,53.5
-C - Toolhead A,Part fan 5015 A:1,35.0
-C - Toolhead A,Hotend V6 A:1,106.3
-C - Toolhead A,Extruder Orbiter A:1,132.7
-C - Toolhead A,X belt clamp A:1,32.2
-C - Toolhead B,Toolhead plate B:1,158.2
-C - Toolhead B,MGN12H block:4,53.5
-C - Toolhead B,MGN12H block:5,53.5
-C - Toolhead B,Part fan 5015 B:1,35.0
-C - Toolhead B,Hotend V6 B:1,106.3
-C - Toolhead B,Extruder Orbiter B:1,132.7
-C - Toolhead B,X belt clamp B:1,32.2
-E - Z axis,8mm x 500mm Lead Screw:2,153.2
-E - Z axis,8mm x 500mm Lead Screw:3,153.2
-E - Z axis,8mm Acme Anti Backlash Nut Block:2,55.0
-E - Z axis,8mm Acme Anti Backlash Nut Block:3,55.0
-E - Z axis,Z carriage plate L:1,155.5
-E - Z axis,Z carriage plate R:1,155.5
-E - Z axis,pulley gt2 6.35 bore:5,15.3
-E - Z axis,pulley gt2 6.35 bore:6,15.3
-E - Z axis,pulley gt2 6.35 bore:7,15.3
-E - Z axis,GT2 idler pulley (5 mm bore) v1:5,7.4
-E - Z axis,GT2 idler pulley (5 mm bore) v1:6,7.4
-E - Z axis,688ZZ Bearing:2,5.9
-E - Z axis,688ZZ Bearing:3,5.9
-E - Z axis,688ZZ Bearing:4,5.9
-E - Z axis,688ZZ Bearing:5,5.9
-E - Z axis,Nema 17 Stepper Motor:7,390.0
-E - Z axis,Z belt run 1:1,4.0
-E - Z axis,Z belt run 2:1,4.0
-E - Z axis,MGN12 rail Z:2,269.1
-E - Z axis,MGN12 rail Z:3,269.1
-E - Z axis,MGN12H block:6,53.5
-E - Z axis,MGN12H block:7,53.5
-E - Z axis,Z screw block top L:1,38.5
-E - Z axis,Z screw block top R:1,38.5
-E - Z axis,Z screw block base L:1,35.9
-E - Z axis,Z screw block base R:1,35.9
-E - Z axis,Z motor mount:1,189.0
-G - Electronics,Electronics panel:1,285.1
-G - Electronics,PSU LRS-350-24:1,1300.0
-G - Electronics,Octopus Pro V1.1:1,180.0
+part,qty,mass_g_each,mass_g_total,material
+"688ZZ Bearing",4,5.92,23.68,"Steel"
+"8mm Acme Anti Backlash Nut Block",2,55.00,110.00,"MASS POM anti-backlash nut"
+"8mm x 500mm Lead Screw",2,153.24,306.49,"Steel"
+"Base cross 2040",2,356.39,712.77,"Aluminum 6061"
+"Base rail 4040",2,655.24,1310.48,"Aluminum 6061"
+"Bed carrier bar F",1,111.04,111.04,"Aluminum 6061"
+"Bed carrier bar R",1,111.04,111.04,"Aluminum 6061"
+"Bed carrier spine",1,32.39,32.39,"Aluminum 6061"
+"Bed levelling spacers",1,8.00,8.00,"MASS Bed levelling spacers"
+"Bed rail 2020",2,245.28,490.56,"Aluminum 6061"
+"Belt A lower",1,5.13,5.13,"MAT GT2 belt"
+"Belt A upper",1,5.13,5.13,"MAT GT2 belt"
+"Belt B lower",1,5.13,5.13,"MAT GT2 belt"
+"Belt B upper",1,5.13,5.13,"MAT GT2 belt"
+"Electronics panel",1,285.12,285.12,"Aluminum 6061"
+"Extruder Orbiter A",1,132.68,132.68,"MASS Extruder Orbiter"
+"Extruder Orbiter B",1,132.68,132.68,"MASS Extruder Orbiter"
+"GT2 idler pulley (5 mm bore) v1",5,7.40,37.00,"Steel"
+"Heated bed 255x245",1,588.27,588.27,"MASS Heated bed 235x235"
+"Hotend V6 A",1,106.35,106.35,"MASS Hotend V6"
+"Hotend V6 B",1,106.35,106.35,"MASS Hotend V6"
+"Hotend fan 4010 A",1,16.00,16.00,"MASS Hotend fan 4010"
+"Hotend fan 4010 B",1,16.00,16.00,"MASS Hotend fan 4010"
+"MGN12 rail X",1,334.89,334.89,"Steel"
+"MGN12 rail Y",2,301.40,602.79,"Steel"
+"MGN12 rail Z",2,269.12,538.23,"Steel"
+"MGN12H block",10,53.47,534.67,"MAT MGN12H block"
+"Magnetic sheet",1,90.00,90.00,"MASS Magnetic sheet"
+"Nema 17 Stepper Motor",4,390.00,1560.00,"MASS NEMA 17 (LDO 48mm)"
+"Octopus Pro V1.1",1,180.00,180.00,"MASS board"
+"PEI spring steel",1,215.00,215.00,"MASS PEI spring steel"
+"PSU LRS-200-24",1,1025.38,1025.38,"MASS PSU"
+"PSU LRS-350-24",1,1300.00,1300.00,"MASS PSU"
+"Part fan 5015 A",1,35.00,35.00,"MASS Part fan 5015"
+"Part fan 5015 B",1,35.00,35.00,"MASS Part fan 5015"
+"Toolhead plate A",1,158.24,158.24,"Aluminum 6061"
+"Toolhead plate B",1,158.24,158.24,"Aluminum 6061"
+"Top tie 2040",1,421.19,421.19,"Aluminum 6061"
+"Upright 4040",2,618.92,1237.85,"Aluminum 6061"
+"X beam 2040",1,421.19,421.19,"Aluminum 6061"
+"X belt clamp A",1,32.22,32.22,"Steel"
+"X belt clamp B",1,32.22,32.22,"Steel"
+"X idler bracket A",1,37.07,37.07,"Aluminum 6061"
+"X idler bracket B",1,35.12,35.12,"Aluminum 6061"
+"X motor mount A",1,46.18,46.18,"Aluminum 6061"
+"X motor mount B",1,46.18,46.18,"Aluminum 6061"
+"Y belt clamp",1,59.45,59.45,"Aluminum 6061"
+"Y belt run 1",1,4.48,4.48,"MAT GT2 belt"
+"Y belt run 2",1,4.48,4.48,"MAT GT2 belt"
+"Y idler bracket",1,37.20,37.20,"Aluminum 6061"
+"Y motor mount",1,67.79,67.79,"Aluminum 6061"
+"Z belt run 1",1,4.04,4.04,"MAT GT2 belt"
+"Z belt run 2",1,4.04,4.04,"MAT GT2 belt"
+"Z carriage plate L",1,155.52,155.52,"Aluminum 6061"
+"Z carriage plate R",1,155.52,155.52,"Aluminum 6061"
+"Z motor mount",1,189.02,189.02,"Steel"
+"Z screw block base L",1,35.91,35.91,"Aluminum 6061"
+"Z screw block base R",1,35.91,35.91,"Aluminum 6061"
+"Z screw block top L",1,38.47,38.47,"Aluminum 6061"
+"Z screw block top R",1,38.47,38.47,"Aluminum 6061"
+"pulley gt2 6.35 bore",6,15.32,91.94,"Steel"
+"TOTAL",93,,14656.3,

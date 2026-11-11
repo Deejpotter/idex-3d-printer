@@ -1,74 +1,79 @@
-name,expression,value_mm,comment
-build_x,230 mm,230.000,"[DRIVER] build volume, X"
-build_y,235 mm,235.000,"[DRIVER] build volume, Y"
-build_z,230 mm,230.000,"[DRIVER] build volume, Z"
-carriage_w,100 mm,100.000,[DRIVER] width of one IDEX carriage
-park_gap,15 mm,15.000,[DRIVER] clearance between a parked carriage and the build area
-end_allow,30 mm,30.000,[DRIVER] motor / idler allowance at each end of the X beam
-x_beam_len,build_x + 2 * carriage_w + 2 * park_gap + 2 * end_allow,520.000,[DERIVED] X beam length - IDEX needs both carriages parked clear
-frame_w,x_beam_len,520.000,"[DERIVED] outer frame width, X"
-frame_d,2 * build_y + 60 mm,530.000,"[DERIVED] frame depth, Y - a bedslinger needs twice the build depth"
-upright_h,500 mm,500.000,[DRIVER] upright length
-p40,40 mm,40.000,[PART] 40 mm V-slot face (still 20-series hardware)
-p20,20 mm,20.000,[PART] 20 mm V-slot face
-base_h,p40,40.000,[DERIVED] height of the base rail the uprights stand on
-beam_y,( frame_d - p40 ) / 2 - mgn_block_h - z_plate_t - p20,206.000,[DERIVED] X beam Y position - sits clear of the Z block and carriage plate
-gantry_z,bed_top + th_drop,168.000,[DERIVED] gantry height at Z home
-top_tie_h,p20,20.000,[DERIVED] thickness of the top tie bar
-mgn_rail_w,12 mm,12.000,[PART] MGN12 rail width
-mgn_rail_h,8 mm,8.000,[PART] MGN12 rail height above its mounting face
-mgn_block_h,13 mm,13.000,[PART] MGN12H block height above the mounting face
-mgn_block_len,45.4 mm,45.400,[NOT WIRED] MGN12H block length
-z_plate_t,6 mm,6.000,[PART] Z carriage plate thickness
-bed_rail_spacing,bed_sz - 35 mm,200.000,[DRIVER] centres of the two Y rails
-bed_sz,max(build_x; build_y),235.000,[DERIVED] heated bed size - must be >= build_x and build_y
-bed_plate_t,5 mm,5.000,[PART] bed carrier plate thickness
-heatbed_t,3 mm,3.000,[PART] heated bed thickness
-bed_top,base_h + p20 + mgn_rail_h + mgn_block_h + bed_plate_t + bed_spacer_t + heatbed_t + magnet_t + pei_t,93.000,[DERIVED] top surface of the heated bed - Z zero
-z_screw_len,500 mm,500.000,[NOT WIRED] TR8 lead screw
-z_plate_w,p40 + 40 mm,80.000,[NOT WIRED] Z carriage plate width
-z_plate_h,120 mm,120.000,[NOT WIRED] Z carriage plate height
-z_screw_x,60 mm,60.000,[NOT WIRED] screw centre from upright outer face
-th_plate_t,6 mm,6.000,[NOT WIRED] toolhead plate thickness
-th_plate_h,( x_belt_a_z - x_belt_b_z ) + x_belt_sep + belt_t + 6 mm,88.800,[DERIVED] toolhead plate height - spans both X belt planes so either toolhead can clamp either belt
-block_pitch,mgn_block_len + 9.6 mm,55.000,[NOT WIRED] X spacing between the two MGN12H blocks
-th_drop,75 mm,75.000,[DRIVER] X beam underside to nozzle tip - set by the toolhead
-bed_spacer_t,2.5 mm,2.500,[PART] levelling spacer height
-magnet_t,1 mm,1.000,[PART] magnetic sheet
-pei_t,0.5 mm,0.500,[PART] PEI spring steel sheet
-x_rail_length,x_beam_len - 20 mm,500.000,"[DERIVED] X rail - longest stocked MGN12 that fits the beam, 10 mm clear each end"
-y_rail_length,frame_d - 80 mm,450.000,[DERIVED] Y rail cut length
-z_rail_length,upright_h - 100 mm,400.000,[DERIVED] Z rail cut length
-x_belt_run,x_beam_len - 50 mm,470.000,"[DERIVED] one X belt run, pulley to idler"
-y_belt_run,frame_d - 120 mm,410.000,[DERIVED] one Y belt run
-z_belt_run,frame_w - 2 * z_screw_x - 30 mm,370.000,[DERIVED] one Z link belt run
-x_rail_seat,gantry_z + 30 mm,198.000,[DERIVED] X rail centre - the upper slot of the 2040 beam
-nozzle_park_a,end_allow + 80 mm,110.000,[DERIVED] nozzle X with carriage A parked left (toolhead plate centre)
-nozzle_park_b,frame_w - end_allow - 80 mm,410.000,[DERIVED] nozzle X with carriage B parked right
-x_rail_inset,( x_beam_len - x_rail_length ) / 2,10.000,[DERIVED] gap from beam end to X rail end
-bed_plate_x,255 mm,255.000,"[PART] bought heated plate width - CR-6 SE assembly, 24 V 270 W"
-bed_plate_y,245 mm,245.000,[PART] bought heated plate depth
-sheet_sz,bed_sz,235.000,[DERIVED] magnetic sheet and PEI size - a stocked square size >= bed_sz
-z_mount_t,6 mm,6.000,[PART] Z motor mount plate thickness
-nema_bolt,31 mm,31.000,"[PART] NEMA 17 bolt pattern, square"
-z_mount_w,nema_bolt + 29 mm,60.000,[DERIVED] Z motor mount plate width
-z_mount_d,76 mm,76.000,[DERIVED] Z motor mount plate depth - motor bolts to the second top-tie slot
-z_mount_y,( frame_d - p40 ) / 2 + 2 mm,247.000,"[DERIVED] Z motor mount plate centre, Y"
-belt_t,1.4 mm,1.400,[PART] GT2 belt thickness
-x_belt_sep,17.4 mm,17.400,[PART] centres of the two runs of one X belt - the pulley tangents
-x_belt_a_z,gantry_z + 57 mm,225.000,[DERIVED] belt A centreline - the X motor A pulley axis
-x_belt_b_z,gantry_z - 7 mm,161.000,[DERIVED] belt B centreline - the X motor B pulley axis
-clamp_t,6 mm,6.000,[PART] belt clamp body thickness behind the belt
-clamp_w,30 mm,30.000,[PART] belt clamp width along the run
-th_plate_bot,x_belt_b_z - x_belt_sep / 2 - belt_t / 2 - 3 mm,148.600,[DERIVED] toolhead plate bottom - 3 mm clear under the lowest belt
-belt_w,6 mm,6.000,[PART] GT2 6 mm belt width
-clamp_h,x_belt_sep + belt_t + 4 mm,22.800,[DERIVED] belt clamp height - spans both runs of one belt
-y_belt_sep,14.6 mm,14.600,[PART] centres of the two Y belt runs - the pulley tangents
-y_clamp_w,y_belt_sep + belt_t + 12 mm,28.000,[DERIVED] Y belt clamp width - straddles both runs
-y_clamp_d,20 mm,20.000,[PART] Y belt clamp depth
-y_belt_bot,base_h + 13 mm,53.000,[DERIVED] underside of the Y belt runs
-y_clamp_h,( bed_top - 12 mm ) - y_belt_bot,28.000,[DERIVED] Y belt clamp height - belt up to the carrier spine
-y_clamp_flange_d,60 mm,60.000,[DERIVED] Y belt clamp flange depth - the bolt lever against belt pull
-y_clamp_flange_t,6 mm,6.000,[PART] Y belt clamp flange thickness
-y_clamp_bolt_y,22 mm,22.000,[DERIVED] flange bolt offset from centre - as wide as the carrier spine allows
-y_clamp_bolt_x,10 mm,10.000,[DERIVED] flange bolt offset across the clamp
+name,expression,value_mm,class,comment
+build_x,"230 mm",230.0000,DRIVER,"build volume, X"
+build_y,"235 mm",235.0000,DRIVER,"build volume, Y"
+build_z,"230 mm",230.0000,DRIVER,"build volume, Z"
+carriage_w,"100 mm",100.0000,DRIVER,"width of one IDEX carriage"
+park_gap,"15 mm",15.0000,DRIVER,"clearance between a parked carriage and the build area"
+end_allow,"30 mm",30.0000,DRIVER,"motor / idler allowance at each end of the X beam"
+x_beam_len,"build_x + 2 * carriage_w + 2 * park_gap + 2 * end_allow",520.0000,DERIVED,"X beam length - IDEX needs both carriages parked clear"
+frame_w,"x_beam_len",520.0000,DERIVED,"outer frame width, X"
+frame_d,"2 * build_y + 60 mm",530.0000,DERIVED,"frame depth, Y - a bedslinger needs twice the build depth"
+upright_h,"500 mm",500.0000,DRIVER,"upright length"
+p40,"40 mm",40.0000,PART,"40 mm V-slot face (still 20-series hardware)"
+p20,"20 mm",20.0000,PART,"20 mm V-slot face"
+base_h,"p40",40.0000,DERIVED,"height of the base rail the uprights stand on"
+beam_y,"( frame_d - p40 ) / 2 - mgn_block_h - z_plate_t - p20",206.0000,DERIVED,"X beam Y position - sits clear of the Z block and carriage plate"
+gantry_z,"bed_top + th_drop",168.0000,DERIVED,"gantry height at Z home"
+top_tie_h,"p20",20.0000,DERIVED,"thickness of the top tie bar"
+mgn_rail_w,"12 mm",12.0000,PART,"MGN12 rail width"
+mgn_rail_h,"8 mm",8.0000,PART,"MGN12 rail height above its mounting face"
+mgn_block_h,"13 mm",13.0000,PART,"MGN12H block height above the mounting face"
+mgn_block_len,"45.4 mm",45.4000,NOT WIRED,"MGN12H block length"
+z_plate_t,"6 mm",6.0000,PART,"Z carriage plate thickness"
+bed_rail_spacing,"bed_sz - 35 mm",200.0000,DRIVER,"centres of the two Y rails"
+bed_sz,"max(build_x; build_y)",235.0000,DERIVED,"heated bed size - must be >= build_x and build_y"
+bed_plate_t,"5 mm",5.0000,PART,"bed carrier plate thickness"
+heatbed_t,"3 mm",3.0000,PART,"heated bed thickness"
+bed_top,"base_h + p20 + mgn_rail_h + mgn_block_h + bed_plate_t + bed_spacer_t + heatbed_t + magnet_t + pei_t",93.0000,DERIVED,"top surface of the heated bed - Z zero"
+z_screw_len,"500 mm",500.0000,NOT WIRED,"TR8 lead screw"
+z_plate_w,"p40 + 40 mm",80.0000,NOT WIRED,"Z carriage plate width"
+z_plate_h,"120 mm",120.0000,NOT WIRED,"Z carriage plate height"
+z_screw_x,"60 mm",60.0000,NOT WIRED,"screw centre from upright outer face"
+th_plate_t,"6 mm",6.0000,NOT WIRED,"toolhead plate thickness"
+th_plate_h,"( x_belt_a_z - x_belt_b_z ) + x_belt_sep + belt_t + 6 mm",88.8000,DERIVED,"toolhead plate height - spans both X belt planes so either toolhead can clamp either belt"
+block_pitch,"mgn_block_len + 9.6 mm",55.0000,NOT WIRED,"X spacing between the two MGN12H blocks"
+th_drop,"75 mm",75.0000,DRIVER,"X beam underside to nozzle tip - set by the toolhead"
+bed_spacer_t,"2.5 mm",2.5000,PART,"levelling spacer height"
+magnet_t,"1 mm",1.0000,PART,"magnetic sheet"
+pei_t,"0.5 mm",0.5000,PART,"PEI spring steel sheet"
+x_rail_length,"x_beam_len - 20 mm",500.0000,DERIVED,"X rail - longest stocked MGN12 that fits the beam, 10 mm clear each end"
+y_rail_length,"frame_d - 80 mm",450.0000,DERIVED,"Y rail cut length"
+z_rail_length,"upright_h - 100 mm",400.0000,DERIVED,"Z rail cut length"
+x_belt_run,"x_beam_len - 50 mm",470.0000,DERIVED,"one X belt run, pulley to idler"
+y_belt_run,"frame_d - 120 mm",410.0000,DERIVED,"one Y belt run"
+z_belt_run,"frame_w - 2 * z_screw_x - 30 mm",370.0000,DERIVED,"one Z link belt run"
+x_rail_seat,"gantry_z + 30 mm",198.0000,DERIVED,"X rail centre - the upper slot of the 2040 beam"
+nozzle_park_a,"end_allow + 80 mm",110.0000,DERIVED,"nozzle X with carriage A parked left (toolhead plate centre)"
+nozzle_park_b,"frame_w - end_allow - 80 mm",410.0000,DERIVED,"nozzle X with carriage B parked right"
+x_rail_inset,"( x_beam_len - x_rail_length ) / 2",10.0000,DERIVED,"gap from beam end to X rail end"
+bed_plate_x,"255 mm",255.0000,PART,"bought heated plate width - CR-6 SE assembly, 24 V 270 W"
+bed_plate_y,"245 mm",245.0000,PART,"bought heated plate depth"
+sheet_sz,"bed_sz",235.0000,DERIVED,"magnetic sheet and PEI size - a stocked square size >= bed_sz"
+z_mount_t,"6 mm",6.0000,PART,"Z motor mount plate thickness"
+nema_bolt,"31 mm",31.0000,PART,"NEMA 17 bolt pattern, square"
+z_mount_w,"nema_bolt + 29 mm",60.0000,DERIVED,"Z motor mount plate width"
+z_mount_d,"76 mm",76.0000,DERIVED,"Z motor mount plate depth - motor bolts to the second top-tie slot"
+z_mount_y,"( frame_d - p40 ) / 2 + 2 mm",247.0000,DERIVED,"Z motor mount plate centre, Y"
+belt_t,"1.4 mm",1.4000,PART,"GT2 belt thickness"
+x_belt_sep,"17.4 mm",17.4000,PART,"centres of the two runs of one X belt - the pulley tangents"
+x_belt_a_z,"gantry_z + 57 mm",225.0000,DERIVED,"belt A centreline - the X motor A pulley axis"
+x_belt_b_z,"gantry_z - 7 mm",161.0000,DERIVED,"belt B centreline - the X motor B pulley axis"
+clamp_t,"6 mm",6.0000,PART,"belt clamp body thickness behind the belt"
+clamp_w,"30 mm",30.0000,PART,"belt clamp width along the run"
+th_plate_bot,"x_belt_b_z - x_belt_sep / 2 - belt_t / 2 - 3 mm",148.6000,DERIVED,"toolhead plate bottom - 3 mm clear under the lowest belt"
+belt_w,"6 mm",6.0000,PART,"GT2 6 mm belt width"
+clamp_h,"x_belt_sep + belt_t + 4 mm",22.8000,DERIVED,"belt clamp height - spans both runs of one belt"
+y_belt_sep,"14.6 mm",14.6000,PART,"centres of the two Y belt runs - the pulley tangents"
+y_clamp_w,"y_belt_sep + belt_t + 12 mm",28.0000,DERIVED,"Y belt clamp width - straddles both runs"
+y_clamp_d,"20 mm",20.0000,PART,"Y belt clamp depth"
+y_belt_bot,"base_h + 13 mm",53.0000,DERIVED,"underside of the Y belt runs"
+y_clamp_h,"( bed_top - 12 mm ) - y_belt_bot",28.0000,DERIVED,"Y belt clamp height - belt up to the carrier spine"
+y_clamp_flange_d,"60 mm",60.0000,DERIVED,"Y belt clamp flange depth - the bolt lever against belt pull"
+y_clamp_flange_t,"6 mm",6.0000,PART,"Y belt clamp flange thickness"
+y_clamp_bolt_y,"22 mm",22.0000,DERIVED,"flange bolt offset from centre - as wide as the carrier spine allows"
+y_clamp_bolt_x,"10 mm",10.0000,DERIVED,"flange bolt offset across the clamp"
+fan40_sz,"40 mm",40.0000,PART,"4010 hotend heatsink fan - square face"
+fan40_t,"10 mm",10.0000,PART,"4010 hotend heatsink fan - thickness"
+psu2_l,"199 mm",199.0000,PART,"LRS-200-24 motion supply - length"
+psu2_h,"30 mm",30.0000,PART,"LRS-200-24 motion supply - height off the panel"
+psu2_w,"98 mm",98.0000,PART,"LRS-200-24 motion supply - width"

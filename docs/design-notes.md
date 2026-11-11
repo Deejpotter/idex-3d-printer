@@ -983,6 +983,110 @@ difference is entirely one bracket.
 `max_accel` stays at 5,600. The honest next step is `RESONANCE_TEST` on Y on the
 built machine, not another calculation.
 
+## 24. Pricing it overseas, and the check that caught the BOM
+
+Two questions this round: is the BOM right, and are those prices real? Neither
+answer was yes.
+
+### The overseas column was an estimate pretending to be a number
+
+`docs/budget-build.md` had a line reading "buy generic instead of brand, saves
+~$434". That figure was mine. Nothing had been read from a supplier. It is the
+same failure as the carrier stiffness in §12 — a number that looks like the output
+of a method and is not.
+
+So every line was opened on AliExpress, in a logged-out Australian session, with
+the right option selected on the listing page. Three things came out of it.
+
+**A search result is not a price.** The grid shows the cheapest variant in the
+listing. One result read "MGN12H … A$1.49"; selecting MGN12H at 500 mm on the
+listing page gave A$38.01. The $1.49 was a 100 mm MGN7 rail.
+
+**There is a voucher under the sale price.** Every cheap line showed exactly
+A$1.49 — a 5 m belt and a 10 m belt from the same listing both did, which is a
+floor, not a price. The rail seller's three lengths pin the mechanism down:
+
+| Length | List | Sale |
+|---|---:|---:|
+| 400 mm | $31.19 | $5.77 |
+| 450 mm | $34.60 | $8.26 |
+| 500 mm | $38.01 | $10.75 |
+
+Those fit `sale = 0.73 x list - 17.00` exactly, all three. A 27% discount with a
+flat **A$17.00 first-order voucher** on top, floored at A$1.49. The 27% repeats;
+the $17 does not. Totalling the sale column would have understated the build by
+several hundred dollars, so **the BOM totals the list prices** and records the
+sale prices beside them.
+
+**On branded parts the list price is a fake anchor.** Two lines came out dearer
+overseas at list than at Australian retail — the Octopus Pro bundle ($211.22
+against $194.45) and the Orbiters ($338.94 against $210.90). For commodity parts
+the list price is real and beats local retail by two to four times; for
+name-brand parts only the sale price wins. Each line therefore takes the cheaper
+of the two, and never pays more overseas than at home.
+
+Result: the full basket is **$2,235.38** locally or **$1,644.21** buying overseas
+where it wins; the budget build with reused parts is **$1,074.90**, or **$965.62**
+if the Octopus bundle is caught on sale. One line decides whether it clears a
+thousand. Detail in `docs/budget-build.md`.
+
+### Check 13: the BOM counts have to match the model
+
+Check 11 already measured every cut length against the CAD, and carried a
+hand-written special case for the carriage blocks — added because that count was
+wrong for months. Writing the same special case twice is a sign it should be
+general, so check 13 now does it for every discrete part: a BOM line names the
+Fusion components it buys, the counts are summed per component (several lines
+share one pulley component) and compared with the model.
+
+It failed on its first run, three ways:
+
+```
+FAIL  BOM part counts match the model
+      GT2 idler pulley: BOM buys 7, model has 5
+      Hotend fan 4010 A: BOM buys 1, model has 0
+      Hotend fan 4010 B: BOM buys 1, model has 0
+      PSU LRS-200-24:    BOM buys 1, model has 0
+```
+
+**The idlers: the BOM was wrong.** It listed four for the X axis. Each X belt
+loops from its motor pulley to a single idler at the far end, and that one idler
+turns both runs — two belts, two idlers. The model had it right. Corrected to
+two, which takes $14.90 off.
+
+**The fans and the second supply: the model was wrong.** Both were bought,
+costed and powered, and neither existed in the CAD. The 4010s matter because
+they sit on the moving toolhead; the LRS-200-24 matters because it is a
+199 x 98 x 30 box that has to physically fit behind the panel, and nothing had
+ever checked that it did.
+
+### What was added
+
+- **`Hotend fan 4010 A` and `B`**, 40 x 40 x 10, on the −X face of each hotend —
+  the only clear side, with the 5015 blower at +X and the Orbiter above z=160.
+  16 g each on a material tuned to a real 4010's mass.
+- **`PSU LRS-200-24`**, 199 x 98 x 30, above the Octopus and beside the LRS-350.
+  It fits, with 5 mm to spare at x=475 against the panel's 480.
+- Five parameters, all wired: `fan40_sz`, `fan40_t`, `psu2_l`, `psu2_h`, `psu2_w`.
+
+Each toolhead goes from 571.4 to **587.4 g**, so X falls from 11,765 to about
+**11,445 mm/s²**. The machine does not change: the bed still sets it. The whole
+machine is now **93 parts, 14.66 kg**, and 97 of 97 occurrences are tied to the
+skeleton.
+
+**18 of 18 checks pass.**
+
+### One thing this turned up and did not settle
+
+The two power supplies are now the heaviest parts in the machine — 1,300 g for
+the LRS-350-24 and 1,025 g for the LRS-200-24, which between them are 16% of the
+14.66 kg. Those masses come from the project's own `MASS PSU` material, not from
+a datasheet, and an attempt to read Mean Well's published weights failed: the
+datasheet PDFs would not render and no distributor page was retrieved. The
+figures are internally consistent and externally unverified. Nothing moving
+depends on them, so no acceleration number is affected, but the machine's total
+mass should not be quoted as if it were measured.
+
 ## 11. Still open
 
 - **The bed's acceleration limit is not reliably known** (§23). The 5,646 mm/s²
@@ -994,12 +1098,18 @@ built machine, not another calculation.
   trusting either.
 - Y and Z rail mounting holes do not follow their lengths (§20).
 - Four BOM lines are cut-to-length and need a supplier quote (§21).
-- Five MGN12H carriage blocks have no in-stock Australian source (§21).
+- **The two power supply masses are unverified** (§24). 1,300 g and 1,025 g come
+  from the project's own material, not a datasheet, and together they are 16% of
+  the machine's 14.66 kg. Mean Well's published weights could not be retrieved.
+- The AliExpress lines are priced but not bought, and not the same parts: generic
+  rails rather than LDO, 2.0 A motors rather than 2.5 A, a brass lead-screw nut
+  rather than POM anti-backlash, and a V6 listing with nine reviews (§24). Buy one
+  rail and check it before committing to five.
 - The 255 × 245 plate's mass is scaled from the 235 × 235 part by area; the
   supplier does not publish it.
-- The Z screw pulleys are modelled with the 6.35 mm bore hub part. The real part
-  is the 8 mm bore variant, which is now in the BOM; the model still shows the
-  stand-in.
+- All six drive pulleys are modelled with one 6.35 mm bore stand-in. Four should
+  be 5 mm bore and two 8 mm; both are in the BOM and both were priced overseas
+  (§24). Check 13 counts them but cannot tell the bores apart.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
 - The brackets are plain plates. They carry the right interfaces — every one
   lands on a measured slot and every belt is gripped — but only the Y belt

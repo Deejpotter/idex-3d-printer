@@ -381,6 +381,33 @@ def run(_context):
                     '%d lines checked, %d blocks (%d with rails + %d extra); %s'
                     % (n, blocks, with_rails, extra, '; '.join(bad) or 'all agree'))
 
+                # 13 - every bought part the BOM counts is in the model that many
+                # times. Check 11 does this for cut lengths; the carriage blocks
+                # needed a hand-written special case because the count was wrong
+                # for months. This is the general form: each line names the Fusion
+                # components it buys, the counts are summed per component (several
+                # lines share one pulley component) and compared with the model.
+                want, lineOf, mapped, unmapped = {}, {}, 0, []
+                for items in groups.values():
+                    for it in items:
+                        if 'models' not in it:
+                            if not it.get('cuts') and not it.get('not_modelled'):
+                                unmapped.append(it['item'][:44])
+                            continue
+                        mapped += 1
+                        for m in it['models']:
+                            want[m['component']] = want.get(m['component'], 0) + m['qty']
+                            lineOf.setdefault(m['component'], []).append(it['item'][:34])
+                wrong = []
+                for comp in sorted(want):
+                    have = len(comps.get(comp, []))
+                    if want[comp] != have:
+                        wrong.append('%s: BOM buys %d, model has %d (%s)'
+                                     % (comp, want[comp], have, ' + '.join(lineOf[comp])))
+                chk(sfx + 'BOM part counts match the model', not wrong,
+                    '%d lines, %d components, %d unmapped; %s'
+                    % (mapped, len(want), len(unmapped), '; '.join(wrong) or 'all agree'))
+
                 # 12 - the 24 V budget. Two hotends and a heated bed do not fit one
                 # 350 W supply, and nothing in the CAD would ever have said so.
                 PB = bom.get('power')
