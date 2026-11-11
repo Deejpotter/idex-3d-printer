@@ -24,10 +24,10 @@ Checks
      grows from its left, front and floor); breaking a rule is.
   9  no parameter drives nothing (decoration that looks like design intent)
  10  driver validation rules, in the style of a product configurator:
-     every driver has a legal range, checked before the
-     model is allowed to regenerate rather than after.
- 11  BOM check line - every cut length, count and stocked size listed in
-     docs/bom.json is measured in the model
+     every driver has a legal range and the relationships between them hold.
+ 11  BOM check line - every cut length, count and stocked size in
+     docs/bom.json is measured in the model, carriage blocks included
+ 12  24 V power budget - every load in docs/bom.json against the supplies
 """
 
 import adsk.core
@@ -71,6 +71,8 @@ DRIVER_RULES = {
     'end_allow':  (20, 150, 'motor and idler allowance at each beam end'),
     'upright_h':  (200, 1200, 'upright length'),
     'th_drop':    (40, 200, 'beam underside to nozzle tip'),
+    'bed_plate_x': (100, 500, 'bought heated plate width'),
+    'bed_plate_y': (100, 500, 'bought heated plate depth'),
 }
 
 
@@ -234,7 +236,119 @@ def run(_context):
                     'nozzle x=%.1f, build area %.1f..%.1f' % (nx, bx0, bx1))
 
 
+        def rules(sfx=''):
+            """Checks 10-12: driver ranges, the BOM check line and the 24 V budget.
+
+            Re-run at every flexed size, because "is that rail a stocked length",
+            "does the bought plate still carry the sheets" and "does the supply still
+            cope" are exactly the questions a size change raises.
+            """
+            # 10 - driver ranges and relationships, checked up front
+            broken = []
+            for n, (lo, hi, note) in DRIVER_RULES.items():
+                q = up.itemByName(n)
+                if q is None:
+                    broken.append('%s missing' % n)
+                    continue
+                v = q.value * 10
+                if not (lo <= v <= hi):
+                    broken.append('%s=%.1f outside %g..%g' % (n, v, lo, hi))
+            if pv('bed_sz') < pv('build_x') - 0.01 or pv('bed_sz') < pv('build_y') - 0.01:
+                broken.append('bed_sz %.1f smaller than the build area' % pv('bed_sz'))
+            for ax, pname in (('x', 'bed_plate_x'), ('y', 'bed_plate_y')):
+                if pv(pname) < pv('sheet_sz') - 0.01:
+                    broken.append('%s %.0f is smaller than sheet_sz %.0f - the bought heated plate '
+                                  'cannot carry the sheets' % (pname, pv(pname), pv('sheet_sz')))
+            if pv('carriage_w') < 2 * 45.4:
+                broken.append('carriage_w %.1f cannot hold two MGN12H blocks in line' % pv('carriage_w'))
+            if abs(pv('z_screw_len') - pv('upright_h')) > 0.01:
+                broken.append('upright_h %.0f needs %.0f mm lead screws, model has z_screw_len %.0f'
+                              % (pv('upright_h'), pv('upright_h'), pv('z_screw_len')))
+            if pv('gantry_z') < pv('bed_top'):
+                broken.append('gantry_z below bed_top - the nozzle would be inside the bed')
+            chk(sfx + 'driver values are in range', not broken, '; '.join(broken) or 'all drivers legal')
+
+            # 11 - the BOM check line: every cut length and count in docs/bom.json
+            # is measured in the model. A CAD change without a BOM change fails here.
+            try:
+                bom = json.load(open(BOM_JSON, encoding='utf-8'))
+                groups = bom['groups']
+            except Exception as ex:
+                bom, groups = None, {}
+                chk(sfx + 'BOM matches the model', False, 'cannot read %s: %s' % (BOM_JSON, ex))
+            if bom is not None:
+                comps = {}
+                for i in range(ao.count):
+                    o = ao.item(i)
+                    if o.fullPathName.split('+')[0].startswith(('Z - Parts', 'Skeleton')):
+                        continue
+                    comps.setdefault(o.component.name, []).append(o)
+                bad, n = [], 0
+                for items in groups.values():
+                    for it in items:
+                        total = 0.0
+                        for c in it.get('cuts', []):
+                            n += 1
+                            occs = comps.get(c['component'], [])
+                            if len(occs) != c['qty']:
+                                bad.append('%s: BOM %d, model %d' % (c['component'], c['qty'], len(occs)))
+                            if not occs:
+                                continue
+                            comp = occs[0].component
+                            how = c.get('measure', 'extrude')
+                            if how == 'extrude':
+                                mm = comp.features.extrudeFeatures.item(0).extentOne.distance.value * 10
+                            else:
+                                bb = comp.bRepBodies.item(0).boundingBox
+                                k = 'xyz'.index(how)
+                                mm = ([bb.maxPoint.x, bb.maxPoint.y, bb.maxPoint.z][k] -
+                                      [bb.minPoint.x, bb.minPoint.y, bb.minPoint.z][k]) * 10
+                            if abs(mm - c['mm']) > 0.05 and not sfx:
+                                bad.append('%s: BOM %g mm, model %.1f mm' % (c['component'], c['mm'], mm))
+                            if 'stock' in c and not any(abs(mm - st) < 0.05 for st in c['stock']):
+                                bad.append('%s: %.1f mm is not a stocked size %s' % (c['component'], mm, c['stock']))
+                            total += mm * len(occs)
+                        if 'stock_total_mm' in it and total > it['stock_total_mm']:
+                            bad.append('%s: needs %.0f mm, stock is %d mm' % (it['item'], total, it['stock_total_mm']))
+
+                # carriage blocks: the ones that ship with rails, plus the extra line,
+                # must equal the blocks in the model. This was wrong by two for months.
+                with_rails = sum(it.get('carriages', 0) for items in groups.values() for it in items)
+                extra = sum(it['qty'] for items in groups.values() for it in items
+                            if 'carriage block' in it['item'].lower())
+                blocks = len(comps.get('MGN12H block', []))
+                n += 1
+                if with_rails + extra != blocks:
+                    bad.append('MGN12H blocks: model %d, BOM %d with rails + %d extra'
+                               % (blocks, with_rails, extra))
+                chk(sfx + ('every length is a buyable size' if sfx else 'BOM matches the model'), not bad,
+                    '%d lines checked, %d blocks (%d with rails + %d extra); %s'
+                    % (n, blocks, with_rails, extra, '; '.join(bad) or 'all agree'))
+
+                # 12 - the 24 V budget. Two hotends and a heated bed do not fit one
+                # 350 W supply, and nothing in the CAD would ever have said so.
+                PB = bom.get('power')
+                if not PB:
+                    chk(sfx + '24 V supplies have headroom', False, 'no power block in bom.json')
+                else:
+                    cap = PB['max_load_fraction']
+                    over, lines = [], []
+                    for sup in PB['supplies']:
+                        load = sum(l['qty'] * l['watts'] for l in PB['loads'] if l['rail'] == sup['rail'])
+                        frac = load / sup['watts']
+                        lines.append('%s %.0f/%dW %.0f%%' % (sup['rail'], load, sup['watts'], 100 * frac))
+                        if frac > cap:
+                            over.append('%s at %.0f%% of %s' % (sup['rail'], 100 * frac, sup['name']))
+                    rails = {s['rail'] for s in PB['supplies']}
+                    unpowered = sorted({l['rail'] for l in PB['loads']} - rails)
+                    if unpowered:
+                        over.append('no supply for rail(s): %s' % ', '.join(unpowered))
+                    chk(sfx + '24 V supplies have headroom', not over,
+                        '%s (cap %.0f%%); %s' % (', '.join(lines), 100 * cap, '; '.join(over) or 'all within cap'))
+
+
         geometry()
+        rules()
 
         # 6 - timeline
         bad = 0
@@ -280,9 +394,11 @@ def run(_context):
             des.computeAll()
             adsk.doEvents()
             n0 = len(results)
+            sfx = '@ %s=%s: ' % (pname, test)
             try:
                 pl[:] = part_list(root)
-                geometry('@ %s=%s: ' % (pname, test))
+                geometry(sfx)
+                rules(sfx)
             finally:
                 up.itemByName(pname).expression = nominal
                 des.computeAll()
@@ -316,71 +432,6 @@ def run(_context):
         orphan = [n for n in names if n not in used]
         chk('every parameter drives something', not orphan,
             '%d of %d drive nothing: %s' % (len(orphan), len(names), ', '.join(orphan) or 'none'))
-
-        # 10 - driver ranges and relationships, checked up front
-        broken = []
-        for n, (lo, hi, note) in DRIVER_RULES.items():
-            q = up.itemByName(n)
-            if q is None:
-                broken.append('%s missing' % n)
-                continue
-            v = q.value * 10
-            if not (lo <= v <= hi):
-                broken.append('%s=%.1f outside %g..%g' % (n, v, lo, hi))
-        if pv('bed_sz') < pv('build_x') - 0.01 or pv('bed_sz') < pv('build_y') - 0.01:
-            broken.append('bed_sz %.1f smaller than the build area' % pv('bed_sz'))
-        if pv('carriage_w') < 2 * 45.4:
-            broken.append('carriage_w %.1f cannot hold two MGN12H blocks in line' % pv('carriage_w'))
-        if abs(pv('z_screw_len') - pv('upright_h')) > 0.01:
-            broken.append('upright_h %.0f needs %.0f mm lead screws, model has z_screw_len %.0f'
-                          % (pv('upright_h'), pv('upright_h'), pv('z_screw_len')))
-        if pv('gantry_z') < pv('bed_top'):
-            broken.append('gantry_z below bed_top - the nozzle would be inside the bed')
-        chk('driver values are in range', not broken, '; '.join(broken) or 'all drivers legal')
-
-        # 11 - the BOM check line: every cut length and count in docs/bom.json
-        # is measured in the model. A CAD change without a BOM change fails here.
-        try:
-            bom = json.load(open(BOM_JSON, encoding='utf-8'))
-        except Exception as ex:
-            bom = None
-            chk('BOM matches the model', False, 'cannot read %s: %s' % (BOM_JSON, ex))
-        if bom is not None:
-            bad, n = [], 0
-            comps = {}
-            for i in range(ao.count):
-                o = ao.item(i)
-                if o.fullPathName.split('+')[0].startswith(('Z - Parts', 'Skeleton')):
-                    continue
-                comps.setdefault(o.component.name, []).append(o)
-            for sec, items in bom.items():
-                for it in items:
-                    total = 0.0
-                    for cut in it.get('cuts', []):
-                        n += 1
-                        occs = comps.get(cut['component'], [])
-                        if len(occs) != cut['qty']:
-                            bad.append('%s: BOM %d, model %d' % (cut['component'], cut['qty'], len(occs)))
-                        if not occs:
-                            continue
-                        c = occs[0].component
-                        how = cut.get('measure', 'extrude')
-                        if how == 'extrude':
-                            mm = c.features.extrudeFeatures.item(0).extentOne.distance.value * 10
-                        else:
-                            bb = c.bRepBodies.item(0).boundingBox
-                            k = 'xyz'.index(how)
-                            mm = ([bb.maxPoint.x, bb.maxPoint.y, bb.maxPoint.z][k] -
-                                  [bb.minPoint.x, bb.minPoint.y, bb.minPoint.z][k]) * 10
-                        if abs(mm - cut['mm']) > 0.05:
-                            bad.append('%s: BOM %g mm, model %.1f mm' % (cut['component'], cut['mm'], mm))
-                        if 'stock' in cut and not any(abs(mm - st) < 0.05 for st in cut['stock']):
-                            bad.append('%s: %.1f mm is not a stocked length %s' % (cut['component'], mm, cut['stock']))
-                        total += mm * len(occs)
-                    if 'stock_total_mm' in it and total > it['stock_total_mm']:
-                        bad.append('%s: needs %.0f mm, stock is %d mm' % (it['item'], total, it['stock_total_mm']))
-            chk('BOM matches the model', not bad,
-                '%d cut lines checked; %s' % (n, '; '.join(bad) or 'all agree'))
 
         out = os.path.join(os.path.expanduser('~'), 'idex-model-checks.json')
         with open(out, 'w') as f:

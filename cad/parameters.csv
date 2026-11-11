@@ -38,7 +38,7 @@ magnet_t,1 mm,1.000,[PART] magnetic sheet
 pei_t,0.5 mm,0.500,[PART] PEI spring steel sheet
 x_rail_length,x_beam_len - 20 mm,500.000,"[DERIVED] X rail - longest stocked MGN12 that fits the beam, 10 mm clear each end"
 y_rail_length,frame_d - 80 mm,450.000,[DERIVED] Y rail cut length
-z_rail_length,upright_h - 150 mm,350.000,[DERIVED] Z rail cut length
+z_rail_length,upright_h - 100 mm,400.000,[DERIVED] Z rail cut length
 x_belt_run,x_beam_len - 50 mm,470.000,"[DERIVED] one X belt run, pulley to idler"
 y_belt_run,frame_d - 120 mm,410.000,[DERIVED] one Y belt run
 z_belt_run,frame_w - 2 * z_screw_x - 30 mm,370.000,[DERIVED] one Z link belt run
@@ -46,3 +46,6 @@ x_rail_seat,gantry_z + 30 mm,198.000,[DERIVED] X rail centre - the upper slot of
 nozzle_park_a,end_allow + 80 mm,110.000,[DERIVED] nozzle X with carriage A parked left (toolhead plate centre)
 nozzle_park_b,frame_w - end_allow - 80 mm,410.000,[DERIVED] nozzle X with carriage B parked right
 x_rail_inset,( x_beam_len - x_rail_length ) / 2,10.000,[DERIVED] gap from beam end to X rail end
+bed_plate_x,255 mm,255.000,"[PART] bought heated plate width - CR-6 SE assembly, 24 V 270 W"
+bed_plate_y,245 mm,245.000,[PART] bought heated plate depth
+sheet_sz,bed_sz,235.000,[DERIVED] magnetic sheet and PEI size - a stocked square size >= bed_sz

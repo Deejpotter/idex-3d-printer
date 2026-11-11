@@ -17,9 +17,9 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Z | One motor, belt-linked to two TR8×8 lead screws |
 | Electronics | BTT Octopus Pro V1.1 + Raspberry Pi, 6 × TMC2209, 24 V |
 | Toolhead mass | 518 g each (modelled) |
-| Moving bed mass | 1.27 kg (modelled) |
+| Moving bed mass | 1.34 kg (modelled) |
 | Frame mass | 4.48 kg; complete modelled machine **13.41 kg**, 87 bodies |
-| Estimated cost | ~A$2,015 inc. GST |
+| Estimated cost | **A$2,250 inc. GST**, A$1,917 of it verified against live listings |
 
 ## What's here
 
@@ -28,7 +28,7 @@ docs/
   build-spec.html    the full write-up: 15 sections, from "why it's slow" to the BOM
   design-notes.md    engineering findings, corrections, and what is still unverified
   bom.md             bill of materials with supplier links and AUD prices
-  bom.json           BOM source: prices, and every cut length against its CAD part
+  bom.json           BOM source: prices, links, stock, cut lengths, 24 V loads
   skeleton-plan.md   how the model was made skeleton-driven
 cad/
   idex-printer-assembly.f3d    Fusion archive (open this one to edit)
@@ -52,8 +52,8 @@ asserts the design rules numerically instead of by eye: nozzle height against
 `bed_top`, every bracket touching a frame member, lead screws seated, rails
 centred on real V-slots, interference limited to the known shaft-through-bore
 set, timeline health, toolhead parking, every part tied to the skeleton, every
-parameter driving something, driver ranges, and a BOM check line that measures
-every cut length in the model. **14 of 14 pass.** Set `FLEX_CASES` to re-run the
+parameter driving something, driver ranges, a BOM check line that measures every
+cut length and carriage block in the model, and a 24 V power budget. **15 of 15 pass.** Set `FLEX_CASES` to re-run the
 geometry rules with `build_x`, `build_y` or `upright_h` changed.
 
 ![Assembly](docs/assembly.png)
@@ -84,6 +84,10 @@ the parameters - 91 of 91 - and the design rules are re-checked at other sizes:
 | `build_x` 230 → 300 | frame, beam, rail, belts and toolhead B follow; all rules hold |
 | `build_y` 235 → 305 | frame, bed, Y rails, belts, motor and electronics follow; all rules hold |
 | `upright_h` 500 → 570 | uprights, Z rails and top tie follow; **the 500 mm lead screws no longer reach** - flagged |
+
+The same flex also asks the buying questions, and those are what bind: a bigger
+build needs a 570 mm X rail and 300 mm sheets, neither of which is sold. **230 ×
+235 mm is the largest build this parts list allows**, not an arbitrary choice.
 
 A part that stays put is not a failure (the frame grows from its left, front and
 floor); a broken rule is. See [design-notes.md](docs/design-notes.md) §20.

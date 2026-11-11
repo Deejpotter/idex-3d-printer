@@ -1,450 +1,730 @@
 {
- "A. Frame": [
-  {
-   "item": "4040 V-slot black - 2 x 500 (uprights) + 2 x 530 (base rails) = 2.06 m",
-   "qty": 1,
-   "unit": 90,
-   "note": "est",
-   "line": 90,
-   "cuts": [
-    {
-     "component": "Upright 4040",
-     "mm": 500,
-     "qty": 2
-    },
-    {
-     "component": "Base rail 4040",
-     "mm": 530,
-     "qty": 2
-    }
-   ]
-  },
-  {
-   "item": "2040 V-slot black - 2 x 520 (top tie, X beam) + 2 x 440 (base cross) = 1.92 m",
-   "qty": 1,
-   "unit": 44,
-   "note": "est",
-   "line": 44,
-   "cuts": [
-    {
-     "component": "Top tie 2040",
-     "mm": 520,
-     "qty": 1
-    },
-    {
-     "component": "X beam 2040",
-     "mm": 520,
-     "qty": 1
-    },
-    {
-     "component": "Base cross 2040",
-     "mm": 440,
-     "qty": 2
-    }
-   ]
-  },
-  {
-   "item": "2020 V-slot black - 2 x 530 (bed rails) = 1.06 m",
-   "qty": 1,
-   "unit": 15,
-   "note": "est",
-   "line": 15,
-   "cuts": [
-    {
-     "component": "Bed rail 2020",
-     "mm": 530,
-     "qty": 2
-    }
-   ]
-  },
-  {
-   "item": "M5 drop-in T-nuts, 20 pc",
-   "qty": 4,
-   "unit": 8,
-   "note": "",
-   "line": 32
-  },
-  {
-   "item": "Black angle corner connector (2020 ends only)",
-   "qty": 8,
-   "unit": 4.5,
-   "note": "est",
-   "line": 36
-  },
-  {
-   "item": "M5 button screws, 8/12/16/20 mm assortment",
-   "qty": 1,
-   "unit": 25,
-   "note": "est",
-   "line": 25
-  }
- ],
- "B. X gantry": [
-  {
-   "item": "LDO SLR12H MGN12H rail + 1 carriage, 500 mm Z1",
-   "qty": 1,
-   "unit": 85.45,
-   "note": "",
-   "line": 85.45,
-   "cuts": [
-    {
-     "component": "MGN12 rail X",
-     "mm": 500,
-     "qty": 1,
-     "stock": [
-      300,
-      320,
-      330,
-      350,
-      400,
-      450,
-      500
-     ]
-    }
-   ]
-  },
-  {
-   "item": "Extra MGN12H carriage blocks (3 more for 2 x 2-block carriages)",
-   "qty": 3,
-   "unit": 15,
-   "note": "AliExpress",
-   "line": 45
-  },
-  {
-   "item": "LDO NEMA 17 42STH48-2504AC",
-   "qty": 2,
-   "unit": 34.95,
-   "note": "",
-   "line": 69.9
-  },
-  {
-   "item": "Gates 2GT 20T pulley, 5 mm bore, 6 mm belt",
-   "qty": 2,
-   "unit": 11,
-   "note": "",
-   "line": 22
-  },
-  {
-   "item": "Gates 2GT 20T toothed idler, 6 mm",
-   "qty": 4,
-   "unit": 7.45,
-   "note": "",
-   "line": 29.8
-  }
- ],
- "C. Toolheads": [
-  {
-   "item": "Trianglelab V6 hotend pre-assembled, 24 V",
-   "qty": 2,
-   "unit": 45,
-   "note": "",
-   "line": 90
-  },
-  {
-   "item": "LDO Orbiter v2.5 extruder (motor included)",
-   "qty": 2,
-   "unit": 105.45,
-   "note": "",
-   "line": 210.9
-  },
-  {
-   "item": "5015 blower fan 24 V (part cooling)",
-   "qty": 2,
-   "unit": 19.5,
-   "note": "",
-   "line": 39
-  },
-  {
-   "item": "4010 axial hotend fan 24 V",
-   "qty": 2,
-   "unit": 8,
-   "note": "",
-   "line": 16
-  },
-  {
-   "item": "ADXL345 accelerometer (shared, for input shaping)",
-   "qty": 1,
-   "unit": 4.95,
-   "note": "",
-   "line": 4.95
-  }
- ],
- "D. Y and bed": [
-  {
-   "item": "LDO SLR12H MGN12H rail + carriage, 450 mm Z1",
-   "qty": 2,
-   "unit": 79.45,
-   "note": "",
-   "line": 158.9,
-   "cuts": [
-    {
-     "component": "MGN12 rail Y",
-     "mm": 450,
-     "qty": 2,
-     "stock": [
-      300,
-      320,
-      330,
-      350,
-      400,
-      450,
-      500
-     ]
-    }
-   ]
-  },
-  {
-   "item": "LDO NEMA 17 42STH48-2504AC",
-   "qty": 1,
-   "unit": 34.95,
-   "note": "",
-   "line": 34.95
-  },
-  {
-   "item": "Gates 2GT 20T pulley 5 mm bore + 2 idlers",
-   "qty": 1,
-   "unit": 25.9,
-   "note": "",
-   "line": 25.9
-  },
-  {
-   "item": "Aluminium heated bed, 235 x 235 x 3 mm, 24 V, bonded heater",
-   "qty": 1,
-   "unit": 49.95,
-   "note": "out of stock",
-   "line": 49.95,
-   "cuts": [
-    {
-     "component": "Heated bed 235x235",
-     "mm": 235,
-     "qty": 1,
-     "measure": "x",
-     "stock": [
-      235
-     ]
-    }
-   ]
-  },
-  {
-   "item": "Magnetic sheet 235x235, high-temp 3M",
-   "qty": 1,
-   "unit": 11.95,
-   "note": "",
-   "line": 11.95
-  },
-  {
-   "item": "Light Satin PEI spring steel plate 235x235",
-   "qty": 1,
-   "unit": 36.45,
-   "note": "",
-   "line": 36.45
-  },
-  {
-   "item": "Bed carrier bars - 235 x 35 x 5 mm aluminium flat, 2 off",
-   "qty": 1,
-   "unit": 25,
-   "note": "est",
-   "line": 25
-  },
-  {
-   "item": "Silicone levelling spacers, 4 pc",
-   "qty": 1,
-   "unit": 11,
-   "note": "",
-   "line": 11
-  }
- ],
- "E. Z axis": [
-  {
-   "item": "8 mm TR8 lead screw / ACME, 500 mm",
-   "qty": 2,
-   "unit": 27.5,
-   "note": "",
-   "line": 55,
-   "cuts": [
-    {
-     "component": "8mm x 500mm Lead Screw",
-     "mm": 500,
-     "qty": 2,
-     "measure": "z"
-    }
-   ]
-  },
-  {
-   "item": "POM anti-backlash nut TR8x8",
-   "qty": 2,
-   "unit": 5.55,
-   "note": "",
-   "line": 11.1
-  },
-  {
-   "item": "LDO SLR12H MGN12H rail + carriage, 350 mm Z1",
-   "qty": 2,
-   "unit": 65.45,
-   "note": "",
-   "line": 130.9,
-   "cuts": [
-    {
-     "component": "MGN12 rail Z",
-     "mm": 350,
-     "qty": 2,
-     "stock": [
-      300,
-      320,
-      330,
-      350,
-      400,
-      450,
-      500
-     ]
-    }
-   ]
-  },
-  {
-   "item": "LDO NEMA 17 42STH48-2504AC",
-   "qty": 1,
-   "unit": 34.95,
-   "note": "",
-   "line": 34.95
-  },
-  {
-   "item": "2GT 20T pulley 8 mm bore (on each screw)",
-   "qty": 2,
-   "unit": 11,
-   "note": "",
-   "line": 22
-  },
-  {
-   "item": "2GT 20T pulley 5 mm bore (motor)",
-   "qty": 1,
-   "unit": 11,
-   "note": "",
-   "line": 11
-  },
-  {
-   "item": "2GT 20T toothed idler 6 mm (belt link tensioner)",
-   "qty": 2,
-   "unit": 7.45,
-   "note": "",
-   "line": 14.9
-  },
-  {
-   "item": "F688Z flange bearing 8x16x5 (2 pc) - screw top support",
-   "qty": 1,
-   "unit": 6,
-   "note": "",
-   "line": 6
-  }
- ],
- "F. Belt stock": [
-  {
-   "item": "Gates Powergrip RF 2GT 6 mm belt, 6 m (X x2, Y, Z link)",
-   "qty": 1,
-   "unit": 59,
-   "note": "",
-   "line": 59,
-   "cuts": [
-    {
-     "component": "Belt A upper",
-     "mm": 470,
-     "qty": 1,
-     "measure": "x"
-    },
-    {
-     "component": "Belt A lower",
-     "mm": 470,
-     "qty": 1,
-     "measure": "x"
-    },
-    {
-     "component": "Belt B upper",
-     "mm": 470,
-     "qty": 1,
-     "measure": "x"
-    },
-    {
-     "component": "Belt B lower",
-     "mm": 470,
-     "qty": 1,
-     "measure": "x"
-    },
-    {
-     "component": "Y belt run 1",
-     "mm": 410,
-     "qty": 1,
-     "measure": "y"
-    },
-    {
-     "component": "Y belt run 2",
-     "mm": 410,
-     "qty": 1,
-     "measure": "y"
-    },
-    {
-     "component": "Z belt run 1",
-     "mm": 370,
-     "qty": 1,
-     "measure": "x"
-    },
-    {
-     "component": "Z belt run 2",
-     "mm": 370,
-     "qty": 1,
-     "measure": "x"
-    }
-   ],
-   "stock_total_mm": 6000
-  }
- ],
- "G. Electronics": [
-  {
-   "item": "BTT Octopus Pro V1.1 (H723) - 8 driver slots, standalone",
-   "qty": 1,
-   "unit": 115,
-   "note": "",
-   "line": 115
-  },
-  {
-   "item": "Raspberry Pi 4 (2 GB) to run Klipper, over USB",
-   "qty": 1,
-   "unit": 85,
-   "note": "est",
-   "line": 85
-  },
-  {
-   "item": "BTT TMC2209 V1.3 drivers, 8-pack",
-   "qty": 1,
-   "unit": 79.45,
-   "note": "",
-   "line": 79.45
-  },
-  {
-   "item": "Mean Well LRS-350-24 - 24 V, 14.6 A, 350 W",
-   "qty": 1,
-   "unit": 74.65,
-   "note": "",
-   "line": 74.65
-  },
-  {
-   "item": "Omron D2F-5L endstop switch",
-   "qty": 4,
-   "unit": 5.45,
-   "note": "",
-   "line": 21.8
-  },
-  {
-   "item": "ADXL345 accelerometer (on the Pi SPI)",
-   "qty": 1,
-   "unit": 4.95,
-   "note": "",
-   "line": 4.95
-  },
-  {
-   "item": "Wiring, Wago blocks, ferrules, IEC inlet, drag chain",
-   "qty": 1,
-   "unit": 80,
-   "note": "est",
-   "line": 80
-  }
- ]
+ "meta": {
+  "priced_on": "2026-11-11",
+  "currency": "AUD inc GST",
+  "note": "Every \"verified\" line was read from the supplier's own live product data on the date above, including the variant named in the Option column and its stock state. \"estimate\" is my own figure and is not a quote."
+ },
+ "power": {
+  "max_load_fraction": 0.8,
+  "supplies": [
+   {
+    "name": "Mean Well LRS-350-24",
+    "watts": 350,
+    "rail": "bed"
+   },
+   {
+    "name": "Mean Well LRS-200-24",
+    "watts": 211,
+    "rail": "motion"
+   }
+  ],
+  "loads": [
+   {
+    "load": "Heated bed, CR-6 SE 24 V assembly",
+    "qty": 1,
+    "watts": 270,
+    "rail": "bed",
+    "source": "supplier listing: 24V ~270W"
+   },
+   {
+    "load": "V6 hotend heater cartridge",
+    "qty": 2,
+    "watts": 40,
+    "rail": "motion",
+    "source": "E3D V6 24 V cartridge rating"
+   },
+   {
+    "load": "NEMA 17 via TMC2209",
+    "qty": 6,
+    "watts": 8,
+    "rail": "motion",
+    "source": "estimate at 1.2 A RMS, 1 ohm per phase, plus driver loss"
+   },
+   {
+    "load": "5015 part cooling blower",
+    "qty": 2,
+    "watts": 2.8,
+    "rail": "motion",
+    "source": "0.12 A at 24 V"
+   },
+   {
+    "load": "4010 hotend fan",
+    "qty": 2,
+    "watts": 1.5,
+    "rail": "motion",
+    "source": "0.06 A at 24 V"
+   },
+   {
+    "load": "Octopus Pro board, drivers idle",
+    "qty": 1,
+    "watts": 5,
+    "rail": "motion",
+    "source": "estimate"
+   }
+  ],
+  "off_budget": "The Raspberry Pi runs from its own 5 V USB-C supply, not the 24 V rails."
+ },
+ "groups": {
+  "A. Frame": [
+   {
+    "item": "4040 V-slot black (20 series) - 2 x 500 uprights + 2 x 530 base rails = 2.06 m",
+    "qty": 1,
+    "unit": 90.0,
+    "line": 90.0,
+    "url": "https://rmcomponents.com.au/products/copy-of-2020-silver-t-slot-aluminium-profile-20-series",
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate",
+    "note": "cut to length; the storefront calculator publishes no per-mm rate, so ask for a quote",
+    "cuts": [
+     {
+      "component": "Upright 4040",
+      "mm": 500,
+      "qty": 2
+     },
+     {
+      "component": "Base rail 4040",
+      "mm": 530,
+      "qty": 2
+     }
+    ]
+   },
+   {
+    "item": "2040 V-slot black - 2 x 520 top tie and X beam + 2 x 440 base cross = 1.92 m",
+    "qty": 1,
+    "unit": 44.0,
+    "line": 44.0,
+    "url": "https://rmcomponents.com.au/products/2040-black-v-slot-aluminium-profile-20-series",
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate",
+    "note": "cut to length, as above",
+    "cuts": [
+     {
+      "component": "Top tie 2040",
+      "mm": 520,
+      "qty": 1
+     },
+     {
+      "component": "X beam 2040",
+      "mm": 520,
+      "qty": 1
+     },
+     {
+      "component": "Base cross 2040",
+      "mm": 440,
+      "qty": 2
+     }
+    ]
+   },
+   {
+    "item": "2020 V-slot black - 2 x 530 bed rails = 1.06 m",
+    "qty": 1,
+    "unit": 15.0,
+    "line": 15.0,
+    "url": "https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series",
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate",
+    "note": "cut to length, as above",
+    "cuts": [
+     {
+      "component": "Bed rail 2020",
+      "mm": 530,
+      "qty": 2
+     }
+    ]
+   },
+   {
+    "item": "M5 drop-in T-slot nuts, 20 pc",
+    "qty": 4,
+    "unit": 8.0,
+    "line": 32.0,
+    "url": "https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts",
+    "variant": "M5",
+    "stock": "in",
+    "conf": "verified",
+    "note": "RM Components list an M5 20-series drop-in spring T-nut 20 pc at $5.49 if you are already ordering extrusion there"
+   },
+   {
+    "item": "20 series right-angle V-slot bracket, black",
+    "qty": 8,
+    "unit": 3.3,
+    "line": 26.4,
+    "url": "https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "M5 socket head cap screws CL12.9, 25 pc - one pack each of 8, 12 and 16 mm",
+    "qty": 3,
+    "unit": 10.95,
+    "line": 32.85,
+    "url": "https://store.dremc.com.au/products/m5-hex-socket-head-cap-screws-shcs-cl12-9-25pc",
+    "variant": "8 mm / 12 mm / 16 mm",
+    "stock": "in",
+    "conf": "verified",
+    "note": "the 10 mm length was out of stock"
+   }
+  ],
+  "B. X gantry": [
+   {
+    "item": "LDO SLR12H / MGN12H stainless rail with carriage, 500 mm",
+    "qty": 1,
+    "unit": 85.45,
+    "line": 85.45,
+    "url": "https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage",
+    "variant": "500mm / Z1",
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "MGN12 rail X",
+      "mm": 500,
+      "qty": 1,
+      "stock": [
+       300,
+       320,
+       330,
+       350,
+       400,
+       450,
+       500
+      ]
+     }
+    ],
+    "carriages": 1
+   },
+   {
+    "item": "MGN12H carriage blocks, 5 extra (10 blocks in the model, 5 come with the rails)",
+    "qty": 5,
+    "unit": 18.0,
+    "line": 90.0,
+    "url": null,
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate",
+    "note": "AliExpress. The only Australian listing found is HIWIN Precision H at $105.00 each, out of stock; a 300 mm LDO rail-and-carriage set at $55.95 is the in-stock local fallback"
+   },
+   {
+    "item": "LDO NEMA 17 42STH48-2504AC",
+    "qty": 2,
+    "unit": 34.95,
+    "line": 69.9,
+    "url": "https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T pulley, 5 mm bore, 6 mm belt",
+    "qty": 2,
+    "unit": 11.0,
+    "line": 22.0,
+    "url": "https://store.dremc.com.au/products/ldo-2gt-pulleys",
+    "variant": "20T Pulley with 5mm bore 6mm Belt",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T toothed idler, 6 mm",
+    "qty": 4,
+    "unit": 7.45,
+    "line": 29.8,
+    "url": "https://store.dremc.com.au/products/ldo-gt2-2gt-20t-toothed-idler-6mm-wide",
+    "variant": "Toothed Idler 6mm 20 Teeth 5mm ID",
+    "stock": "in",
+    "conf": "verified"
+   }
+  ],
+  "C. Toolheads": [
+   {
+    "item": "Trianglelab V6 hotend, pre-assembled, 24 V",
+    "qty": 2,
+    "unit": 45.0,
+    "line": 90.0,
+    "url": "https://store.dremc.com.au/products/v6-hotend-pre-assembled-compatible-for-prusa-i3-mk3-s-trianglelab",
+    "variant": "Pre-Assembled",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "LDO Orbiter v2.5 extruder, motor included",
+    "qty": 2,
+    "unit": 105.45,
+    "line": 210.9,
+    "url": "https://store.dremc.com.au/products/ldo-orbiter-v2-5-extruder",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "5015 blower fan 24 V, part cooling",
+    "qty": 2,
+    "unit": 19.5,
+    "line": 39.0,
+    "url": "https://store.dremc.com.au/products/5015-24v-blower-fan-by-dremc",
+    "variant": "2 Wire",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "4010 axial fan 24 V, hotend heatsink",
+    "qty": 2,
+    "unit": 20.5,
+    "line": 41.0,
+    "url": "https://store.dremc.com.au/products/4010-axial-fan-24v-by-dremc",
+    "variant": "3 wire (Tachometer Output)",
+    "stock": "in",
+    "conf": "verified",
+    "note": "the 2-wire version is $19.50 but was out of stock"
+   }
+  ],
+  "D. Y and bed": [
+   {
+    "item": "LDO SLR12H / MGN12H stainless rail with carriage, 450 mm",
+    "qty": 2,
+    "unit": 79.45,
+    "line": 158.9,
+    "url": "https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage",
+    "variant": "450mm / Z1",
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "MGN12 rail Y",
+      "mm": 450,
+      "qty": 2,
+      "stock": [
+       300,
+       320,
+       330,
+       350,
+       400,
+       450,
+       500
+      ]
+     }
+    ],
+    "carriages": 2
+   },
+   {
+    "item": "LDO NEMA 17 42STH48-2504AC",
+    "qty": 1,
+    "unit": 34.95,
+    "line": 34.95,
+    "url": "https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T pulley, 5 mm bore, 6 mm belt",
+    "qty": 1,
+    "unit": 11.0,
+    "line": 11.0,
+    "url": "https://store.dremc.com.au/products/ldo-2gt-pulleys",
+    "variant": "20T Pulley with 5mm bore 6mm Belt",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T toothed idler, 6 mm",
+    "qty": 1,
+    "unit": 7.45,
+    "line": 7.45,
+    "url": "https://store.dremc.com.au/products/ldo-gt2-2gt-20t-toothed-idler-6mm-wide",
+    "variant": "Toothed Idler 6mm 20 Teeth 5mm ID",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Heated bed assembly, 255 x 245 mm, 24 V ~270 W (CR-6 SE)",
+    "qty": 1,
+    "unit": 55.95,
+    "line": 55.95,
+    "url": "https://store.dremc.com.au/products/heated-hot-bed-kit-for-cr-6-se",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "replaces the 235 x 235 Ender 3 bed, which is out of stock at both DREMC listings. Bigger than the 235 print area, so it carries the sheets with margin",
+    "cuts": [
+     {
+      "component": "Heated bed 255x245",
+      "mm": 255,
+      "qty": 1,
+      "measure": "x"
+     }
+    ]
+   },
+   {
+    "item": "Magnetic sheet 235 x 235, high-temp 3M adhesive",
+    "qty": 1,
+    "unit": 11.95,
+    "line": 11.95,
+    "url": "https://store.dremc.com.au/products/magnetic-sheet-with-3m-adhesive",
+    "variant": "235x235 Ender 3 / 5",
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "Magnetic sheet",
+      "mm": 235,
+      "qty": 1,
+      "measure": "x",
+      "stock": [
+       125,
+       185,
+       235,
+       255,
+       305,
+       355
+      ]
+     }
+    ]
+   },
+   {
+    "item": "Light satin PEI spring steel plate, 235 x 235",
+    "qty": 1,
+    "unit": 36.45,
+    "line": 36.45,
+    "url": "https://store.dremc.com.au/products/dremc-light-satin-pei-spring-steel-build-plate-3d-printers",
+    "variant": "235x235 K1/Ender 3 V3",
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "PEI spring steel",
+      "mm": 235,
+      "qty": 1,
+      "measure": "x",
+      "stock": [
+       125,
+       185,
+       235,
+       255,
+       305,
+       355
+      ]
+     }
+    ]
+   },
+   {
+    "item": "Bed carrier bars - 6061 flat bar, 2 off at 235 x 35 x 5 mm",
+    "qty": 1,
+    "unit": 24.2,
+    "line": 24.2,
+    "url": "https://rmcomponents.com.au/products/6061-aluminium-flat-bar-6-x-50-mm-thickness-x-width-custom-length-available",
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate",
+    "note": "nearest stocked section is 6 x 50 mm, cut and trimmed to 35 x 5; price is the listing base, not a quote"
+   },
+   {
+    "item": "Silicone bed levelling spacers, 4 pc",
+    "qty": 1,
+    "unit": 11.0,
+    "line": 11.0,
+    "url": "https://store.dremc.com.au/products/4pc-heatbed-silicone-leveling-column-for-ender-3-and-cr-10-series",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   }
+  ],
+  "E. Z axis": [
+   {
+    "item": "8 mm metric lead screw / ACME, 500 mm",
+    "qty": 2,
+    "unit": 27.5,
+    "line": 55.0,
+    "url": "https://rmcomponents.com.au/products/copy-of-t8-8mm-lead-screw-please-select-the-length-you-require-1",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "8mm x 500mm Lead Screw",
+      "mm": 500,
+      "qty": 2,
+      "measure": "z",
+      "stock": [
+       300,
+       400,
+       500,
+       800
+      ]
+     }
+    ]
+   },
+   {
+    "item": "POM lead screw nut with anti-backlash nut, TR8x8",
+    "qty": 2,
+    "unit": 5.55,
+    "line": 11.1,
+    "url": "https://store.dremc.com.au/products/dremc-pom-lead-screw-nuts-with-anti-backlash-nut",
+    "variant": "TR8X8 Square",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "LDO SLR12H / MGN12H stainless rail with carriage, 400 mm",
+    "qty": 2,
+    "unit": 69.45,
+    "line": 138.9,
+    "url": "https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage",
+    "variant": "400mm / Z1",
+    "stock": "in",
+    "conf": "verified",
+    "note": "350 mm would also fit but is out of stock; 400 mm gives 355 mm of Z travel against a 230 mm build",
+    "cuts": [
+     {
+      "component": "MGN12 rail Z",
+      "mm": 400,
+      "qty": 2,
+      "stock": [
+       300,
+       320,
+       330,
+       350,
+       400,
+       450,
+       500
+      ]
+     }
+    ],
+    "carriages": 2
+   },
+   {
+    "item": "LDO NEMA 17 42STH48-2504AC",
+    "qty": 1,
+    "unit": 34.95,
+    "line": 34.95,
+    "url": "https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T pulley, 8 mm bore, 6 mm belt - one on each lead screw",
+    "qty": 2,
+    "unit": 11.0,
+    "line": 22.0,
+    "url": "https://store.dremc.com.au/products/ldo-2gt-pulleys",
+    "variant": "20T Pulley with 8mm bore 6mm Belt",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T pulley, 5 mm bore, 6 mm belt - Z motor",
+    "qty": 1,
+    "unit": 11.0,
+    "line": 11.0,
+    "url": "https://store.dremc.com.au/products/ldo-2gt-pulleys",
+    "variant": "20T Pulley with 5mm bore 6mm Belt",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Gates 2GT 20T toothed idler, 6 mm - Z link belt tensioners",
+    "qty": 2,
+    "unit": 7.45,
+    "line": 14.9,
+    "url": "https://store.dremc.com.au/products/ldo-gt2-2gt-20t-toothed-idler-6mm-wide",
+    "variant": "Toothed Idler 6mm 20 Teeth 5mm ID",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "F688Z flange bearing 8x16x5, 2 pc per pack - screw end supports",
+    "qty": 2,
+    "unit": 6.0,
+    "line": 12.0,
+    "url": "https://store.dremc.com.au/products/f688z-flange-deep-groove-ball-bearing-8x16x5mm",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "4 bearings in the model, 2 per pack"
+   }
+  ],
+  "F. Belt stock": [
+   {
+    "item": "Gates Powergrip RF 2GT 6 mm timing belt, 6 m",
+    "qty": 1,
+    "unit": 59.0,
+    "line": 59.0,
+    "url": "https://store.dremc.com.au/products/gates-powergrip%C2%AE-rf-2gt-6mm-timing-belt",
+    "variant": "6000mm (6m)",
+    "stock": "in",
+    "conf": "verified",
+    "cuts": [
+     {
+      "component": "Belt A upper",
+      "mm": 470,
+      "qty": 1,
+      "measure": "x"
+     },
+     {
+      "component": "Belt A lower",
+      "mm": 470,
+      "qty": 1,
+      "measure": "x"
+     },
+     {
+      "component": "Belt B upper",
+      "mm": 470,
+      "qty": 1,
+      "measure": "x"
+     },
+     {
+      "component": "Belt B lower",
+      "mm": 470,
+      "qty": 1,
+      "measure": "x"
+     },
+     {
+      "component": "Y belt run 1",
+      "mm": 410,
+      "qty": 1,
+      "measure": "y"
+     },
+     {
+      "component": "Y belt run 2",
+      "mm": 410,
+      "qty": 1,
+      "measure": "y"
+     },
+     {
+      "component": "Z belt run 1",
+      "mm": 370,
+      "qty": 1,
+      "measure": "x"
+     },
+     {
+      "component": "Z belt run 2",
+      "mm": 370,
+      "qty": 1,
+      "measure": "x"
+     }
+    ],
+    "stock_total_mm": 6000
+   }
+  ],
+  "G. Electronics": [
+   {
+    "item": "BigTreeTech Octopus Pro V1.1 (H723) - 8 driver slots",
+    "qty": 1,
+    "unit": 115.0,
+    "line": 115.0,
+    "url": "https://store.dremc.com.au/products/bigtreetech-octopus-pro-v1-1-h723-chip",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "BigTreeTech TMC2209 V1.3 stepper drivers, 8 pack",
+    "qty": 1,
+    "unit": 79.45,
+    "line": 79.45,
+    "url": "https://store.dremc.com.au/products/bigtreetech-tmc2209-v1-3-stepper-motor-driver",
+    "variant": "8x",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Mean Well LRS-350-24 - bed supply, 270 W of 350 W",
+    "qty": 1,
+    "unit": 74.65,
+    "line": 74.65,
+    "url": "https://store.dremc.com.au/products/mean-well-lrs-350-24-24v-350w-power-supply",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Mean Well LRS-200-24 - motion, hotends and logic, 142 W of 211 W",
+    "qty": 1,
+    "unit": 69.0,
+    "line": 69.0,
+    "url": "https://store.dremc.com.au/products/mean-well-lrs-200-24-24v-8-8a-enclosed-power-suply",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "second supply added after the 24 V budget came to 412 W: two hotends and a 270 W bed do not fit one 350 W unit"
+   },
+   {
+    "item": "Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB",
+    "qty": 1,
+    "unit": 109.33,
+    "line": 109.33,
+    "url": "https://core-electronics.com.au/raspberry-pi-4-model-b-2gb.html",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "Pi 5 2 GB is $125.52 and is not needed for Klipper"
+   },
+   {
+    "item": "Official Raspberry Pi 4 USB-C power supply, 5.1 V 15.3 W",
+    "qty": 1,
+    "unit": 11.9,
+    "line": 11.9,
+    "url": "https://core-electronics.com.au/raspberry-pi-4-official-power-supply-usb-c-5v-15w-white.html",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Official Raspberry Pi 64 GB A2 micro SD card",
+    "qty": 1,
+    "unit": 47.5,
+    "line": 47.5,
+    "url": "https://core-electronics.com.au/raspberry-pi-a2-class-sd-card-64-gb.html",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "the 32 GB card is $32.18 but was out of stock"
+   },
+   {
+    "item": "Omron D2F-5L endstop switch",
+    "qty": 4,
+    "unit": 5.45,
+    "line": 21.8,
+    "url": "https://store.dremc.com.au/products/omron-d2f-5l-switch",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "ADXL345 accelerometer, 3 axis - shared, for input shaping",
+    "qty": 1,
+    "unit": 4.95,
+    "line": 4.95,
+    "url": "https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291",
+    "variant": null,
+    "stock": "in",
+    "conf": "verified",
+    "note": "one only, moved between toolheads; the earlier BOM counted it twice"
+   },
+   {
+    "item": "Wago 221-413 lever terminal block, 3 way",
+    "qty": 6,
+    "unit": 2.95,
+    "line": 17.7,
+    "url": "https://store.dremc.com.au/products/wago-221-series-terminal-block",
+    "variant": "221-413 3 Way",
+    "stock": "in",
+    "conf": "verified"
+   },
+   {
+    "item": "Wiring, ferrules, IEC inlet with switch and fuse, drag chain, sleeving",
+    "qty": 1,
+    "unit": 70.0,
+    "line": 70.0,
+    "url": null,
+    "variant": null,
+    "stock": "n/a",
+    "conf": "estimate"
+   }
+  ]
+ }
 }

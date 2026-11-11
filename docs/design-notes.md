@@ -29,10 +29,11 @@ Result:
 |---|---|---|---|
 | Original: 1 block, 1.42 kg toolhead | 1.42 kg | 40.0 Hz | 3,541 mm/s² |
 | This design: 2 blocks, 518 g toolhead | 0.518 kg | 77.5 Hz | 13,259 mm/s² |
-| Y axis (the bed) | 1.27 kg | 51.9 Hz | **5,948 mm/s²** |
+| Y axis (the bed) | 1.27 kg | 51.9 Hz | 5,948 mm/s² |
+| Y axis, with the in-stock 255 × 245 plate (§21) | 1.34 kg | 50.6 Hz | **5,646 mm/s²** |
 
 **The bed is still the slowest axis.** `max_accel` in `printer.cfg` is set to
-5,900 for that reason. Raising it further means stiffening the bed again.
+5,600 for that reason. Raising it further means stiffening the bed again.
 
 See §12 for how the bed got from 4,255 to 5,948 mm/s², and for the correction
 to the stiffness figure that made the earlier number wrong.
@@ -702,11 +703,112 @@ needs `z_screw_len` lead screws.
   offset. Offsets that are facts of a part (a motor centre 10 mm from the beam
   end) are written into the plane expression rather than given a parameter each.
 
+## 21. Pricing it against live listings, and what that changed in the model
+
+Every line of the BOM was re-read from the suppliers' own product data on
+11 November 2026, variant by variant, including stock state. Eight lines were
+wrong, and three of them changed the design.
+
+### What the BOM had wrong
+
+| Line | Was | Is | Why |
+|---|---|---|---|
+| 4010 hotend fan | $8.00, marked verified | **$20.50** | the $8.00 was never read from anywhere; marking it verified was the worse error |
+| Raspberry Pi 4 2 GB | $85.00 estimate | **$109.33** | Core Electronics, in stock. Plus $11.90 for the official supply and $47.50 for a card, neither of which was costed |
+| Extra MGN12H blocks | 3 | **5** | the model has 10 blocks and the five rails bring five. Off by two since the second block per carriage was added |
+| ADXL345 | counted twice | **once** | one accelerometer, moved between toolheads |
+| F688Z bearings | 1 pack | **2 packs** | four bearings in the model, two per pack |
+| Y pulley and idler | one $25.90 bundle | **$11.00 + $7.45** | the bundle said two idlers; the model has one |
+| 2040 extrusion | 480 / 400 mm cuts | **520 / 440 mm** | drifted from the model (§20) |
+| Corner brackets | $4.50 estimate | **$3.30** | RM Components list the 20-series black bracket |
+
+The total goes from A$1,990.80 to **A$2,250.28**, of which A$333.20 is still
+estimated: the four cut-to-length lines and loose wiring. Both extrusion
+suppliers price cut lengths through a calculator app that returns $0.00 on the
+storefront, so those four lines genuinely need a quote — which is worth saying
+plainly rather than leaving a confident-looking number.
+
+### Three parts that changed the design
+
+**The heated bed was the only unbuyable part.** Both DREMC 235 × 235 listings
+are out of stock. The CR-6 SE assembly — 255 × 245 mm, 24 V ~270 W — is in
+stock at $55.95, so the model now uses it, with the 235 sheets centred on it and
+margin all round. It costs 68 g of moving mass, which takes the bed's accel
+limit from 5,948 to 5,646 mm/s², and `max_accel` in `printer.cfg` drops to
+5,600 to match. A slightly slower machine that can be built beats a faster one
+that cannot.
+
+**The 350 mm Z rail is out of stock; 400 mm is not.** `z_rail_length` is now
+`upright_h - 100 mm`, so the Z rails are 400 mm: in stock, and 355 mm of travel
+against a 230 mm build instead of 305 mm.
+
+**A 520 mm MGN12 rail is not sold at all.** DREMC stock LDO rails in 300, 320,
+330, 350, 400, 450 and 500 mm. The X rail is `x_beam_len - 20 mm` = 500 mm,
+centred on the beam.
+
+### The checks that would have caught all of it
+
+Three new numeric checks, bringing `check_model.py` to **15 of 15 at nominal
+size**:
+
+- **Check 11 now counts carriage blocks** — rails' carriages plus the extras
+  line must equal the blocks in the model. It fails on the old count of 3.
+- **Check 11 enforces stocked sizes**, from lists in `bom.json`: rails
+  300–500 mm, sheets 125–355 mm, lead screws 300/400/500/800 mm.
+- **Check 12 is a 24 V power budget**, see below.
+- A driver rule now says the bought heated plate must be at least as big as the
+  sheets, so growing the build past the bought bed fails up front.
+
+Checks 10, 11 and 12 moved into a `rules()` function that the flex loop calls
+too, so a size change is now asked the buying questions as well as the geometric
+ones. That is what turned up the real size envelope:
+
+| Flex | Geometry | Buyable |
+|---|---|---|
+| `build_x` 230 → 300 | passes | **no** — needs a 570 mm X rail and 300 mm sheets, neither stocked, and the bought plate is too small |
+| `build_y` 235 → 305 | passes | **no** — same sheet and plate limits |
+| `upright_h` 500 → 570 | lead screws no longer reach | **no** — needs a 470 mm Z rail (450 or 500 are stocked) and 570 mm screws |
+
+So **230 × 235 is not an arbitrary build volume: it is the largest this parts
+list allows.** The binding constraint is the 500 mm rail and the 235 mm sheet,
+not the frame.
+
+### The 24 V supply does not fit
+
+Adding up the loads was overdue:
+
+| Load | Qty | W each | Total |
+|---|---:|---:|---:|
+| Heated bed | 1 | 270 | 270.0 |
+| V6 hotend heater | 2 | 40 | 80.0 |
+| NEMA 17 via TMC2209 | 6 | 8 | 48.0 |
+| 5015 part fan | 2 | 2.8 | 5.6 |
+| 4010 hotend fan | 2 | 1.5 | 3.0 |
+| Octopus Pro | 1 | 5 | 5.0 |
+| | | | **411.6 W** |
+
+A single LRS-350-24 is **118% loaded**, and it was undersized at the old 220 W
+bed too (362 W) — two hotends is what breaks it. The fix is a second supply:
+LRS-350-24 for the bed alone (77%) and LRS-200-24 for motion, hotends and the
+board (67%), $69.00 more. Nothing above 80% of rating, which is what check 12
+asserts. The Pi keeps its own 5 V supply and is off the 24 V budget entirely.
+
+The stepper figure (8 W each) is the one estimate in that table; everything else
+is a rating off a datasheet or a supplier listing. Even at 4 W per motor the
+single supply still fails.
+
 ## 11. Still open
 
-- The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
+- The bed is still the slowest axis at 5,646 mm/s² against X's 13,259. Stiffer
   carrier bars are the next lever, at the cost of levelling-spacer height.
 - Y and Z rail mounting holes do not follow their lengths (§20).
+- Four BOM lines are cut-to-length and need a supplier quote (§21).
+- Five MGN12H carriage blocks have no in-stock Australian source (§21).
+- The 255 × 245 plate's mass is scaled from the 235 × 235 part by area; the
+  supplier does not publish it.
+- The Z screw pulleys are modelled with the 6.35 mm bore hub part. The real part
+  is the 8 mm bore variant, which is now in the BOM; the model still shows the
+  stand-in.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
 - The Z motor flange misses both slots on the top tie underside.
 - The brackets are plain L-plates. They carry the right interfaces but have not
