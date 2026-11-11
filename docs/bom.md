@@ -8,18 +8,23 @@ All prices **AUD including GST**, read from supplier product data on **11 Novemb
 Quantities come from the parametric Fusion model. The frame is 520 mm wide because the
 IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-notes.md) §4.
 
+Every cut length and part count below is listed against its CAD component in
+`docs/bom.json` (`cuts`). `scripts/check_model.py` check 11 measures those components in
+the model and fails if a length, a count or a stocked size disagrees. Edit `bom.json`,
+then run `node scripts/genbom.js`.
+
 ## A. Frame
 
 | Part | Qty | Unit | Line | Source | Confidence |
 |---|---:|---:|---:|---|---|
 | 4040 V-slot black - 2 x 500 (uprights) + 2 x 530 (base rails) = 2.06 m | 1 | $90.00 | $90.00 | [RM Components](https://rmcomponents.com.au/products/copy-of-2020-silver-t-slot-aluminium-profile-20-series) | estimate |
-| 2040 V-slot black - 2 x 480 (top tie, X beam) + 2 x 400 (base cross) = 1.76 m | 1 | $40.00 | $40.00 | [RM Components](https://rmcomponents.com.au/products/2040-black-v-slot-aluminium-profile-20-series) | estimate |
+| 2040 V-slot black - 2 x 520 (top tie, X beam) + 2 x 440 (base cross) = 1.92 m | 1 | $44.00 | $44.00 | [RM Components](https://rmcomponents.com.au/products/2040-black-v-slot-aluminium-profile-20-series) | estimate |
 | 2020 V-slot black - 2 x 530 (bed rails) = 1.06 m | 1 | $15.00 | $15.00 | [RM Components](https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series) | estimate |
 | M5 drop-in T-nuts, 20 pc | 4 | $8.00 | $32.00 | [DREMC](https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts) | verified |
 | Black angle corner connector (2020 ends only) | 8 | $4.50 | $36.00 | — | estimate |
 | M5 button screws, 8/12/16/20 mm assortment | 1 | $25.00 | $25.00 | — | estimate |
 
-**Subtotal: $238.00**
+**Subtotal: $242.00**
 
 ## B. X gantry
 
@@ -49,7 +54,7 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 
 | Part | Qty | Unit | Line | Source | Confidence |
 |---|---:|---:|---:|---|---|
-| LDO SLR12H MGN12H rail + carriage, 350 mm Z1 | 2 | $65.45 | $130.90 | [DREMC](https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage) | verified |
+| LDO SLR12H MGN12H rail + carriage, 450 mm Z1 | 2 | $79.45 | $158.90 | [DREMC](https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage) | verified |
 | LDO NEMA 17 42STH48-2504AC | 1 | $34.95 | $34.95 | [DREMC](https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac) | verified |
 | Gates 2GT 20T pulley 5 mm bore + 2 idlers | 1 | $25.90 | $25.90 | — | verified |
 | Aluminium heated bed, 235 x 235 x 3 mm, 24 V, bonded heater | 1 | $49.95 | $49.95 | [DREMC](https://store.dremc.com.au/products/creality-heated-hot-bed-kit-for-ender-3-series) | verified, **out of stock** |
@@ -58,7 +63,7 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 | Bed carrier bars - 235 x 35 x 5 mm aluminium flat, 2 off | 1 | $25.00 | $25.00 | — | estimate |
 | Silicone levelling spacers, 4 pc | 1 | $11.00 | $11.00 | [DREMC](https://store.dremc.com.au/products/4pc-heatbed-silicone-leveling-column-for-ender-3-and-cr-10-series) | verified |
 
-**Subtotal: $326.10**
+**Subtotal: $354.10**
 
 ## E. Z axis
 
@@ -66,14 +71,14 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 |---|---:|---:|---:|---|---|
 | 8 mm TR8 lead screw / ACME, 500 mm | 2 | $27.50 | $55.00 | [RM Components](https://rmcomponents.com.au/products/copy-of-t8-8mm-lead-screw-please-select-the-length-you-require-1) | verified |
 | POM anti-backlash nut TR8x8 | 2 | $5.55 | $11.10 | [DREMC](https://store.dremc.com.au/products/dremc-pom-lead-screw-nuts-with-anti-backlash-nut) | verified |
-| LDO SLR12H MGN12H rail + carriage, 400 mm Z1 | 2 | $69.45 | $138.90 | [DREMC](https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage) | verified |
+| LDO SLR12H MGN12H rail + carriage, 350 mm Z1 | 2 | $65.45 | $130.90 | [DREMC](https://store.dremc.com.au/products/ldo-slr12h-mgn12h-linear-rail-with-carriage) | verified |
 | LDO NEMA 17 42STH48-2504AC | 1 | $34.95 | $34.95 | [DREMC](https://store.dremc.com.au/products/ldo-nema-17-motor-ldo-42sth48-2504ac) | verified |
 | 2GT 20T pulley 8 mm bore (on each screw) | 2 | $11.00 | $22.00 | [DREMC](https://store.dremc.com.au/products/ldo-2gt-pulleys) | verified |
 | 2GT 20T pulley 5 mm bore (motor) | 1 | $11.00 | $11.00 | [DREMC](https://store.dremc.com.au/products/ldo-2gt-pulleys) | verified |
 | 2GT 20T toothed idler 6 mm (belt link tensioner) | 2 | $7.45 | $14.90 | [DREMC](https://store.dremc.com.au/products/ldo-gt2-2gt-20t-toothed-idler-6mm-wide) | verified |
 | F688Z flange bearing 8x16x5 (2 pc) - screw top support | 1 | $6.00 | $6.00 | [DREMC](https://store.dremc.com.au/products/f688z-flange-deep-groove-ball-bearing-8x16x5mm) | verified |
 
-**Subtotal: $293.85**
+**Subtotal: $285.85**
 
 ## F. Belt stock
 
@@ -101,14 +106,14 @@ IDEX carriages carry two MGN12H blocks each — see [design-notes.md](design-not
 
 | Sub-assembly | Subtotal |
 |---|---:|
-| A. Frame | $238.00 |
+| A. Frame | $242.00 |
 | B. X gantry | $252.15 |
 | C. Toolheads | $360.85 |
-| D. Y and bed | $326.10 |
-| E. Z axis | $293.85 |
+| D. Y and bed | $354.10 |
+| E. Z axis | $285.85 |
 | F. Belt stock | $59.00 |
 | G. Electronics | $460.85 |
-| **Total** | **$1990.80** |
+| **Total** | **$2014.80** |
 
 Call it **$1,900 to $2,100** once the estimated lines firm up. Anything already on
 hand comes off the top, mostly from the Frame and Electronics groups.

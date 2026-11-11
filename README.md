@@ -19,7 +19,7 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Toolhead mass | 518 g each (modelled) |
 | Moving bed mass | 1.27 kg (modelled) |
 | Frame mass | 4.48 kg; complete modelled machine **13.41 kg**, 87 bodies |
-| Estimated cost | ~A$1,991 inc. GST |
+| Estimated cost | ~A$2,015 inc. GST |
 
 ## What's here
 
@@ -28,26 +28,33 @@ docs/
   build-spec.html    the full write-up: 15 sections, from "why it's slow" to the BOM
   design-notes.md    engineering findings, corrections, and what is still unverified
   bom.md             bill of materials with supplier links and AUD prices
+  bom.json           BOM source: prices, and every cut length against its CAD part
+  skeleton-plan.md   how the model was made skeleton-driven
 cad/
   idex-printer-assembly.f3d    Fusion archive (open this one to edit)
   idex-printer-assembly.step   portable STEP export
-  parameters.csv             the 38 driving parameters
+  parameters.csv             all 47 parameters, with their expressions
   mass-report.csv            per-part mass
 klipper/
   printer.cfg        full machine config for the Octopus Pro V1.1
   idex-macros.cfg    toolchange, copy and mirror modes, start/end
 scripts/
   check_model.py     design-rule checks - run as a Fusion script
+  skeleton_tie.py    ties parts to the Skeleton without moving them
+  nothing_moved.py   compares every part with a saved baseline
+  genbom.js          bom.json -> bom.md
 ```
 
 ## Checking the model
 
 Run `scripts/check_model.py` as a Fusion script with the assembly open. It
 asserts the design rules numerically instead of by eye: nozzle height against
-`bed_top`, every bracket touching a frame member, rails centred on real V-slots,
-interference limited to the known shaft-through-bore set, timeline health,
-toolhead parking, and parameter coverage. Eight of nine checks pass; the failure
-is a suppressed stale `Capture Position` with no geometric effect.
+`bed_top`, every bracket touching a frame member, lead screws seated, rails
+centred on real V-slots, interference limited to the known shaft-through-bore
+set, timeline health, toolhead parking, every part tied to the skeleton, every
+parameter driving something, driver ranges, and a BOM check line that measures
+every cut length in the model. **14 of 14 pass.** Set `FLEX_CASES` to re-run the
+geometry rules with `build_x`, `build_y` or `upright_h` changed.
 
 ![Assembly](docs/assembly.png)
 
@@ -69,22 +76,19 @@ becomes the slowest axis — 5,948 mm/s² after the bed was rebuilt (see
 
 ## How parametric is it, really?
 
-41 user parameters — but measured rather than claimed. `scripts/check_model.py`
-flexes each driving parameter and counts what actually moved:
+Every part is tied to a `Skeleton` component of construction planes driven by
+the parameters - 91 of 91 - and the design rules are re-checked at other sizes:
 
-| Parameter | Coverage |
-|---|---:|
-| `build_x` | 10% |
-| `build_y` | 12% |
-| `upright_h` | 4% |
+| Change | Result |
+|---|---|
+| `build_x` 230 → 300 | frame, beam, rail, belts and toolhead B follow; all rules hold |
+| `build_y` 235 → 305 | frame, bed, Y rails, belts, motor and electronics follow; all rules hold |
+| `upright_h` 500 → 570 | uprights, Z rails and top tie follow; **the 500 mm lead screws no longer reach** - flagged |
 
-Only the frame members follow, because only they are rigid-jointed to the layout
-skeleton. Everything added since sits at a fixed transform. The fix is
-[skeletal modelling](https://help.autodesk.com/cloudhelp/2023/ENU/Inventor-Help/files/GUID-0435FE9D-6283-4CE0-813B-BD9B0BE5778C.htm)
-applied to every sub-assembly, and it is the largest outstanding job — see
-[design-notes.md](docs/design-notes.md) §18.
+A part that stays put is not a failure (the frame grows from its left, front and
+floor); a broken rule is. See [design-notes.md](docs/design-notes.md) §20.
 
-What *does* propagate correctly is the vertical stack: `bed_top` is built from the
+The vertical stack propagates too: `bed_top` is built from the
 real layer thicknesses and `gantry_z = bed_top + th_drop`, so changing the bed
 construction moves the gantry to match.
 

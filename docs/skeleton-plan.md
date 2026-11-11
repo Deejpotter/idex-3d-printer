@@ -13,6 +13,12 @@ coverage 4-12%) to skeleton-driven, following the established method:
 
 Restore point: Fusion **v11**.
 
+**Status: done, 11 November 2026.** All phases complete; results in
+[design-notes.md](design-notes.md) §20. Two deviations from the plan: native
+parts were *not* rebuilt at their own origin (the seats on the Skeleton carry an
+offset instead, so no geometry had to change), and the Y / Z rail hole patterns
+do not follow their lengths (a Fusion API limitation).
+
 ## Target
 
 | | Now | Target |

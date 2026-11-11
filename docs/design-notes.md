@@ -608,15 +608,106 @@ should fall out of them. Fusion does the derived layer natively through
 expressions, so no spreadsheet is needed here — the discipline of separating
 drivers from everything else is the part worth copying.
 
+## 20. Skeleton-driven: every part tied, every rule re-checked at other sizes
+
+§18 and §19 ended with the model "frame parametric, everything else pinned" -
+parameter coverage 4-12%. That is now fixed, following the plan in
+[skeleton-plan.md](skeleton-plan.md).
+
+### What was built
+
+- A grounded **`Skeleton`** component with **no solid bodies**: construction
+  planes offset from its origin by parameter expressions (`frame_w`,
+  `( frame_d - p40 ) / 2`, `gantry_z - th_drop`, ...), anchor points at
+  three-plane intersections, and a **seat** (joint origin) for every part.
+- **Every part is rigid-jointed to a seat on the Skeleton - 91 of 91**, never to
+  a sibling part. The old `Layout` component (15 pasted bodies with no parameters
+  behind them, which is why only the frame ever moved) is deleted.
+- The seats sit on the Skeleton side, oriented to the part's existing pose and
+  offset to its origin, so referenced (read-only) bought parts tie exactly the
+  same way as native ones, and no part geometry had to be rebuilt.
+- Lengths from equations: X / Y / Z rails (`x_rail_length`, `y_rail_length`,
+  `z_rail_length`), all eight belt runs (`x_belt_run`, `y_belt_run`,
+  `z_belt_run`), the bed stack and carrier bars (`bed_sz`, centred on the bed),
+  the Z carriage plates (`z_plate_w/t/h`), the toolhead plates
+  (`carriage_w + 10 mm`, `th_plate_t/h`), the MGN12H block (`mgn_block_len`).
+  Every sketch that was touched is now fully constrained.
+- `bed_sz = max(build_x; build_y)` - its own comment already said it had to be
+  at least both.
+
+### How "nothing moved" was proven
+
+Before any change, every part's world bounding box went to a baseline file.
+After every batch, `scripts/nothing_moved.py` compared all 87 parts against it.
+Each joint was also checked as it was made: the part's transform before and
+after had to match to 0.00001 mm, or the whole batch rolled back. Every batch
+passed. The one exception was deliberate (the X rail change below).
+
+`scripts/skeleton_tie.py` is the reusable engine that does the tying.
+
+### What the checks say now
+
+`check_model.py`: **14 / 14 at nominal size.** Check 8 was rewritten, because the
+old one was wrong: it scored a part as a failure if it did not move when
+`build_x` grew, but the frame grows from its left, front and floor, so the left
+upright *should* stay put. The new check 8 is two parts - every part tied, and
+checks 1-5 and 7 re-run with each driver flexed:
+
+| Flex | Result |
+|---|---|
+| `build_x` 230 → 300 | all rules hold; toolhead B parks at x = 480 |
+| `build_y` 235 → 305 | all rules hold; frame 670 deep, bed 305 |
+| `upright_h` 500 → 570 | **one rule fails**: the bought 500 mm lead screws no longer reach the base block |
+
+The `upright_h` failure is the right answer, not a bug: the screws are bought
+parts and do not stretch. A driver rule now says so up front - `upright_h`
+needs `z_screw_len` lead screws.
+
+### Things found on the way
+
+- **Check 9 never worked.** Its regex had literal backspace characters where
+  `\b` word boundaries belonged, so it could not match any parameter name. The
+  "11 of 41 drive nothing" figure in §19 did not come from that code. Fixed; it
+  now really reports **0 of 47**. The backspaces came from shell quoting, and the
+  same thing happened again while fixing it.
+- **The BOM had drifted from the model.** It listed a 500 mm X rail, 350 mm Y
+  rails and 400 mm Z rails; the model had 520, 450 and 350. The 2040 line said
+  480 / 400 mm cuts where the model has 520 / 440. Corrected, and the BOM source
+  (`docs/bom.json`) now lists every cut against its CAD component. **Check 11**
+  measures those components and fails on any length, count or stocked-size
+  mismatch.
+- **A 520 mm MGN12 rail is not sold.** DREMC stocks LDO rails in 300, 320, 330,
+  350, 400, 450 and 500 mm (read 11 Nov 2026). The X rail is now
+  `x_beam_len - 20 mm` = 500, centred with 10 mm clear at each end. Check 11
+  enforces stocked lengths, so a size that needs a 570 mm rail fails the BOM line.
+- **Why cuts kept saying "No target body".** The hidden parts-library copy of a
+  component counts as its first occurrence, which makes its bodies invisible, and
+  cuts skip invisible bodies. This was also behind the earlier rail and boss hole
+  failures. The library copies of the three rails were removed, and the rail
+  components renamed `MGN12 rail X / Y / Z` now that their lengths are not fixed.
+- The stale `Capture Position` (`Position8`) is deleted. Every part is held by a
+  joint now, so it had nothing left to hold. Timeline: 0 unhealthy.
+- Three note-only parameters were removed from the model because no geometry
+  exists for them: `foot_bolt_pitch` / `foot_bolt_len` (M5 x 16 into the 4040
+  end bores, four on 20 mm centres) and `mgn_block_w` (27 mm). The values are
+  kept here.
+
+### Known limits
+
+- The Y and Z rail **mounting holes do not follow the length.** Fusion would not
+  pattern a feature inside these nested, multi-copy components through the API,
+  so their hole sets stay as modelled. The X rail's holes are a proper pattern
+  whose count follows `x_rail_length`.
+- The Skeleton has many named planes (`X: frame_w - 10 mm`), one per distinct
+  offset. Offsets that are facts of a part (a motor centre 10 mm from the beam
+  end) are written into the plane expression rather than given a parameter each.
+
 ## 11. Still open
 
 - The bed is still the slowest axis at 5,948 mm/s² against X's 13,259. Stiffer
   carrier bars are the next lever, at the cost of levelling-spacer height.
-- Only the frame follows the parameters (§13).
-- A stale `Capture Position` entry sits in the timeline, suppressed, with no
-  geometric effect — every part measures where it should — but still flagged.
-- **Parameter coverage is 4–12%** (§18). Converting the model to a full
-  skeleton-driven assembly is the largest outstanding piece of work.
+- Y and Z rail mounting holes do not follow their lengths (§20).
+- Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
 - The Z motor flange misses both slots on the top tie underside.
 - The brackets are plain L-plates. They carry the right interfaces but have not
   been designed as printed or machined parts.

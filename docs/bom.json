@@ -1,0 +1,450 @@
+{
+ "A. Frame": [
+  {
+   "item": "4040 V-slot black - 2 x 500 (uprights) + 2 x 530 (base rails) = 2.06 m",
+   "qty": 1,
+   "unit": 90,
+   "note": "est",
+   "line": 90,
+   "cuts": [
+    {
+     "component": "Upright 4040",
+     "mm": 500,
+     "qty": 2
+    },
+    {
+     "component": "Base rail 4040",
+     "mm": 530,
+     "qty": 2
+    }
+   ]
+  },
+  {
+   "item": "2040 V-slot black - 2 x 520 (top tie, X beam) + 2 x 440 (base cross) = 1.92 m",
+   "qty": 1,
+   "unit": 44,
+   "note": "est",
+   "line": 44,
+   "cuts": [
+    {
+     "component": "Top tie 2040",
+     "mm": 520,
+     "qty": 1
+    },
+    {
+     "component": "X beam 2040",
+     "mm": 520,
+     "qty": 1
+    },
+    {
+     "component": "Base cross 2040",
+     "mm": 440,
+     "qty": 2
+    }
+   ]
+  },
+  {
+   "item": "2020 V-slot black - 2 x 530 (bed rails) = 1.06 m",
+   "qty": 1,
+   "unit": 15,
+   "note": "est",
+   "line": 15,
+   "cuts": [
+    {
+     "component": "Bed rail 2020",
+     "mm": 530,
+     "qty": 2
+    }
+   ]
+  },
+  {
+   "item": "M5 drop-in T-nuts, 20 pc",
+   "qty": 4,
+   "unit": 8,
+   "note": "",
+   "line": 32
+  },
+  {
+   "item": "Black angle corner connector (2020 ends only)",
+   "qty": 8,
+   "unit": 4.5,
+   "note": "est",
+   "line": 36
+  },
+  {
+   "item": "M5 button screws, 8/12/16/20 mm assortment",
+   "qty": 1,
+   "unit": 25,
+   "note": "est",
+   "line": 25
+  }
+ ],
+ "B. X gantry": [
+  {
+   "item": "LDO SLR12H MGN12H rail + 1 carriage, 500 mm Z1",
+   "qty": 1,
+   "unit": 85.45,
+   "note": "",
+   "line": 85.45,
+   "cuts": [
+    {
+     "component": "MGN12 rail X",
+     "mm": 500,
+     "qty": 1,
+     "stock": [
+      300,
+      320,
+      330,
+      350,
+      400,
+      450,
+      500
+     ]
+    }
+   ]
+  },
+  {
+   "item": "Extra MGN12H carriage blocks (3 more for 2 x 2-block carriages)",
+   "qty": 3,
+   "unit": 15,
+   "note": "AliExpress",
+   "line": 45
+  },
+  {
+   "item": "LDO NEMA 17 42STH48-2504AC",
+   "qty": 2,
+   "unit": 34.95,
+   "note": "",
+   "line": 69.9
+  },
+  {
+   "item": "Gates 2GT 20T pulley, 5 mm bore, 6 mm belt",
+   "qty": 2,
+   "unit": 11,
+   "note": "",
+   "line": 22
+  },
+  {
+   "item": "Gates 2GT 20T toothed idler, 6 mm",
+   "qty": 4,
+   "unit": 7.45,
+   "note": "",
+   "line": 29.8
+  }
+ ],
+ "C. Toolheads": [
+  {
+   "item": "Trianglelab V6 hotend pre-assembled, 24 V",
+   "qty": 2,
+   "unit": 45,
+   "note": "",
+   "line": 90
+  },
+  {
+   "item": "LDO Orbiter v2.5 extruder (motor included)",
+   "qty": 2,
+   "unit": 105.45,
+   "note": "",
+   "line": 210.9
+  },
+  {
+   "item": "5015 blower fan 24 V (part cooling)",
+   "qty": 2,
+   "unit": 19.5,
+   "note": "",
+   "line": 39
+  },
+  {
+   "item": "4010 axial hotend fan 24 V",
+   "qty": 2,
+   "unit": 8,
+   "note": "",
+   "line": 16
+  },
+  {
+   "item": "ADXL345 accelerometer (shared, for input shaping)",
+   "qty": 1,
+   "unit": 4.95,
+   "note": "",
+   "line": 4.95
+  }
+ ],
+ "D. Y and bed": [
+  {
+   "item": "LDO SLR12H MGN12H rail + carriage, 450 mm Z1",
+   "qty": 2,
+   "unit": 79.45,
+   "note": "",
+   "line": 158.9,
+   "cuts": [
+    {
+     "component": "MGN12 rail Y",
+     "mm": 450,
+     "qty": 2,
+     "stock": [
+      300,
+      320,
+      330,
+      350,
+      400,
+      450,
+      500
+     ]
+    }
+   ]
+  },
+  {
+   "item": "LDO NEMA 17 42STH48-2504AC",
+   "qty": 1,
+   "unit": 34.95,
+   "note": "",
+   "line": 34.95
+  },
+  {
+   "item": "Gates 2GT 20T pulley 5 mm bore + 2 idlers",
+   "qty": 1,
+   "unit": 25.9,
+   "note": "",
+   "line": 25.9
+  },
+  {
+   "item": "Aluminium heated bed, 235 x 235 x 3 mm, 24 V, bonded heater",
+   "qty": 1,
+   "unit": 49.95,
+   "note": "out of stock",
+   "line": 49.95,
+   "cuts": [
+    {
+     "component": "Heated bed 235x235",
+     "mm": 235,
+     "qty": 1,
+     "measure": "x",
+     "stock": [
+      235
+     ]
+    }
+   ]
+  },
+  {
+   "item": "Magnetic sheet 235x235, high-temp 3M",
+   "qty": 1,
+   "unit": 11.95,
+   "note": "",
+   "line": 11.95
+  },
+  {
+   "item": "Light Satin PEI spring steel plate 235x235",
+   "qty": 1,
+   "unit": 36.45,
+   "note": "",
+   "line": 36.45
+  },
+  {
+   "item": "Bed carrier bars - 235 x 35 x 5 mm aluminium flat, 2 off",
+   "qty": 1,
+   "unit": 25,
+   "note": "est",
+   "line": 25
+  },
+  {
+   "item": "Silicone levelling spacers, 4 pc",
+   "qty": 1,
+   "unit": 11,
+   "note": "",
+   "line": 11
+  }
+ ],
+ "E. Z axis": [
+  {
+   "item": "8 mm TR8 lead screw / ACME, 500 mm",
+   "qty": 2,
+   "unit": 27.5,
+   "note": "",
+   "line": 55,
+   "cuts": [
+    {
+     "component": "8mm x 500mm Lead Screw",
+     "mm": 500,
+     "qty": 2,
+     "measure": "z"
+    }
+   ]
+  },
+  {
+   "item": "POM anti-backlash nut TR8x8",
+   "qty": 2,
+   "unit": 5.55,
+   "note": "",
+   "line": 11.1
+  },
+  {
+   "item": "LDO SLR12H MGN12H rail + carriage, 350 mm Z1",
+   "qty": 2,
+   "unit": 65.45,
+   "note": "",
+   "line": 130.9,
+   "cuts": [
+    {
+     "component": "MGN12 rail Z",
+     "mm": 350,
+     "qty": 2,
+     "stock": [
+      300,
+      320,
+      330,
+      350,
+      400,
+      450,
+      500
+     ]
+    }
+   ]
+  },
+  {
+   "item": "LDO NEMA 17 42STH48-2504AC",
+   "qty": 1,
+   "unit": 34.95,
+   "note": "",
+   "line": 34.95
+  },
+  {
+   "item": "2GT 20T pulley 8 mm bore (on each screw)",
+   "qty": 2,
+   "unit": 11,
+   "note": "",
+   "line": 22
+  },
+  {
+   "item": "2GT 20T pulley 5 mm bore (motor)",
+   "qty": 1,
+   "unit": 11,
+   "note": "",
+   "line": 11
+  },
+  {
+   "item": "2GT 20T toothed idler 6 mm (belt link tensioner)",
+   "qty": 2,
+   "unit": 7.45,
+   "note": "",
+   "line": 14.9
+  },
+  {
+   "item": "F688Z flange bearing 8x16x5 (2 pc) - screw top support",
+   "qty": 1,
+   "unit": 6,
+   "note": "",
+   "line": 6
+  }
+ ],
+ "F. Belt stock": [
+  {
+   "item": "Gates Powergrip RF 2GT 6 mm belt, 6 m (X x2, Y, Z link)",
+   "qty": 1,
+   "unit": 59,
+   "note": "",
+   "line": 59,
+   "cuts": [
+    {
+     "component": "Belt A upper",
+     "mm": 470,
+     "qty": 1,
+     "measure": "x"
+    },
+    {
+     "component": "Belt A lower",
+     "mm": 470,
+     "qty": 1,
+     "measure": "x"
+    },
+    {
+     "component": "Belt B upper",
+     "mm": 470,
+     "qty": 1,
+     "measure": "x"
+    },
+    {
+     "component": "Belt B lower",
+     "mm": 470,
+     "qty": 1,
+     "measure": "x"
+    },
+    {
+     "component": "Y belt run 1",
+     "mm": 410,
+     "qty": 1,
+     "measure": "y"
+    },
+    {
+     "component": "Y belt run 2",
+     "mm": 410,
+     "qty": 1,
+     "measure": "y"
+    },
+    {
+     "component": "Z belt run 1",
+     "mm": 370,
+     "qty": 1,
+     "measure": "x"
+    },
+    {
+     "component": "Z belt run 2",
+     "mm": 370,
+     "qty": 1,
+     "measure": "x"
+    }
+   ],
+   "stock_total_mm": 6000
+  }
+ ],
+ "G. Electronics": [
+  {
+   "item": "BTT Octopus Pro V1.1 (H723) - 8 driver slots, standalone",
+   "qty": 1,
+   "unit": 115,
+   "note": "",
+   "line": 115
+  },
+  {
+   "item": "Raspberry Pi 4 (2 GB) to run Klipper, over USB",
+   "qty": 1,
+   "unit": 85,
+   "note": "est",
+   "line": 85
+  },
+  {
+   "item": "BTT TMC2209 V1.3 drivers, 8-pack",
+   "qty": 1,
+   "unit": 79.45,
+   "note": "",
+   "line": 79.45
+  },
+  {
+   "item": "Mean Well LRS-350-24 - 24 V, 14.6 A, 350 W",
+   "qty": 1,
+   "unit": 74.65,
+   "note": "",
+   "line": 74.65
+  },
+  {
+   "item": "Omron D2F-5L endstop switch",
+   "qty": 4,
+   "unit": 5.45,
+   "note": "",
+   "line": 21.8
+  },
+  {
+   "item": "ADXL345 accelerometer (on the Pi SPI)",
+   "qty": 1,
+   "unit": 4.95,
+   "note": "",
+   "line": 4.95
+  },
+  {
+   "item": "Wiring, Wago blocks, ferrules, IEC inlet, drag chain",
+   "qty": 1,
+   "unit": 80,
+   "note": "est",
+   "line": 80
+  }
+ ]
+}
