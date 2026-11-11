@@ -1705,6 +1705,74 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 24</span>
+  <h2>What an overseas price actually is &mdash; and the check that caught the BOM</h2>
+  <p>Two questions: is the BOM right, and are those prices real? Neither answer was yes.</p>
+
+  <h3>The cheap column was an estimate wearing a number&rsquo;s clothes</h3>
+  <div class="plain">
+    <span class="tag">&ldquo;Buy generic instead of brand, saves ~$434&rdquo;</span>
+    <p>That figure was mine. Nothing had been read from a supplier. It is the same failure as the carrier stiffness in Lesson 23 &mdash; a number that looks like the output of a method and is not. So every line was opened on AliExpress, in a logged-out Australian session, with the right option selected on the listing page.</p>
+  </div>
+
+  <h3>Three things an overseas price does that a local one does not</h3>
+  <p><strong>A search result is not a price.</strong> The grid shows the cheapest variant in the listing. One result read &ldquo;MGN12H &hellip; A$1.49&rdquo;; opening it and selecting MGN12H at 500&nbsp;mm gave <strong>A$38.01</strong>. The $1.49 was a 100&nbsp;mm MGN7 rail.</p>
+  <p><strong>There is a voucher hiding under the sale price.</strong> Every cheap line showed exactly A$1.49 &mdash; a 5&nbsp;m belt and a 10&nbsp;m belt from the same listing both did, which is a floor, not a price. One seller&rsquo;s three rail lengths pin the mechanism down:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>MGN12H rail</th><th class="n">List</th><th class="n">Sale</th></tr></thead>
+    <tbody>
+      <tr><td>400 mm</td><td class="n">$31.19</td><td class="n">$5.77</td></tr>
+      <tr><td>450 mm</td><td class="n">$34.60</td><td class="n">$8.26</td></tr>
+      <tr><td>500 mm</td><td class="n">$38.01</td><td class="n">$10.75</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="eq">sale = 0.73 &times; list &minus; 17.00 &nbsp;&mdash;&nbsp; exact, all three</div>
+  <p>A 27% discount with a flat <strong>A$17.00 first-order voucher</strong> on top, floored at A$1.49. The 27% repeats; <strong>the $17 does not</strong>. Totalling the sale column would have understated the build by hundreds, so the BOM totals the list prices and records the sale beside them.</p>
+  <p><strong>On branded parts the list price is a fake anchor.</strong> Two lines came out <em>dearer</em> overseas at list than at Australian retail:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Line</th><th class="n">Australia</th><th class="n">AliExpress list</th><th class="n">AliExpress sale</th></tr></thead>
+    <tbody>
+      <tr><td>Octopus Pro + 8 &times; TMC2209</td><td class="n">$194.45</td><td class="n">$211.22</td><td class="n"><strong>$77.43</strong></td></tr>
+      <tr><td>Orbiter v2.5 &times; 2</td><td class="n">$210.90</td><td class="n">$338.94</td><td class="n"><strong>$121.62</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>For commodity parts &mdash; rails, belt, pulleys, fans, bearings, endstops &mdash; the list price is real and beats local retail by two to four times. For name brands, only the sale price wins. Every line now takes the cheaper of the two and never pays more overseas than at home.</p>
+  <div class="tbl">
+  <table>
+    <caption>Where it lands</caption>
+    <thead><tr><th>Basket</th><th class="n">Total</th></tr></thead>
+    <tbody>
+      <tr><td>Everything new, Australian retail</td><td class="n">$2,235.38</td></tr>
+      <tr><td>Everything new, overseas where it wins</td><td class="n">$1,700.05</td></tr>
+      <tr><td>Budget build &mdash; overseas plus what you own</td><td class="n">$1,074.90</td></tr>
+      <tr class="hi"><td><strong>&hellip; with the Octopus bundle caught on sale</strong></td><td class="n"><strong>$965.62</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>One line, $117, decides whether it clears a thousand.</p>
+
+  <h3>Check 13: the BOM counts have to match the model</h3>
+  <p>Check 11 already measured every cut length against the CAD, and carried a hand-written special case for the carriage blocks &mdash; added because that count was wrong for months. Writing the same special case twice is a sign it should be general. Check 13 now does it for every discrete part: a BOM line names the Fusion components it buys, the counts are summed per component, and compared with the model. It failed on its first run, three ways.</p>
+  <div class="eq">FAIL  BOM part counts match the model &mdash; idlers 7 vs 5, two 4010 fans missing, LRS-200-24 missing</div>
+  <div class="plain">
+    <span class="tag">Once the BOM was wrong, twice the model was</span>
+    <p><strong>The idlers.</strong> The BOM listed four for X. Each X belt loops from its motor pulley to a single idler at the far end, and that one idler turns <em>both</em> runs &mdash; two belts, two idlers. The model had it right; the BOM lost $14.90.</p>
+    <p><strong>The fans and the second supply.</strong> Both were bought, costed and <em>powered in the 24&nbsp;V budget</em>, and neither existed in the CAD. The 4010s matter because they ride on the moving toolhead. The LRS-200-24 matters because it is a 199 &times; 98 &times; 30 box that has to physically fit behind the panel, and nothing had ever checked that it did. It does, with 5&nbsp;mm to spare.</p>
+  </div>
+  <p>Each toolhead goes from 571.4 to <strong>587.4 g</strong>, so X falls to about <strong>11,445 mm/s&sup2;</strong>. The machine does not change &mdash; the bed still sets it. <strong>93 parts, 14.66 kg, 97 of 97 tied to the skeleton, 18 of 18 checks passing.</strong></p>
+
+  <h3>One thing this turned up and did not settle</h3>
+  <div class="plain">
+    <span class="tag">The heaviest parts in the machine are unverified</span>
+    <p>The two power supplies now weigh 1,300 g and 1,025 g in the model &mdash; between them <strong>16% of the 14.66 kg</strong>. Those masses come from the project&rsquo;s own <code>MASS PSU</code> material, not a datasheet, and an attempt to read Mean Well&rsquo;s published weights failed: the PDFs would not render and no distributor page was retrieved. Internally consistent, externally unchecked. Nothing that moves depends on them, so no acceleration figure is affected &mdash; but the machine&rsquo;s total mass is not a measured number, and should not be quoted as one.</p>
+  </div>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
