@@ -30,7 +30,7 @@ z_plate_w,p40 + 40 mm,80.000,[NOT WIRED] Z carriage plate width
 z_plate_h,120 mm,120.000,[NOT WIRED] Z carriage plate height
 z_screw_x,60 mm,60.000,[NOT WIRED] screw centre from upright outer face
 th_plate_t,6 mm,6.000,[NOT WIRED] toolhead plate thickness
-th_plate_h,70 mm,70.000,[NOT WIRED] toolhead plate height
+th_plate_h,( x_belt_a_z - x_belt_b_z ) + x_belt_sep + belt_t + 6 mm,88.800,[DERIVED] toolhead plate height - spans both X belt planes so either toolhead can clamp either belt
 block_pitch,mgn_block_len + 9.6 mm,55.000,[NOT WIRED] X spacing between the two MGN12H blocks
 th_drop,75 mm,75.000,[DRIVER] X beam underside to nozzle tip - set by the toolhead
 bed_spacer_t,2.5 mm,2.500,[PART] levelling spacer height
@@ -54,3 +54,17 @@ nema_bolt,31 mm,31.000,"[PART] NEMA 17 bolt pattern, square"
 z_mount_w,nema_bolt + 29 mm,60.000,[DERIVED] Z motor mount plate width
 z_mount_d,76 mm,76.000,[DERIVED] Z motor mount plate depth - motor bolts to the second top-tie slot
 z_mount_y,( frame_d - p40 ) / 2 + 2 mm,247.000,"[DERIVED] Z motor mount plate centre, Y"
+belt_t,1.4 mm,1.400,[PART] GT2 belt thickness
+x_belt_sep,17.4 mm,17.400,[PART] centres of the two runs of one X belt - the pulley tangents
+x_belt_a_z,gantry_z + 57 mm,225.000,[DERIVED] belt A centreline - the X motor A pulley axis
+x_belt_b_z,gantry_z - 7 mm,161.000,[DERIVED] belt B centreline - the X motor B pulley axis
+clamp_t,6 mm,6.000,[PART] belt clamp body thickness behind the belt
+clamp_w,30 mm,30.000,[PART] belt clamp width along the run
+th_plate_bot,x_belt_b_z - x_belt_sep / 2 - belt_t / 2 - 3 mm,148.600,[DERIVED] toolhead plate bottom - 3 mm clear under the lowest belt
+belt_w,6 mm,6.000,[PART] GT2 6 mm belt width
+clamp_h,x_belt_sep + belt_t + 4 mm,22.800,[DERIVED] belt clamp height - spans both runs of one belt
+y_belt_sep,14.6 mm,14.600,[PART] centres of the two Y belt runs - the pulley tangents
+y_clamp_w,y_belt_sep + belt_t + 12 mm,28.000,[DERIVED] Y belt clamp width - straddles both runs
+y_clamp_d,20 mm,20.000,[PART] Y belt clamp depth
+y_belt_bot,base_h + 13 mm,53.000,[DERIVED] underside of the Y belt runs
+y_clamp_h,( bed_top - 12 mm ) - y_belt_bot,28.000,[DERIVED] Y belt clamp height - belt up to the carrier spine

@@ -15,8 +15,9 @@ Checks
   1  nozzle tip of each toolhead sits exactly on bed_top
   2  the print surface really is at bed_top
   3  every bracket touches at least one frame member
-  4  each rail is centred on a measured V-slot, not between two, and the
-     Z motor mount's bolts land on real top-tie slots
+  4  each rail is centred on a measured V-slot, not between two, the
+     Z motor mount's bolts land on real top-tie slots, and every belt is
+     actually clamped to the carriage it drives
   5  interference is only the known shaft-through-bore set
   6  the timeline is healthy
   7  each toolhead parks clear of the build area
@@ -49,7 +50,7 @@ BRACKETS = ('X motor mount', 'X idler bracket', 'Y motor mount',
 
 # the overlaps that are a shaft or a belt meeting a part that would carry a
 # bore in reality. Any value not on this list is a fault.
-EXPECTED_INTERFERENCE = sorted([992, 992, 384, 122, 122, 70, 70])
+EXPECTED_INTERFERENCE = sorted([992, 992, 384, 168, 168, 122, 122, 70, 70])
 
 # parameter, nominal, test value. Set FLEX_CASES to a list of names to run
 # only those (each flex recomputes the whole assembly; run one per call when
@@ -224,6 +225,35 @@ def run(_context):
                     ys and not off,
                     '%d M5 holes at y=%s, slots at %s' % (
                         len(ys), ys, ['%.1f' % sc for sc in slots]))
+
+            # 4c - a belt that is not clamped to the thing it drives is a
+            # drawing, not a drive. Every belt run must be gripped by a clamp,
+            # and that clamp must touch the carriage it pulls.
+            BELTS = {'Belt A upper': ('X belt clamp A', 'Toolhead plate A'),
+                     'Belt A lower': ('X belt clamp A', 'Toolhead plate A'),
+                     'Belt B upper': ('X belt clamp B', 'Toolhead plate B'),
+                     'Belt B lower': ('X belt clamp B', 'Toolhead plate B'),
+                     'Y belt run 1': ('Y belt clamp', 'Bed carrier spine'),
+                     'Y belt run 2': ('Y belt clamp', 'Bed carrier spine')}
+            loose = []
+            for belt, (clamp, carrier) in BELTS.items():
+                bx = find(belt)
+                cx = find(clamp)
+                kx = find(carrier)
+                if not bx:
+                    loose.append('%s missing' % belt); continue
+                if not cx:
+                    loose.append('%s has no %s' % (belt, clamp)); continue
+                g = gap(bx[0][3], cx[0][3])
+                if g > 0.01:
+                    loose.append('%s is %.1f mm clear of %s' % (belt, g, clamp))
+                    continue
+                # the clamp has to end up on the carriage: either it bolts
+                # straight to it, or the belt is sandwiched between the two
+                if kx and min(gap(cx[0][3], kx[0][3]), gap(bx[0][3], kx[0][3])) > 0.01:
+                    loose.append('%s is not anchored to %s' % (clamp, carrier))
+            chk(sfx + 'every belt is clamped to what it drives', not loose,
+                '%d belt runs; %s' % (len(BELTS), '; '.join(sorted(set(loose))) or 'all clamped'))
 
             # 5 - interference is only what we signed off
             ents = adsk.core.ObjectCollection.create()

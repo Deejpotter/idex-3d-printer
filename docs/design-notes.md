@@ -335,9 +335,8 @@ so it is inverted here — check the motor actually enables before trusting it.
   weights for both disagree wildly between sources — anywhere from 95 to 148 g
   — so the weight argument is not solid enough to act on.
 - **CR-6 SE bed kit** (255 × 245, $55.95, in stock) instead of the 235 × 235
-  that is out of stock. It would give a slightly larger build area for $6 more,
-  but it changes `build_x` and `build_y`, and those do not yet propagate
-  downstream (§13). Worth revisiting once they do.
+  that is out of stock. Rejected here because `build_x` and `build_y` did not
+  propagate downstream. **Adopted in §21** once they did — it is now the bed.
 
 ## 13. The parametric claim only covers the frame
 
@@ -831,10 +830,138 @@ The stepper figure (8 W each) is the one estimate in that table; everything else
 is a rating off a datasheet or a supplier listing. Even at 4 W per motor the
 single supply still fails.
 
+## 22. Nothing was attached to its belt
+
+The open items listed "belt clamps where the belts meet the carriages are not
+modelled" as a detail still to draw. It was not a detail. **Not one belt in the
+machine was connected to the thing it drives.**
+
+### What check 4c found
+
+A new check asserts the obvious: every belt run must touch a clamp, and that
+clamp must end up on the carriage — bolted to it, or with the belt sandwiched
+between the two. First run:
+
+```
+FAIL  every belt is clamped to what it drives   6 belt runs;
+      Belt A lower has no X belt clamp A;  Belt A upper has no X belt clamp A;
+      Belt B lower has no X belt clamp B;  Belt B upper has no X belt clamp B;
+      Y belt run 1 is 15.0 mm clear of Y belt clamp;
+      Y belt run 2 is 15.0 mm clear of Y belt clamp
+```
+
+The X axis had no clamps at all. The Y belt clamp existed, was tied to the
+skeleton, had passed every check for weeks — and floated **15 mm above the belt
+it was named after**. It was a 24 × 20 × 7 block with an undimensioned sketch,
+placed by eye at `bed_top - 19`, and nothing had ever asked it to touch
+anything.
+
+### Why the X belts could not have been clamped as drawn
+
+The two X belts run at different heights, because each is wrapped round its own
+motor pulley: belt A on the centreline `gantry_z + 57` (225 mm), belt B on
+`gantry_z - 7` (161 mm). Each belt presents two runs, 17.4 mm apart — the two
+tangents of a 20-tooth pulley — so a toolhead has to grip a 22.8 mm band.
+
+The toolhead plate ran from 153 to 223. Belt A's upper run sits at 233–234.4,
+**ten millimetres above the top of the plate**, and belt B's lower run at
+151.6–153 is a millimetre below the bottom. Neither carriage could reach its own
+belt. The plate was 70 mm tall because `th_plate_h` was set to 70 mm, and no
+rule had ever connected that number to the belts.
+
+### The fix
+
+- `th_plate_h` is now `( x_belt_a_z - x_belt_b_z ) + x_belt_sep + belt_t + 6 mm`
+  — 88.8 mm, spanning **both** belt planes with 3 mm clear at each end. One
+  plate design serves both toolheads, which is what an IDEX wants anyway.
+- **`X belt clamp A` and `X belt clamp B`**, 30 × 6 × 22.8 mm, each centred on
+  its own belt centreline and sitting `belt_w` behind the plate's back face, so
+  the belt is clamped between plate and clamp. Both sketches fully constrained.
+- **`Y belt clamp`** rebuilt: 28 × 20 × 28, from `y_belt_bot` up to the carrier
+  spine's underside, straddling both Y runs. It grips the belts rather than
+  hovering over them, which adds two 168 mm³ overlaps to the expected
+  interference set — the same "belt through a part that grips it" class as the
+  four pulley overlaps already there.
+
+Nothing else moved: the three changed parts were the only ones the baseline
+flagged. **17 of 17 checks pass**, 94 of 94 parts tied.
+
+The cost is 65 g per toolhead — the taller plate and the clamp — taking it from
+506 to 571 g. X falls from 13,259 to about 11,765 mm/s². **The machine does not
+slow down**, because the bed still limits it at 5,646.
+
+## 23. The bed's stiffness numbers do not reproduce
+
+The top open item has been "the bed is the slowest axis, stiffer carrier bars
+are the next lever" since §12. Before spending anything on bars, the number
+behind it was checked. It does not survive.
+
+§12 gives carrier stiffness "computed from geometry, `k = 48EI/L³` over the
+200 mm rail spacing":
+
+| Carrier | §12 says | 48EI/L³, bending about Y (t³, gravity) | about Z (in-plane, the way Y accelerates) |
+|---|---:|---:|---:|
+| 2 bars 40 × 3 | 293 kN/m | 75 kN/m | 13,248 kN/m |
+| 2 bars 35 × 5 | 521 kN/m | 302 kN/m | 14,792 kN/m |
+| 2 bars 30 × 6 | 666 kN/m | 447 kN/m | 11,178 kN/m |
+
+Neither column is the published one, and the ratios settle it: §12's steps are
+**1.78 and 1.28**, thickness-cubed gives 4.05 and 1.48, width-cubed gives 1.12
+and 0.76. No span, axis or count reproduces it. The figures are not wrong by a
+factor — they are not the output of the stated method at all.
+
+### What the right axis says
+
+The bed accelerates along **Y**. The carrier bars span along **X** between the
+rail blocks. A Y-direction load therefore bends them about the Z axis, on
+`I = t·w³/12` — width cubed, not thickness cubed. For the 35 × 5 bars that is
+17,864 mm⁴ each and **14,792 kN/m** for the pair.
+
+Putting the Y chain together the way Lesson 2 does — belt, clamp and carrier in
+series:
+
+| Belt clamp | Chain total | f | Accel |
+|---|---:|---:|---:|
+| printed, 25 kN/m | 23.7 kN/m | 21.2 Hz | 990 mm/s² |
+| ribbed printed, 60 | 52.9 kN/m | 31.6 Hz | 2,211 mm/s² |
+| aluminium, 150 | 112.3 kN/m | 46.1 Hz | 4,693 mm/s² |
+| aluminium, short and wide, 400 | 210.9 kN/m | 63.2 Hz | 8,817 mm/s² |
+
+**The carrier bars contribute 0.16% of the compliance. The belt clamp
+contributes 94.7%.**
+
+### Two conclusions that change the plan
+
+1. **Stiffer carrier bars buy nothing.** Going 35 × 5 → 30 × 6, which §12 chose
+   not to do and listed as worth +5%, is in the direction that matters actually
+   **worse** — 11,178 against 14,792 kN/m, because the bar gets narrower and
+   width is what counts. Either way it is lost in the noise behind the clamp.
+2. **The Y belt clamp is the bed.** It is 95% of the compliance, it is the part
+   that was floating in mid-air until §22, and it is the one thing worth
+   designing properly. Short, wide, aluminium, bolted to the carrier spine on
+   as large a footprint as fits.
+
+This is Lesson 2 doing its job again: the floppiest spring wins, and it was
+never the one being argued about.
+
+### What is still unverified
+
+The 5,646 mm/s² figure the machine is set to is inherited from §12 and rests on
+its 521 kN/m carrier. That number does not reproduce, so **the bed's real
+acceleration limit is not currently known** — the first-principles chain puts it
+anywhere from 990 to 8,817 mm/s² depending entirely on a clamp that has never
+been designed. `max_accel` stays at 5,600 as a working figure. The honest next
+step is an input-shaper measurement on the built machine, not another
+calculation.
+
 ## 11. Still open
 
-- The bed is still the slowest axis at 5,646 mm/s² against X's 13,259. Stiffer
-  carrier bars are the next lever, at the cost of levelling-spacer height.
+- **The bed's acceleration limit is not reliably known** (§23). The 5,646 mm/s²
+  figure rests on a carrier stiffness that cannot be reproduced; the chain is
+  95% belt clamp, and that clamp has not been designed. Measure it with the
+  input shaper on the built machine.
+- The Y belt clamp needs designing as a real part - short, wide and aluminium.
+  It is the single thing that sets the bed's speed (§23).
 - Y and Z rail mounting holes do not follow their lengths (§20).
 - Four BOM lines are cut-to-length and need a supplier quote (§21).
 - Five MGN12H carriage blocks have no in-stock Australian source (§21).
@@ -844,14 +971,12 @@ single supply still fails.
   is the 8 mm bore variant, which is now in the BOM; the model still shows the
   stand-in.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
-- The brackets are plain plates. They carry the right interfaces — every one of
-  them now lands on a measured slot — but have not been designed as printed or
-  machined parts.
+- The brackets and belt clamps are plain plates and blocks. They carry the right
+  interfaces — every bracket lands on a measured slot and every belt is gripped
+  — but none has been designed as a printed or machined part.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
-- Belt clamps where the belts meet the carriages are not modelled.
 - Wiring and drag chain are not modelled.
 - No printed part has been designed. The brackets in the model are plain plates
   standing in for parts that still have to be drawn, and the carriage and Z
   plates are solid rectangles that would really carry cutouts and hole patterns.
 - `safe_distance` and the park positions are derived from the model, not measured.
-- No source in Australia currently stocks the 235 × 235 24 V heated bed.

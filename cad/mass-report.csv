@@ -39,24 +39,26 @@ D - Y and bed,PEI spring steel:1,215.0
 D - Y and bed,Bed carrier bar F:1,111.0
 D - Y and bed,Bed carrier bar R:1,111.0
 D - Y and bed,Bed levelling spacers:1,8.0
-D - Y and bed,Y belt clamp:1,9.1
+D - Y and bed,Y belt clamp:1,42.3
 D - Y and bed,Bed carrier spine:1,33.1
 D - Y and bed,Y motor mount:1,67.8
 D - Y and bed,Y idler bracket:1,37.2
 D - Y and bed,Y belt run 1:1,4.5
 D - Y and bed,Y belt run 2:1,4.5
-C - Toolhead A,Toolhead plate A:1,124.7
+C - Toolhead A,Toolhead plate A:1,158.2
 C - Toolhead A,MGN12H block:2,53.5
 C - Toolhead A,MGN12H block:3,53.5
 C - Toolhead A,Part fan 5015 A:1,35.0
 C - Toolhead A,Hotend V6 A:1,106.3
 C - Toolhead A,Extruder Orbiter A:1,132.7
-C - Toolhead B,Toolhead plate B:1,124.7
+C - Toolhead A,X belt clamp A:1,32.2
+C - Toolhead B,Toolhead plate B:1,158.2
 C - Toolhead B,MGN12H block:4,53.5
 C - Toolhead B,MGN12H block:5,53.5
 C - Toolhead B,Part fan 5015 B:1,35.0
 C - Toolhead B,Hotend V6 B:1,106.3
 C - Toolhead B,Extruder Orbiter B:1,132.7
+C - Toolhead B,X belt clamp B:1,32.2
 E - Z axis,8mm x 500mm Lead Screw:2,153.2
 E - Z axis,8mm x 500mm Lead Screw:3,153.2
 E - Z axis,8mm Acme Anti Backlash Nut Block:2,55.0
