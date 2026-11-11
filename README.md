@@ -18,7 +18,7 @@ frame, X gantry, two toolheads, Y axis and bed, Z axis, electronics.
 | Electronics | BTT Octopus Pro V1.1 + Raspberry Pi, 6 × TMC2209, 24 V |
 | Toolhead mass | 518 g each (modelled) |
 | Moving bed mass | 1.34 kg (modelled) |
-| Frame mass | 3.68 kg; complete modelled machine **13.58 kg**, 90 parts (94 occurrences, all tied) |
+| Frame mass | 3.68 kg; complete modelled machine **13.60 kg**, 90 parts (94 occurrences, all tied) |
 | Estimated cost | **A$2,250 inc. GST** all-new and all-brand; **~A$1,014** reusing your motors, bed and extruders and buying generic — same speed. See [budget-build.md](docs/budget-build.md) |
 
 ## What's here

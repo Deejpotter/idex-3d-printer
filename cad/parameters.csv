@@ -68,3 +68,7 @@ y_clamp_w,y_belt_sep + belt_t + 12 mm,28.000,[DERIVED] Y belt clamp width - stra
 y_clamp_d,20 mm,20.000,[PART] Y belt clamp depth
 y_belt_bot,base_h + 13 mm,53.000,[DERIVED] underside of the Y belt runs
 y_clamp_h,( bed_top - 12 mm ) - y_belt_bot,28.000,[DERIVED] Y belt clamp height - belt up to the carrier spine
+y_clamp_flange_d,60 mm,60.000,[DERIVED] Y belt clamp flange depth - the bolt lever against belt pull
+y_clamp_flange_t,6 mm,6.000,[PART] Y belt clamp flange thickness
+y_clamp_bolt_y,22 mm,22.000,[DERIVED] flange bolt offset from centre - as wide as the carrier spine allows
+y_clamp_bolt_x,10 mm,10.000,[DERIVED] flange bolt offset across the clamp

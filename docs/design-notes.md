@@ -944,15 +944,44 @@ contributes 94.7%.**
 This is Lesson 2 doing its job again: the floppiest spring wins, and it was
 never the one being argued about.
 
+### Acting on it: the clamp redesigned
+
+The clamp block itself was never the problem. A solid 28 x 20 aluminium block
+cantilevered 28 mm is **176,000 kN/m** — four hundred times stiffer than the
+belt. What flexes is the **bolted joint**, and the build spec's own figures put
+that at 25 kN/m printed, 60 ribbed, ~150 for aluminium bolted properly.
+
+A joint resists belt pull as a moment about its bolt pattern, so the lever is
+everything. The old clamp was 28 x 20 with two bolts about 14 mm apart. The new
+one keeps the same web down to the belt but adds a **60 mm flange with four
+bolts at ±22 mm**, spread across the carrier spine's full footprint — a lever
+3.1x longer, so about **ten times** the moment stiffness for 50 g of aluminium.
+
+| | Bed mass | Chain | f | Accel |
+|---|---:|---:|---:|---:|
+| old: 28 × 20 block, 2 bolts at ±7 mm | 1,379 g | 112.3 kN/m | 45.4 Hz | 4,557 mm/s² |
+| **new: 28 × 60 flange, 4 bolts at ±22 mm** | 1,429 g | 179.4 kN/m | 56.4 Hz | **7,027 mm/s²** |
+
+**+54% on the limiting axis for 50 g.** X is 11,765, so the bed still sets the
+machine — but it sets it at about 7,000 rather than 4,600.
+
+Note what that means for `max_accel`. The old clamp would not have supported the
+5,600 the config asks for; the new one has headroom over it. The setting does
+not change, because it is now **conservative instead of optimistic**, and
+because all of this is still a calculation. Measure it before raising it.
+
 ### What is still unverified
 
-The 5,646 mm/s² figure the machine is set to is inherited from §12 and rests on
-its 521 kN/m carrier. That number does not reproduce, so **the bed's real
-acceleration limit is not currently known** — the first-principles chain puts it
-anywhere from 990 to 8,817 mm/s² depending entirely on a clamp that has never
-been designed. `max_accel` stays at 5,600 as a working figure. The honest next
-step is an input-shaper measurement on the built machine, not another
-calculation.
+The 5,646 mm/s² figure the machine was set to is inherited from §12 and rests
+on its 521 kN/m carrier, which does not reproduce. The chain above replaces it
+with something derived from stated geometry, but two of its three terms —
+belt at 460 kN/m and the bolted joint at 150/300 — are rules of thumb from the
+build spec, not measurements. So the bed's limit is now **bounded rather than
+known**: 4,600 with the old clamp, about 7,000 with the new one, and the
+difference is entirely one bracket.
+
+`max_accel` stays at 5,600. The honest next step is `RESONANCE_TEST` on Y on the
+built machine, not another calculation.
 
 ## 11. Still open
 
@@ -960,8 +989,9 @@ calculation.
   figure rests on a carrier stiffness that cannot be reproduced; the chain is
   95% belt clamp, and that clamp has not been designed. Measure it with the
   input shaper on the built machine.
-- The Y belt clamp needs designing as a real part - short, wide and aluminium.
-  It is the single thing that sets the bed's speed (§23).
+- The bed's limit is bounded, not measured: ~7,000 mm/s² with the redesigned
+  clamp, ~4,600 with the old one (§23). Run `RESONANCE_TEST` on Y before
+  trusting either.
 - Y and Z rail mounting holes do not follow their lengths (§20).
 - Four BOM lines are cut-to-length and need a supplier quote (§21).
 - Five MGN12H carriage blocks have no in-stock Australian source (§21).
@@ -971,9 +1001,9 @@ calculation.
   is the 8 mm bore variant, which is now in the BOM; the model still shows the
   stand-in.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
-- The brackets and belt clamps are plain plates and blocks. They carry the right
-  interfaces — every bracket lands on a measured slot and every belt is gripped
-  — but none has been designed as a printed or machined part.
+- The brackets are plain plates. They carry the right interfaces — every one
+  lands on a measured slot and every belt is gripped — but only the Y belt
+  clamp has been shaped for stiffness rather than drawn as a block.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Wiring and drag chain are not modelled.
 - No printed part has been designed. The brackets in the model are plain plates
