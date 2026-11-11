@@ -1652,6 +1652,59 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 23</span>
+  <h2>Nothing was attached to its belt &mdash; and the bed&rsquo;s numbers were wrong</h2>
+  <p>Two findings this round, and both came from asking the model a question nobody had asked it before.</p>
+
+  <h3>Not one belt was connected to anything</h3>
+  <p>The open items listed &ldquo;belt clamps are not modelled&rdquo; as a detail still to draw. It was not a detail. A new check asserts the obvious &mdash; every belt run must touch a clamp, and that clamp must end up on the carriage. First run:</p>
+  <div class="eq">FAIL  every belt is clamped to what it drives &mdash; <b>6 belt runs</b>, 6 faults</div>
+  <p>The X axis had <strong>no clamps at all</strong>. The Y belt clamp existed, was tied to the skeleton, had a name, and had passed every check for weeks &mdash; while floating <strong>15 mm above the belt it was named after</strong>. It was a 24 &times; 20 &times; 7 block with an undimensioned sketch, placed by eye, and nothing had ever asked it to touch anything.</p>
+  <div class="plain">
+    <span class="tag">Why the X belts could not have been clamped as drawn</span>
+    <p>Each X belt wraps its own motor pulley, so belt A sits on the centreline <code>gantry_z + 57</code> and belt B on <code>gantry_z &minus; 7</code>. Each presents two runs 17.4 mm apart &mdash; the two tangents of a 20-tooth pulley &mdash; so a toolhead has to grip a 22.8 mm band. The toolhead plate ran from 153 to 223, and belt A&rsquo;s upper run is at <strong>233</strong>. Ten millimetres out of reach. The plate was 70 mm tall because <code>th_plate_h</code> was set to 70 mm, and no rule had ever tied that number to the belts.</p>
+  </div>
+  <p>The plate now spans <em>both</em> belt planes &mdash; <code>( x_belt_a_z &minus; x_belt_b_z ) + x_belt_sep + belt_t + 6 mm</code>, 88.8 mm &mdash; so one plate design serves both toolheads, which is what an IDEX wants anyway. Each toolhead gets a clamp that grips its own belt against the back of that plate. The Y clamp was rebuilt to reach its belts. Cost: 65 g per toolhead, X from 13,259 to 11,765 mm/s&sup2;, and <strong>no change to the machine</strong>, because the bed still limits it.</p>
+
+  <h3>The bed&rsquo;s stiffness figures do not reproduce</h3>
+  <p>The top open item had been &ldquo;the bed is the slowest axis, stiffer carrier bars are the next lever&rdquo;. Before spending anything on bars, the number behind it was checked against its own stated method, <code>k = 48EI/L&sup3;</code>.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Carrier</th><th class="n">Published</th><th class="n">About Y (t&sup3;, gravity)</th><th class="n">About Z (how Y accelerates)</th></tr></thead>
+    <tbody>
+      <tr><td>2 bars 40 &times; 3</td><td class="n">293 kN/m</td><td class="n">75</td><td class="n">13,248</td></tr>
+      <tr><td>2 bars 35 &times; 5</td><td class="n">521 kN/m</td><td class="n">302</td><td class="n">14,792</td></tr>
+      <tr><td>2 bars 30 &times; 6</td><td class="n">666 kN/m</td><td class="n">447</td><td class="n">11,178</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Neither column is the published one, and the ratios settle it: the published steps are <strong>1.78 and 1.28</strong>, thickness-cubed gives 4.05 and 1.48, width-cubed gives 1.12 and 0.76. No span, axis or count reproduces it. These were not the output of the stated method at all.</p>
+  <p>Done the right way: the bed accelerates along <strong>Y</strong>, the bars span along <strong>X</strong>, so a Y load bends them about Z on width-cubed, not thickness-cubed. That is <strong>14,792 kN/m</strong> for the pair &mdash; and in the chain it contributes <strong>0.16% of the compliance</strong>. The belt clamp contributes <strong>94.7%</strong>.</p>
+  <div class="plain">
+    <span class="tag">Two conclusions that change the plan</span>
+    <p><strong>Stiffer carrier bars buy nothing.</strong> Going 35 &times; 5 &rarr; 30 &times; 6 is, in the direction that actually matters, <em>worse</em> &mdash; the bar gets narrower and width is what counts. And <strong>the Y belt clamp is the bed</strong>: 95% of the compliance, and the part that was hanging in mid-air until this round. Lesson 2 doing its job again &mdash; the floppiest spring wins, and it was never the one being argued about.</p>
+  </div>
+
+  <h3>Acting on it</h3>
+  <p>The clamp <em>block</em> was never the problem: a solid 28 &times; 20 aluminium block cantilevered 28 mm is <strong>176,000 kN/m</strong>, four hundred times stiffer than the belt. What flexes is the <strong>bolted joint</strong>, and a joint resists belt pull as a moment about its bolt pattern. So the lever is everything.</p>
+  <div class="tbl">
+  <table>
+    <caption>Same web, wider flange</caption>
+    <thead><tr><th>Y belt clamp</th><th class="n">Bed mass</th><th class="n">Chain</th><th class="n">f</th><th class="n">Accel</th></tr></thead>
+    <tbody>
+      <tr><td>old: 28 &times; 20 block, 2 bolts at &plusmn;7 mm</td><td class="n">1,379 g</td><td class="n">112.3 kN/m</td><td class="n">45.4 Hz</td><td class="n">4,557</td></tr>
+      <tr class="hi"><td><strong>new: 28 &times; 60 flange, 4 bolts at &plusmn;22 mm</strong></td><td class="n">1,429 g</td><td class="n">179.4 kN/m</td><td class="n">56.4 Hz</td><td class="n"><strong>7,027</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A 3.1&times; longer lever is about <strong>ten times</strong> the moment stiffness, for 50 g of aluminium spread across the carrier spine&rsquo;s full footprint. <strong>+54% on the limiting axis.</strong> X is 11,765, so the bed still sets the machine &mdash; now at about 7,000 rather than 4,600.</p>
+  <div class="plain">
+    <span class="tag">What this means for max_accel</span>
+    <p>It stays at <strong>5,600</strong>. The old clamp would not have supported that figure; the new one has headroom over it. The setting does not change because it has gone from optimistic to conservative &mdash; and because all of this is still a calculation whose belt and joint terms are rules of thumb. The bed&rsquo;s limit is now <em>bounded</em>, not known: ~4,600 with the old clamp, ~7,000 with the new, and the difference is entirely one bracket. Run <code>RESONANCE_TEST</code> on Y before raising it.</p>
+  </div>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
