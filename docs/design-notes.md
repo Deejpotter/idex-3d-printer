@@ -544,9 +544,69 @@ just stops at the frame. Extending it means a datum body per interface — X rai
 seat, Y rail seats, Z rail seats, bed stack, each motor face — and a rigid joint
 from every part to its datum instead of a baked transform.
 
-Checked the Maker Store engineering wiki for prior art, since the team works in
-Inventor. It has extrusion profile templates and file-naming and drawing
-standards, but no skeleton or iLogic method to copy.
+**Correction:** I first reported that there was no in-house method to copy,
+having looked at only one source. That was wrong — see §19.
+
+## 19. Separate the drivers from everything else
+
+There is an established pattern for configurable product families, and it is a
+layer above skeletal modelling: **the driving values do not live in the CAD.**
+They live in a spreadsheet, the model reads its sizes from it, a small app
+validates every value *before* writing, and the BOM is generated from the same
+source.
+
+Two things in that pattern matter more than the tooling:
+
+- **A handful of drivers, not dozens.** A whole parametric workbench can run on
+  six: width, length, height, shelf height, top thickness, top overhang.
+  Everything else is a formula.
+- **Validation runs before the model regenerates**, not after. If a value fails a
+  rule nothing is written, and the message names the field that failed.
+
+### What my parameters actually looked like
+
+| | Count |
+|---|---:|
+| Bare numbers someone has to choose | **33** |
+| Expressions that follow from something | 8 |
+
+Worse, an audit of what each one actually drives found **twelve parameters that
+drive nothing at all** — decoration that reads as design intent. And decoration
+rots: `z_screw_x` still said 33 mm long after the lead screws moved to x = 60 in
+the slot-centre fix. Anyone reading the parameter list would have believed it.
+
+### Applied
+
+- `z_screw_x` corrected to 60 mm.
+- Four parameters converted from bare numbers to expressions: `bed_sz = build_y`,
+  `bed_rail_spacing = bed_sz - 35 mm`, `block_pitch = mgn_block_len + 10 mm`,
+  `z_plate_w = p40 + 40 mm`.
+- Every parameter labelled by class in its comment, so the kinds are visible in
+  the dialog: **`[DRIVER]`** (someone chooses it), **`[PART]`** (a fact about a
+  bought component), **`[DERIVED]`** (follows), **`[NOT WIRED]`** (drives nothing
+  yet — stated rather than hidden).
+- Two checks added to `check_model.py`: **every parameter drives something**
+  (currently FAIL, 11 of 41) and **driver values are in range**, with explicit
+  rules — `carriage_w` must fit two MGN12H blocks, `bed_sz` cannot be smaller than
+  the build area, `gantry_z` cannot sit below `bed_top`.
+- The extrusion cut list now derives from the drivers rather than being typed:
+
+```
+4040 upright      x2   500.0 mm      4040 total  2060 mm
+4040 base rail    x2   530.0 mm      2040 total  1920 mm
+2040 base cross   x2   440.0 mm      2020 total  1060 mm
+2040 top tie      x1   520.0 mm
+2040 X beam       x1   520.0 mm
+2020 bed rail     x2   530.0 mm
+```
+
+### What this changes about the plan
+
+Skeletal modelling (§18) is still the right structure for *positions*. This is the
+layer above: the drivers should be few, separated, validated up front, and the BOM
+should fall out of them. Fusion does the derived layer natively through
+expressions, so no spreadsheet is needed here — the discipline of separating
+drivers from everything else is the part worth copying.
 
 ## 11. Still open
 

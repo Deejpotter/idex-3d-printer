@@ -22,6 +22,10 @@ Checks
   8  PARAMETER COVERAGE - flexes the driving parameters and reports what
      actually followed. This is the one that matters: the model is only
      parametric to the extent this number is high.
+  9  no parameter drives nothing (decoration that looks like design intent)
+ 10  driver validation rules, in the style of the Maker Store AXIS
+     configurators: every driver has a legal range, checked before the
+     model is allowed to regenerate rather than after.
 """
 
 import adsk.core
@@ -47,6 +51,20 @@ EXPECTED_INTERFERENCE = sorted([992, 992, 384, 122, 122, 70, 70])
 FLEX = (('build_x', '230 mm', '300 mm'),
         ('build_y', '235 mm', '305 mm'),
         ('upright_h', '500 mm', '570 mm'))
+
+# Driver validation, after the Maker Store AXIS configurators: each driving
+# parameter has a legal range and the relationships are checked explicitly.
+# name: (min, max, note)
+DRIVER_RULES = {
+    'build_x':    (100, 1000, 'build volume X'),
+    'build_y':    (100, 1000, 'build volume Y'),
+    'build_z':    (100, 1000, 'build volume Z'),
+    'carriage_w': (40, 200, 'one IDEX carriage must fit two MGN12H blocks in line'),
+    'park_gap':   (5, 100, 'clearance between a parked carriage and the build area'),
+    'end_allow':  (20, 150, 'motor and idler allowance at each beam end'),
+    'upright_h':  (200, 1200, 'upright length'),
+    'th_drop':    (40, 200, 'beam underside to nozzle tip'),
+}
 
 
 def part_list(root):
@@ -225,6 +243,50 @@ def run(_context):
             coverage[pname] = pct
             chk('parameter coverage: %s' % pname, pct > 90.0,
                 '%.0f%% followed (%d of %d parts)' % (pct, len(moved), total))
+
+        # 9 - a parameter that drives nothing is decoration, and it rots.
+        # z_screw_x read 33 mm long after the screws moved to 60.
+        import re
+        names = [up.item(i).name for i in range(up.count)]
+        used = set()
+        for i in range(up.count):
+            e = up.item(i).expression
+            for n in names:
+                if re.search(r'%s' % re.escape(n), e):
+                    used.add(n)
+        ap = des.allParameters
+        for i in range(ap.count):
+            q = ap.item(i)
+            if q.name in names:
+                continue
+            try:
+                e = q.expression
+            except Exception:
+                continue
+            for n in names:
+                if re.search(r'%s' % re.escape(n), e):
+                    used.add(n)
+        orphan = [n for n in names if n not in used]
+        chk('every parameter drives something', not orphan,
+            '%d of %d drive nothing: %s' % (len(orphan), len(names), ', '.join(orphan) or 'none'))
+
+        # 10 - driver ranges and relationships, checked up front
+        broken = []
+        for n, (lo, hi, note) in DRIVER_RULES.items():
+            q = up.itemByName(n)
+            if q is None:
+                broken.append('%s missing' % n)
+                continue
+            v = q.value * 10
+            if not (lo <= v <= hi):
+                broken.append('%s=%.1f outside %g..%g' % (n, v, lo, hi))
+        if pv('bed_sz') < pv('build_x') - 0.01 or pv('bed_sz') < pv('build_y') - 0.01:
+            broken.append('bed_sz %.1f smaller than the build area' % pv('bed_sz'))
+        if pv('carriage_w') < 2 * 45.4:
+            broken.append('carriage_w %.1f cannot hold two MGN12H blocks in line' % pv('carriage_w'))
+        if pv('gantry_z') < pv('bed_top'):
+            broken.append('gantry_z below bed_top - the nozzle would be inside the bed')
+        chk('driver values are in range', not broken, '; '.join(broken) or 'all drivers legal')
 
         out = os.path.join(os.path.expanduser('~'), 'idex-model-checks.json')
         with open(out, 'w') as f:
