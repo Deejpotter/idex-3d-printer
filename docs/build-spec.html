@@ -1461,6 +1461,92 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 21</span>
+  <h2>Pricing it against live listings, and what that changed in the design</h2>
+  <p>Every line of the bill of materials was re-read from the suppliers&rsquo; own product data, variant by variant, with stock state. The point was accuracy. What it produced was three design changes, because <strong>a part you cannot buy is not a design decision, it is a wish</strong>.</p>
+
+  <h3>Eight lines were wrong</h3>
+  <div class="tbl">
+  <table>
+    <caption>What the BOM said, and what the suppliers said</caption>
+    <thead><tr><th>Line</th><th>Was</th><th>Is</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>4010 hotend fan</td><td class="n">$8.00, marked <em>verified</em></td><td class="n">$20.50</td><td>the $8.00 was never read from anywhere. Marking it verified was the worse error of the two</td></tr>
+      <tr><td>Raspberry Pi 4 2&nbsp;GB</td><td class="n">$85.00 estimate</td><td class="n">$109.33</td><td>and neither the $11.90 supply nor the $47.50 card had been costed at all</td></tr>
+      <tr class="hi"><td>Extra MGN12H blocks</td><td class="n">3</td><td class="n">5</td><td>the model has ten blocks and five rails bring five. Off by two ever since the second block per carriage was added</td></tr>
+      <tr><td>ADXL345 accelerometer</td><td class="n">counted twice</td><td class="n">once</td><td>one unit, moved between toolheads</td></tr>
+      <tr><td>F688Z bearings</td><td class="n">1 pack</td><td class="n">2 packs</td><td>four bearings in the model, two per pack</td></tr>
+      <tr><td>Y pulley and idler</td><td class="n">one $25.90 bundle</td><td class="n">$11.00 + $7.45</td><td>the bundle included an idler the model does not have</td></tr>
+      <tr><td>2040 extrusion cuts</td><td class="n">480 / 400 mm</td><td class="n">520 / 440 mm</td><td>drifted from the model</td></tr>
+      <tr><td>Corner brackets</td><td class="n">$4.50 estimate</td><td class="n">$3.30</td><td>a real listing exists</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The total moves from <strong>A$1,990.80 to A$2,250.28</strong>. A$1,917 of that is now verified against live listings; <strong>A$333 is still honestly estimated</strong> &mdash; four cut-to-length lines and loose wiring. Both extrusion suppliers price cut lengths through a calculator that returns $0.00 on the storefront, so those lines genuinely need a quote. Saying so is worth more than a confident-looking number.</p>
+
+  <h3>Three parts changed the design</h3>
+  <div class="plain">
+    <span class="tag">The bed was the only unbuyable part</span>
+    <p>Both 235&nbsp;&times;&nbsp;235 listings are out of stock. The CR-6 SE assembly &mdash; <strong>255&nbsp;&times;&nbsp;245&nbsp;mm, 24&nbsp;V, ~270&nbsp;W, in stock at $55.95</strong> &mdash; is what the model now uses, with the 235 sheets centred on it. It costs 68&nbsp;g of moving mass, which takes the bed&rsquo;s acceleration ceiling from 5,948 to <strong>5,646&nbsp;mm/s&sup2;</strong>. A machine 5% slower that can actually be built beats a faster one that cannot.</p>
+  </div>
+  <p>The <strong>350&nbsp;mm Z rail is out of stock and 400&nbsp;mm is not</strong>, so the Z rails are now 400 &mdash; which also buys 355&nbsp;mm of travel against a 230&nbsp;mm build instead of 305. And a <strong>520&nbsp;mm MGN12 rail is not sold at all</strong>: the range is 300, 320, 330, 350, 400, 450, 500. The X rail is 500, centred on the 520 beam with 10&nbsp;mm clear at each end.</p>
+
+  <h3>The supply does not fit, and never did</h3>
+  <p>Nobody had added up the 24&nbsp;V loads.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Load</th><th class="n">Qty</th><th class="n">W each</th><th class="n">Total</th></tr></thead>
+    <tbody>
+      <tr><td>Heated bed</td><td class="n">1</td><td class="n">270</td><td class="n">270.0</td></tr>
+      <tr><td>V6 hotend heater</td><td class="n">2</td><td class="n">40</td><td class="n">80.0</td></tr>
+      <tr><td>NEMA 17 via TMC2209</td><td class="n">6</td><td class="n">8</td><td class="n">48.0</td></tr>
+      <tr><td>5015 part fan</td><td class="n">2</td><td class="n">2.8</td><td class="n">5.6</td></tr>
+      <tr><td>4010 hotend fan</td><td class="n">2</td><td class="n">1.5</td><td class="n">3.0</td></tr>
+      <tr><td>Octopus Pro</td><td class="n">1</td><td class="n">5</td><td class="n">5.0</td></tr>
+      <tr class="hi"><td><strong>Total</strong></td><td class="n"></td><td class="n"></td><td class="n"><strong>411.6 W</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>A single LRS-350-24 is <strong>118% loaded</strong> &mdash; and it was already over at the old 220&nbsp;W bed, at 362&nbsp;W. <em>Two hotends</em> is what breaks it, and two hotends is the whole point of the machine. The fix is a second supply: the 350&nbsp;W unit takes the bed alone at 77%, and an LRS-200-24 takes motion, hotends and the board at 67%, for $69 more. The Pi keeps its own 5&nbsp;V supply.</p>
+
+  <h3>The Z motor had no mount, and could not have had one</h3>
+  <div class="plain">
+    <span class="tag">A fault that geometry alone would never flag</span>
+    <p>The Z motor sat with its face against the top tie, bolted to nothing. The tie&rsquo;s slots are 20&nbsp;mm apart; a NEMA 17&rsquo;s bolt pattern is 31&nbsp;mm square. <strong>No rotation or offset puts two of its bolts on two of those slots.</strong> Every other motor already had a bracket; this one was the exception, and it needed one. It is now a 60&nbsp;&times;&nbsp;76&nbsp;&times;&nbsp;6&nbsp;mm plate with four M3 holes on the motor pattern and four M5 holes measured onto the slots.</p>
+  </div>
+  <p>Hanging the motor under a 6&nbsp;mm plate drops it 6&nbsp;mm, and the Z link belt has to follow or it will not run true. Because every part is tied to the skeleton, that was one parameter: the three planes carrying the belt now subtract the plate thickness, and the motor, three pulleys, two idlers and two belt runs moved together. Eight parts, one edit, nothing else moved.</p>
+
+  <h3>Checks that would have caught all of it</h3>
+  <p>Four new ones, taking the suite to <strong>16 of 16</strong>:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Check</th><th>What it asserts</th></tr></thead>
+    <tbody>
+      <tr><td>4b &mdash; mount bolts on slots</td><td>the Z motor mount&rsquo;s M5 hole axes sit on slot centres found by walking the tie&rsquo;s underside</td></tr>
+      <tr><td>11 &mdash; carriage blocks</td><td>rails&rsquo; carriages plus the extras line equals the blocks in the model. Fails on the old count of three</td></tr>
+      <tr><td>11 &mdash; stocked sizes</td><td>every rail, sheet and lead screw length is one a supplier actually sells</td></tr>
+      <tr class="hi"><td>12 &mdash; power budget</td><td>every 24&nbsp;V load against its supply, nothing above 80% of rating</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>One of them was wrong on its first run: check 4b reported the bolts 2.8&nbsp;mm off their slots. The holes were right; the check was reading a point on the hole&rsquo;s <em>surface</em> instead of its axis, and 2.8&nbsp;mm is the hole radius. Worth recording, because a check that errs pessimistically is exactly the kind you believe.</p>
+
+  <h3>What the size envelope actually is</h3>
+  <p>Those checks now re-run at every flexed size, so a size change is asked the buying questions as well as the geometric ones. The answer is blunt:</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Change</th><th>Geometry</th><th>Buyable</th></tr></thead>
+    <tbody>
+      <tr><td><code>build_x</code> 230 &rarr; 300</td><td>passes</td><td class="n"><strong>no</strong> &mdash; needs a 570 mm X rail and 300 mm sheets, neither sold, and the bought plate is too small</td></tr>
+      <tr><td><code>build_y</code> 235 &rarr; 305</td><td>passes</td><td class="n"><strong>no</strong> &mdash; same sheet and plate limits</td></tr>
+      <tr><td><code>upright_h</code> 500 &rarr; 570</td><td>lead screws stop reaching</td><td class="n"><strong>no</strong> &mdash; needs a 470 mm Z rail and 570 mm screws</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>So <strong>230&nbsp;&times;&nbsp;235&nbsp;mm is not an arbitrary build volume. It is the largest this parts list allows.</strong> The binding constraints are the 500&nbsp;mm rail and the 235&nbsp;mm sheet &mdash; not the frame, not the motors, and not anything the geometry would ever have told us.</p>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
