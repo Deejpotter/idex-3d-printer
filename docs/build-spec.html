@@ -1547,6 +1547,111 @@ a:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
 </section>
 
 <section class="lesson">
+  <span class="lnum">Lesson 22</span>
+  <h2>Getting it under $1,000 &mdash; and which savings cost you the machine</h2>
+  <p>A$2,250 was more than you wanted. Two things need saying before any cutting starts.</p>
+  <div class="plain">
+    <span class="tag">The printed parts are already free</span>
+    <p>Every bracket &mdash; motor mounts, idler brackets, belt clamps, carriage bodies, Z nut mounts, the new Z motor mount &mdash; is costed at <strong>zero</strong> in the BOM, under &ldquo;not costed here&rdquo;. Choosing to print them saves nothing, because nothing was ever budgeted for them. And the BOM is a <em>buy-everything</em> list: it assumes you own none of it, which is the right way to write a BOM and the wrong way to read a budget.</p>
+  </div>
+
+  <h3>Where the money goes</h3>
+  <div class="tbl">
+  <table>
+    <caption>No single group dominates &mdash; which is why there is no one thing to delete</caption>
+    <thead><tr><th>Group</th><th class="n">Cost</th><th class="n">Share</th></tr></thead>
+    <tbody>
+      <tr><td>Electronics</td><td class="n">$552.28</td><td class="n">24.5%</td></tr>
+      <tr><td>Linear motion &mdash; rails and carriage blocks</td><td class="n">$488.25</td><td class="n">21.7%</td></tr>
+      <tr><td>Frame, belts, fasteners</td><td class="n">$480.50</td><td class="n">21.4%</td></tr>
+      <tr><td>Hotends, extruders, fans</td><td class="n">$449.90</td><td class="n">20.0%</td></tr>
+      <tr><td>Motors</td><td class="n">$139.80</td><td class="n">6.2%</td></tr>
+      <tr><td>Bed stack</td><td class="n">$139.55</td><td class="n">6.2%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>But the <strong>top ten lines are half the total</strong>, and nearly every one is a brand-name part at Australian retail: $210.90 of Orbiter extruders, $383.25 of LDO rails, $115 of BigTreeTech board, $109.33 of Raspberry Pi, $90 of Trianglelab hotends. The design is not extravagant. The <em>shopping list</em> is.</p>
+
+  <h3>What each cut costs in speed</h3>
+  <p>The machine runs at <strong>5,646 mm/s&sup2;</strong>, set by the bed. Using the same model as Lesson 1 &mdash; <code>accel = f&sup2; &times; 2.21</code>, <code>f = (1/2&pi;)&radic;(k/m)</code> &mdash; calibrated on the two measured points in the model, the X toolhead implies a chain stiffness of 120 kN/m and the bed 135 kN/m.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Change</th><th class="n">Saves</th><th class="n">Machine runs at</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>Buy generic instead of brand</td><td class="n">~$434</td><td class="n"><strong>5,646</strong> &mdash; unchanged</td></tr>
+      <tr class="hi"><td>Reuse your motors, bed and extruders</td><td class="n">~$580</td><td class="n"><strong>5,646</strong> &mdash; unchanged</td></tr>
+      <tr><td>One power supply instead of two</td><td class="n">$69</td><td class="n">unchanged, slower warm-up</td></tr>
+      <tr class="dim"><td><strong>Linear rails &rarr; V-wheels</strong></td><td class="n">~$308</td><td class="n"><strong>697</strong> &mdash; 12% of it</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>Why V-wheels are the wrong saving</h3>
+  <p>Calibrate on the Ender 3 &mdash; 0.40 kg at 32.5 Hz, the reference this whole model was validated against in Lesson 2 &mdash; and a V-wheel carriage chain comes out at about <strong>16.7 kN/m</strong>, against 120&ndash;135 kN/m on rails. <strong>Eight times softer.</strong> Lesson 2 says the floppiest spring wins, and on wheels the wheels <em>are</em> the floppiest spring by a mile.</p>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>On V-wheels</th><th class="n">Frequency</th><th class="n">Accel</th></tr></thead>
+    <tbody>
+      <tr><td>X with the light Orbiter head (506 g)</td><td class="n">28.9 Hz</td><td class="n">1,845</td></tr>
+      <tr><td>X with the Titan head you own (667 g)</td><td class="n">25.2 Hz</td><td class="n">1,400</td></tr>
+      <tr class="dim"><td><strong>Y, the bed (1.34 kg)</strong></td><td class="n"><strong>17.8 Hz</strong></td><td class="n"><strong>697</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The bed is the heaviest moving thing, so it suffers most, and the slowest axis sets the machine. You would pay $308 to turn a 5,646 mm/s&sup2; printer into a <strong>697 mm/s&sup2;</strong> one &mdash; slower than the stock Ender 3 this design was meant to beat. Every argument in this document for linear rails is an argument against that cut.</p>
+
+  <h3>Why the Orbiters are the right saving</h3>
+  <div class="plain">
+    <span class="tag">$210.90 for nothing</span>
+    <p>Swapping the Orbiters for the Titan and low-profile NEMA 17 you already own adds about 160 g per toolhead, and X falls from 13,259 to roughly 10,000 mm/s&sup2;. <strong>The machine does not slow down at all</strong>, because X was never the limit &mdash; the bed is, at 5,646. This is exactly the recommendation Lesson 4 made before any of this was costed: don&rsquo;t buy light extruders, the mass isn&rsquo;t what&rsquo;s holding you back.</p>
+  </div>
+
+  <h3>The build that fits</h3>
+  <div class="tbl">
+  <table>
+    <caption>From A$2,250.28 to A$1,014.20</caption>
+    <thead><tr><th>Cut</th><th class="n">Saving</th><th class="n">Running total</th></tr></thead>
+    <tbody>
+      <tr><td>Orbiter v2.5 &times; 2 &rarr; your Titan + low-profile NEMA 17</td><td class="n">$210.90</td><td class="n"></td></tr>
+      <tr><td>4 of 5 bought NEMA 17s &rarr; motors you own</td><td class="n">$104.85</td><td class="n"></td></tr>
+      <tr><td>Bed, magnet and PEI &rarr; the 235 set off the old printer</td><td class="n">$104.35</td><td class="n"></td></tr>
+      <tr><td>4040 uprights and base rails &rarr; reuse the old frame</td><td class="n">$90.00</td><td class="n"></td></tr>
+      <tr><td>Wiring, IEC inlet, drag chain &rarr; strip the old printer</td><td class="n">$70.00</td><td class="n">$1,670.18</td></tr>
+      <tr><td>Pi 4 + card + supply &rarr; Pi Zero 2 W ($34.20) + generic card</td><td class="n">$134.53</td><td class="n"></td></tr>
+      <tr><td>TMC2209 8-pack &rarr; 5-pack plus one single</td><td class="n">$18.55</td><td class="n"></td></tr>
+      <tr><td>Second supply &rarr; one 350 W with the bed power-capped</td><td class="n">$69.00</td><td class="n">$1,448.10</td></tr>
+      <tr><td>5 LDO rails &rarr; generic MGN12H</td><td class="n">$208.25</td><td class="n"></td></tr>
+      <tr><td>Gates pulleys and idlers &times; 13 &rarr; generic GT2</td><td class="n">$72.65</td><td class="n"></td></tr>
+      <tr><td>Trianglelab V6 &times; 2 &rarr; generic V6 clones</td><td class="n">$50.00</td><td class="n"></td></tr>
+      <tr><td>Fans &times; 4, 6 m belt, 4 endstops &rarr; generic</td><td class="n">$103.00</td><td class="n"></td></tr>
+      <tr class="hi"><td><strong>Budget build, rails kept</strong></td><td class="n"></td><td class="n"><strong>$1,014.20</strong></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p><strong>45% of the full BOM, at exactly the same 5,646 mm/s&sup2;.</strong> Buying everything locally with no overseas orders lands at A$1,448.</p>
+
+  <h3>Three caveats, stated plainly</h3>
+  <ul class="body">
+    <li><strong>The reuse column assumes what you own</strong> &mdash; two Titans with low-profile NEMA 17s, four more NEMA 17s, the 235 bed with magnet and PEI, and enough 4040 to rebuild the frame. If any of that is wrong, add it back; all of it at retail is $580.10.</li>
+    <li><strong>The generic column is estimated, not quoted.</strong> Generic MGN12 rails are the one real risk &mdash; the geometry is standard but tolerance and smoothness vary, and the rails are what the speed rests on. Buy one and check it before committing to five.</li>
+    <li><strong>One supply needs the bed capped.</strong> The loads total 411.6 W against 350 W. <code>max_power: 0.55</code> on the bed brings it to 274 W, inside the 80% rule check 12 enforces &mdash; at the cost of a 148 W bed warming a 255 &times; 245 plate. If you&rsquo;d rather not wait, the second supply is $69.</li>
+  </ul>
+
+  <h3>What not to cut</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>Item</th><th class="n">Cost</th><th>Why it stays</th></tr></thead>
+    <tbody>
+      <tr class="hi"><td>The second carriage block per toolhead</td><td class="n">$18</td><td>worth +42% on X &mdash; the cheapest performance in the machine</td></tr>
+      <tr><td>The linear rails</td><td class="n">~$228</td><td>eight times stiffer than wheels; they are the speed</td></tr>
+      <tr><td>24 V</td><td class="n">&mdash;</td><td>on 12 V the motors run out of headroom at ~250 mm/s</td></tr>
+      <tr><td>The Octopus Pro</td><td class="n">$115</td><td>eight drivers; IDEX needs six and the cheap boards have five</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="lesson">
   <span class="lnum">Reference</span>
   <h2>Glossary</h2>
   <dl class="gloss">
