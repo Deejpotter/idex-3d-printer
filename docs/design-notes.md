@@ -1087,6 +1087,163 @@ figures are internally consistent and externally unverified. Nothing moving
 depends on them, so no acceleration number is affected, but the machine's total
 mass should not be quoted as if it were measured.
 
+## 25. The enclosure, and folding the motors in to get it
+
+An integrated enclosure with an electronics bay and an extractor fan. Three
+things had to be settled before any of it could be drawn, and the first was a
+surprise.
+
+### The frame is a T, not a box
+
+The obvious plan is to skin what is already there: the machine is 20-series
+V-slot throughout and 6 mm Bubbleboard drops straight into a 6 mm slot, which is
+exactly what `cnc-tools/app/table-enclosure-calculator` is built to work out.
+
+Read the side elevation out of the model and it does not work. Above the base
+rectangle there are **two uprights and one top tie, all at mid-depth**. Nothing
+at the front, nothing at the back. That is correct for a bedslinger — the bed
+has to sling through where the walls would be — but it means there are no slots
+in the right places. An enclosure here is not a skin. It is a cage.
+
+### What set the width, and the 40 mm it cost
+
+Six things stuck out past the frame, and the widest was not a bracket:
+
+| Part | Reaches | Past the frame |
+|---|---:|---:|
+| X motor mount A / B | −15.0 / 535.0 | 15.0 mm |
+| NEMA 17 × 2 | −11.2 / 531.2 | 11.2 mm |
+| X idler bracket A / B | −5.0 / 525.0 | 5.0 mm |
+| Lead screws × 2 | 550.8 | 10.8 mm |
+| Top tie | 560.0 | 20.0 mm |
+
+The X motors sit on the belt line with their shafts along Y, centred on pulleys
+10 mm from each end of the beam. The 42.4 mm motor body and the 50 mm mount
+plate therefore hang over the side rails. Wrapping them would have made the
+enclosure 560 wide instead of 520 and needed its own base rectangle — about
+$30 of extrusion and 40 mm of bench.
+
+**Folded in instead.** `x_motor_x = x_mount_w / 2` puts the mount plate's outer
+face flush with the beam end, and seven skeleton planes move the motors,
+pulleys, idlers and idler brackets 15 mm inboard with it. The belt runs follow:
+`x_belt_run = x_beam_len - 2 * ( x_motor_x + 15 mm )`, 470 → 440 mm. Nothing
+now reaches past x 0..520. `build_x`, `frame_w` and the travel are unchanged.
+
+It is not free. The parked toolhead plate reaches x 55 and the mount plate now
+ends at x 50, so the clearance is **5.0 mm**, down from 20. That is thin enough
+that it should not be left to trust, so check 7b measures it every run, at every
+flexed size, and fails under 3 mm. The mount is a 50 mm placeholder with five
+unconstrained sketches; `x_mount_w = nema_w + 7.6 mm` records that a designed
+mount would be 42.4 mm wide and hand back 7.6 mm of that clearance.
+
+### The cage
+
+Four 2020 posts at the corners, z 40 to 560, standing on the base rails. Four
+2020 top rails at z 560 to 580, landing on the top tie, which carries them. The
+footprint is flush with the frame at 520 × 530.
+
+Panels went in next, and only two of them could use the slot rule:
+
+- **Sides surface-mount.** The 4040 uprights occupy x 0..40 at mid-depth, which
+  is exactly the line a slotted side panel would have to travel. They sit on the
+  outside faces instead, at full size.
+- **Top sits in the rails' slots**, 506 × 516 by the calculator's OD − 14.
+- **Rear sits in the corner posts' slots**, 506 × 506 — bounded by the top
+  rail's underside rather than the roof, after the first attempt had it
+  intersecting the top panel by 18,216 mm³.
+- **The door is a 476 × 516 awning**, hinged on the front top rail.
+
+Five panels, 1.37 m², against a 2400 × 1200 sheet's 2.88 m². **One sheet does
+the enclosure at 48%**, and the offcut covers the electronics bay.
+
+### Two classes of interference, and only one of them is a modelling artifact
+
+Adding the panels took the interference check from 9 overlaps to 17. Six are
+**panels sitting in V-slots**: the extrusion is modelled as solid bar, so a 6 mm
+sheet 6 mm into a slot has to read as a clash. Those are an artifact and are now
+named as such in `EXPECTED_INTERFERENCE`.
+
+The other two are real. The **rear panel crosses both bed rails**, which run the
+full 530 mm depth and reach the rear face the panel sits in. 20 × 13 mm of
+overlap at each. The answer is two notches in the sheet, and they are recorded
+as `REAR_PANEL_NOTCHES` so nobody cuts the panel square and then wonders.
+
+### Where it lands
+
+| | |
+|---|---|
+| Cage | 4 posts + 4 top rails, 4.10 m of 2020, 1.88 kg |
+| Panels | 5 sheets, 1.37 m², 1.76 kg |
+| Enclosure total | **3.67 kg** |
+| Whole model | **106 parts, 18.32 kg**, 110 occurrences all tied |
+| Priced enclosure cost | **$157.54** — extrusion, brackets and fasteners at the BOM's own rates |
+
+Four enclosure lines carry no price: the Bubbleboard sheet, the fan, the damper
+and the hinges. No public listing was found for the sheet, so the BOM carries
+nothing rather than a number I made up.
+
+**19 of 19 checks pass**, including the enclosure's eight cut lengths and five
+panels, which check 11 and check 13 now measure against the model like
+everything else.
+
+### The extractor, and why it is a small fan
+
+The enclosure earns its keep two ways: it contains fumes and noise, and it holds
+a warm chamber so ABS and ASA stop warping. Extraction serves the first and
+destroys the second, because every cubic metre thrown out is reheated from room
+temperature:
+
+```
+P = Q x rho x cp x dT / 3600   ->   P = 0.335 x Q[m3/h] x dT
+```
+
+The cage encloses about **122 L**. Holding 45 °C in a 20 °C room is dT = 25 K,
+and conduction through 1.41 m² of 6 mm bubble board costs about **116 W** before
+the fan moves at all.
+
+| Extraction | Air changes/hr | Reheat | With conduction | Against a 270 W bed |
+|---|---:|---:|---:|---|
+| 6 m³/h | 49 | 50 W | 166 W | fits, with margin |
+| 25 m³/h | 205 | 209 W | 325 W | over |
+| 50 m³/h | 410 | 419 W | 535 W | twice the bed |
+| 120 m³/h | 984 | 1005 W | 1121 W | no chamber at all |
+
+**6 m³/h still gives 49 air changes an hour.** Fume control never needed a big
+fan; it needed a small one running all the time. So one 120 mm fan on PWM at
+about 5% is the continuous bleed, and full speed is the purge — 122 L at
+120 m³/h is five air changes in about 18 seconds.
+
+Two things that are not optional. The fan needs a **gravity damper**, because a
+fan that is off but open is a chimney and the bed cannot hold temperature
+against it. And a **120 mm axial fan will not push through HEPA**: a case fan
+makes 10–20 Pa and HEPA media wants 100–250 Pa. Carbon felt is the right
+medium for an axial fan; HEPA needs radial blowers, which is why the Bento-style
+filters use 5015s.
+
+The slot-in cartridge suits this well. At the 6 m³/h bleed, a 120 × 120 face
+sees **0.12 m/s**, which is plenty of dwell time for carbon to adsorb. At purge
+it sees 1.9 m/s and adsorbs almost nothing — which is fine, because purging is
+about dumping air, not cleaning it. The filter does its work in the slow mode.
+
+### The electronics bay
+
+Already half-decided by the model: the electronics sit at y 536..566, outboard
+of the frame's back face at y 530. The enclosure's rear wall is in that plane,
+so the bay is outside the heated volume by construction. Stepper drivers derate
+with ambient temperature and electrolytic capacitor life roughly halves per
+10 K, so a separate control box would solve the same problem at the cost of a
+long umbilical and a second object on the bench. The rear wall already solves
+it.
+
+Bubbleboard is the right **cover** and the wrong **chassis**. The bay carries
+2.5 kg — 1,300 g of LRS-350, 1,025 g of LRS-200, 180 g of Octopus — and 6 mm
+polypropylene with a bubble core will sag and let the fixings pull through. The
+supplies mount to a 2020 sub-frame like everything else on this machine; the
+board closes the bay, which matters because it is non-conductive and the
+LRS-350's 240 V terminals are exposed. One more thing to watch: the bed sweeps
+to y 505, 25 mm from that wall, at up to 100 °C. The 6 mm board is a reasonable
+thermal break. Do not also insulate the bay.
+
 ## 11. Still open
 
 - **The bed's acceleration limit is not reliably known** (§23). The 5,646 mm/s²
@@ -1113,7 +1270,16 @@ mass should not be quoted as if it were measured.
 - Uprights taller than 500 mm need longer lead screws; the model flags it (§20).
 - The brackets are plain plates. They carry the right interfaces — every one
   lands on a measured slot and every belt is gripped — but only the Y belt
-  clamp has been shaped for stiffness rather than drawn as a block.
+  clamp has been shaped for stiffness rather than drawn as a block. The two X
+  motor mounts are now the urgent ones: at 50 mm wide they leave only 5.0 mm to
+  the parked toolhead, and a designed mount at nema_w would give back 7.6 (§25).
+- **The extractor fan, its damper and the filter cartridge are specified but not
+  drawn** (§25). The cartridge wants a 120 × 120 face, a slot for the sheets and
+  a pre-filter ahead of the carbon.
+- The enclosure has no sealing, no door catch and no gasket in the model, and a
+  chamber that does not seal does not hold 45 °C.
+- **The rear panel needs two 20 × 13 mm notches** where it crosses the bed rails
+  (§25). The flat sheet in the model does not carry them.
 - Bed levelling hardware (springs or silicone spacers) is not modelled.
 - Wiring and drag chain are not modelled.
 - No printed part has been designed. The brackets in the model are plain plates

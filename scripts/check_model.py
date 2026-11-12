@@ -50,7 +50,18 @@ BRACKETS = ('X motor mount', 'X idler bracket', 'Y motor mount',
 
 # the overlaps that are a shaft or a belt meeting a part that would carry a
 # bore in reality. Any value not on this list is a fault.
-EXPECTED_INTERFERENCE = sorted([992, 992, 384, 168, 168, 122, 122, 70, 70])
+# Overlaps the model is expected to show. Three classes, all deliberate:
+#  - a belt or screw passing through the bore of the part that grips it
+#    (992, 384, 168, 122, 70) - the belt is drawn as a straight run, so it
+#    passes through the pulley it would really wrap;
+#  - a panel sitting in a V-slot (39468, 38220) - the extrusion is modelled as
+#    a solid bar, so a 6 mm sheet 6 mm into its slot must read as interference;
+#  - the rear panel crossing the two bed rails (1560) - this one is real, and
+#    the answer is a 20 x 13 mm notch in the sheet at each rail. Cut them.
+PANEL_IN_SLOT = [39468, 39468, 39468, 39468, 38220, 38220]
+REAR_PANEL_NOTCHES = [1560, 1560]
+EXPECTED_INTERFERENCE = sorted([992, 992, 384, 168, 168, 122, 122, 70, 70]
+                               + PANEL_IN_SLOT + REAR_PANEL_NOTCHES)
 
 # parameter, nominal, test value. Set FLEX_CASES to a list of names to run
 # only those (each flex recomputes the whole assembly; run one per call when
@@ -280,6 +291,46 @@ def run(_context):
                                   (b.maxPoint.z - b.minPoint.z) * 1000.0))
             chk(sfx + 'interference is the known set only', sorted(vols) == EXPECTED_INTERFERENCE,
                 '%d found: %s' % (res.count, sorted(vols, reverse=True)))
+
+            # 7b - the parked toolhead against the X end hardware. Folding the
+            # motors inside the frame for the enclosure bought 40 mm of bench
+            # width and spent it on this gap, so it gets measured rather than
+            # assumed. It is the one clearance a build_x change can close.
+            END_GAP_MIN = 3.0
+            tight = []
+            for tag, other in (('A', 'B'), ('B', 'A')):
+                plate = find('Toolhead plate %s' % tag, 'C - Toolhead %s' % tag)
+                if not plate:
+                    continue
+                px0, px1 = plate[0][3][0], plate[0][3][1]
+                pb = plate[0][3]
+                for part in ('X motor mount %s' % tag, 'X motor mount %s' % other,
+                             'X idler bracket %s' % tag, 'X idler bracket %s' % other):
+                    for occ in find(part, 'B - X gantry'):
+                        b = occ[3]
+                        # only where they actually share Y and Z, so parts that
+                        # pass above or behind the plate are not counted
+                        if not (b[2] < pb[3] and b[3] > pb[2] and b[4] < pb[5] and b[5] > pb[4]):
+                            continue
+                        if b[1] <= px0:
+                            g = px0 - b[1]
+                        elif b[0] >= px1:
+                            g = b[0] - px1
+                        else:
+                            g = -1.0
+                        if g < END_GAP_MIN:
+                            tight.append('%s to %s: %.1f mm' % (part, 'Toolhead plate %s' % tag, g))
+            allgaps = []
+            for tag in ('A', 'B'):
+                plate = find('Toolhead plate %s' % tag, 'C - Toolhead %s' % tag)
+                mount = find('X motor mount %s' % tag, 'B - X gantry')
+                if plate and mount:
+                    px0, px1 = plate[0][3][0], plate[0][3][1]
+                    m0, m1 = mount[0][3][0], mount[0][3][1]
+                    allgaps.append('%s %.1f mm' % (tag, px0 - m1 if m1 <= px0 else m0 - px1))
+            chk(sfx + 'parked toolhead clears the X end hardware', not tight,
+                '; '.join(tight) or 'closest ' + ', '.join(allgaps) +
+                ' (minimum %.0f mm)' % END_GAP_MIN)
 
             # 7 - parking
             bx0 = pv('frame_w') / 2 - pv('build_x') / 2

@@ -66,6 +66,13 @@
         "watts": 5,
         "rail": "motion",
         "source": "estimate"
+      },
+      {
+        "load": "Enclosure extractor fan, 120 mm",
+        "qty": 1,
+        "watts": 2.4,
+        "rail": "motion",
+        "source": "typical 24 V 120 mm PWM fan at full speed; it runs at about 5% in normal use"
       }
     ],
     "off_budget": "The Raspberry Pi runs from its own 5 V USB-C supply, not the 24 V rails."
@@ -1092,25 +1099,25 @@
         "cuts": [
           {
             "component": "Belt A upper",
-            "mm": 470,
+            "mm": 440,
             "qty": 1,
             "measure": "x"
           },
           {
             "component": "Belt A lower",
-            "mm": 470,
+            "mm": 440,
             "qty": 1,
             "measure": "x"
           },
           {
             "component": "Belt B upper",
-            "mm": 470,
+            "mm": 440,
             "qty": 1,
             "measure": "x"
           },
           {
             "component": "Belt B lower",
-            "mm": 470,
+            "mm": 440,
             "qty": 1,
             "measure": "x"
           },
@@ -1153,7 +1160,8 @@
           "read": "variant",
           "note": "10 m for a sixth of the price of 6 m of Gates. Not Gates Powergrip: core material and tooth form are the seller’s word"
         },
-        "not_modelled": "stock length; the belt runs are modelled, not the reel"
+        "not_modelled": "stock length; the belt runs are modelled, not the reel",
+        "note": "four X runs at 440 mm, two Y at 410, two Z at 370 - 2,320 mm of run plus wrap and tension allowance. The X runs shortened from 470 when the motors were folded inside the frame for the enclosure."
       }
     ],
     "G. Electronics": [
@@ -1368,6 +1376,198 @@
           "why": "mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving"
         },
         "not_modelled": "wiring is not modelled"
+      }
+    ],
+    "H. Enclosure": [
+      {
+        "item": "2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m",
+        "qty": 1,
+        "unit": 58.02,
+        "line": 58.02,
+        "url": "https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series",
+        "variant": null,
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "cut to length, costed at the rate the frame’s own 2020 line implies ($14.15/m); RM Components publishes no per-mm rate, so it needs the same quote as the frame",
+        "cuts": [
+          {
+            "component": "Enc post FL",
+            "mm": 520,
+            "qty": 1,
+            "measure": "extrude"
+          },
+          {
+            "component": "Enc post FR",
+            "mm": 520,
+            "qty": 1,
+            "measure": "extrude"
+          },
+          {
+            "component": "Enc post RL",
+            "mm": 520,
+            "qty": 1,
+            "measure": "extrude"
+          },
+          {
+            "component": "Enc post RR",
+            "mm": 520,
+            "qty": 1,
+            "measure": "extrude"
+          },
+          {
+            "component": "Enc top rail F",
+            "mm": 520,
+            "qty": 1,
+            "measure": "x"
+          },
+          {
+            "component": "Enc top rail R",
+            "mm": 520,
+            "qty": 1,
+            "measure": "x"
+          },
+          {
+            "component": "Enc top rail L",
+            "mm": 490,
+            "qty": 1,
+            "measure": "y"
+          },
+          {
+            "component": "Enc top rail X",
+            "mm": 490,
+            "qty": 1,
+            "measure": "y"
+          }
+        ],
+        "stock_total_mm": 4100,
+        "ali": {
+          "sourced": false,
+          "reason": "freight",
+          "why": "cut-to-length metal: too heavy to ship economically"
+        }
+      },
+      {
+        "item": "20 series right-angle V-slot bracket, black - cage corners",
+        "qty": 20,
+        "unit": 3.3,
+        "line": 66,
+        "url": "https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black",
+        "variant": "black",
+        "stock": "in",
+        "conf": "estimate",
+        "note": "8 post ends and 4 top-rail corners need two brackets each where the load is real; 20 is the working number, not a measured one",
+        "not_modelled": "fasteners are not modelled individually",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "cheaper or equal locally, or wanted next week rather than next month"
+        }
+      },
+      {
+        "item": "M5 T-nuts and cap screws for the cage - 40 pairs",
+        "qty": 1,
+        "unit": 33.52,
+        "line": 33.52,
+        "url": "https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts",
+        "variant": "M5",
+        "stock": "in",
+        "conf": "estimate",
+        "note": "costed at the rate the frame’s own fastener lines imply",
+        "not_modelled": "fasteners are not modelled individually",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "cheaper or equal locally, or wanted next week rather than next month"
+        }
+      },
+      {
+        "item": "Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels",
+        "qty": 1,
+        "unit": 0,
+        "line": 0,
+        "url": null,
+        "variant": "6 mm, 2400 x 1200",
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Five panels total 1.37 m2 of a 2.88 m2 sheet (48%); the offcut covers the electronics bay and leaves a spare side. Clear corflute is the same 6 mm if you want to see the print",
+        "models": [
+          {
+            "component": "Enc panel L",
+            "qty": 1
+          },
+          {
+            "component": "Enc panel R",
+            "qty": 1
+          },
+          {
+            "component": "Enc panel rear",
+            "qty": 1
+          },
+          {
+            "component": "Enc panel top",
+            "qty": 1
+          },
+          {
+            "component": "Enc door awning",
+            "qty": 1
+          }
+        ],
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "a Maker Store sheet; not sourced overseas"
+        }
+      },
+      {
+        "item": "120 mm 24 V extractor fan, PWM - top rear corner",
+        "qty": 1,
+        "unit": 0,
+        "line": 0,
+        "url": null,
+        "variant": "120 x 120 x 25, 4-pin PWM",
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "NOT PRICED. Runs at about 5% as the continuous bleed and full for purging. An axial fan cannot push through HEPA - if the filter box carries HEPA it needs radial blowers of its own",
+        "not_modelled": "fan and filter box are designed but not yet drawn",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "not yet specified"
+        }
+      },
+      {
+        "item": "Gravity backdraft damper, 120 mm - seals the fan when it is off",
+        "qty": 1,
+        "unit": 0,
+        "line": 0,
+        "url": null,
+        "variant": "120 mm",
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "NOT PRICED. Not optional for a heated chamber: a fan that is off but open is a chimney, and the bed cannot hold temperature against it",
+        "not_modelled": "fan and filter box are designed but not yet drawn",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "not yet specified"
+        }
+      },
+      {
+        "item": "Awning hinge pair, 20 series - door hinges on the front top rail",
+        "qty": 2,
+        "unit": 0,
+        "line": 0,
+        "url": null,
+        "variant": "20 series",
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "NOT PRICED. The door is 476 x 516, hinged along the top rail and lifting up",
+        "not_modelled": "fasteners are not modelled individually",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "not yet specified"
+        }
       }
     ]
   }

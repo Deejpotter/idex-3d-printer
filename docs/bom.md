@@ -90,7 +90,7 @@ power supplies. Edit `bom.json`, then run `node scripts/genbom.js`.
 
 | Part | Option priced | Qty | Line | Source | Stock | Conf. | AliExpress | Read as |
 |---|---|---:|---:|---|---|---|---:|---|
-| Gates Powergrip RF 2GT 6 mm timing belt, 6 m | 6000mm (6m) | 1 | $59.00 | [DREMC](https://store.dremc.com.au/products/gates-powergrip%C2%AE-rf-2gt-6mm-timing-belt) | in stock | verified | [$9.19](https://www.aliexpress.com/item/1005008463979470.html) | variant [^a14] |
+| Gates Powergrip RF 2GT 6 mm timing belt, 6 m [^13] | 6000mm (6m) | 1 | $59.00 | [DREMC](https://store.dremc.com.au/products/gates-powergrip%C2%AE-rf-2gt-6mm-timing-belt) | in stock | verified | [$9.19](https://www.aliexpress.com/item/1005008463979470.html) | variant [^a14] |
 
 **Subtotal: $59.00** locally, **$9.19** buying overseas where it wins.
 
@@ -101,16 +101,30 @@ power supplies. Edit `bom.json`, then run `node scripts/genbom.js`.
 | BigTreeTech Octopus Pro V1.1 (H723) - 8 driver slots | — | 1 | $115.00 | [DREMC](https://store.dremc.com.au/products/bigtreetech-octopus-pro-v1-1-h723-chip) | in stock | verified | ~~$211.22~~ dearer | variant, BigTreeTech [^a15] |
 | BigTreeTech TMC2209 V1.3 stepper drivers, 8 pack | 8x | 1 | $79.45 | [DREMC](https://store.dremc.com.au/products/bigtreetech-tmc2209-v1-3-stepper-motor-driver) | in stock | verified | in the line above | included in the AliExpress line for "BigTreeTech Octopus Pro V1.1 (H723) - 8 driver slots" |
 | Mean Well LRS-350-24 - bed supply, 270 W of 350 W | — | 1 | $74.65 | [DREMC](https://store.dremc.com.au/products/mean-well-lrs-350-24-24v-350w-power-supply) | in stock | verified | — | mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving |
-| Mean Well LRS-200-24 - motion, hotends and logic, 142 W of 211 W [^13] | — | 1 | $69.00 | [DREMC](https://store.dremc.com.au/products/mean-well-lrs-200-24-24v-8-8a-enclosed-power-suply) | in stock | verified | — | mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving |
-| Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB [^14] | — | 1 | $109.33 | [Core Electronics](https://core-electronics.com.au/raspberry-pi-4-model-b-2gb.html) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
+| Mean Well LRS-200-24 - motion, hotends and logic, 142 W of 211 W [^14] | — | 1 | $69.00 | [DREMC](https://store.dremc.com.au/products/mean-well-lrs-200-24-24v-8-8a-enclosed-power-suply) | in stock | verified | — | mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving |
+| Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB [^15] | — | 1 | $109.33 | [Core Electronics](https://core-electronics.com.au/raspberry-pi-4-model-b-2gb.html) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Official Raspberry Pi 4 USB-C power supply, 5.1 V 15.3 W | — | 1 | $11.90 | [Core Electronics](https://core-electronics.com.au/raspberry-pi-4-official-power-supply-usb-c-5v-15w-white.html) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
-| Official Raspberry Pi 64 GB A2 micro SD card [^15] | — | 1 | $47.50 | [Core Electronics](https://core-electronics.com.au/raspberry-pi-a2-class-sd-card-64-gb.html) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
+| Official Raspberry Pi 64 GB A2 micro SD card [^16] | — | 1 | $47.50 | [Core Electronics](https://core-electronics.com.au/raspberry-pi-a2-class-sd-card-64-gb.html) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Omron D2F-5L endstop switch | — | 4 | $21.80 | [DREMC](https://store.dremc.com.au/products/omron-d2f-5l-switch) | in stock | verified | [$5.81](https://www.aliexpress.com/item/1005006964029745.html) | band [^a16] |
-| ADXL345 accelerometer, 3 axis - shared, for input shaping [^16] | — | 1 | $4.95 | [DREMC](https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
+| ADXL345 accelerometer, 3 axis - shared, for input shaping [^17] | — | 1 | $4.95 | [DREMC](https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Wago 221-413 lever terminal block, 3 way | 221-413 3 Way | 6 | $17.70 | [DREMC](https://store.dremc.com.au/products/wago-221-series-terminal-block) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Wiring, ferrules, IEC inlet with switch and fuse, drag chain, sleeving | — | 1 | $70.00 | — | — | estimate | — | mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving |
 
 **Subtotal: $621.28** locally, **$605.29** buying overseas where it wins.
+
+## H. Enclosure
+
+| Part | Option priced | Qty | Line | Source | Stock | Conf. | AliExpress | Read as |
+|---|---|---:|---:|---|---|---|---:|---|
+| 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m [^18] | — | 1 | $58.02 | [RM Components](https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series) | — | estimate | — | cut-to-length metal: too heavy to ship economically |
+| 20 series right-angle V-slot bracket, black - cage corners [^19] | black | 20 | $66.00 | [RM Components](https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
+| M5 T-nuts and cap screws for the cage - 40 pairs [^20] | M5 | 1 | $33.52 | [DREMC](https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
+| Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels [^21] | 6 mm, 2400 x 1200 | 1 | $0.00 | — | — | estimate | — | a Maker Store sheet; not sourced overseas |
+| 120 mm 24 V extractor fan, PWM - top rear corner [^22] | 120 x 120 x 25, 4-pin PWM | 1 | $0.00 | — | — | estimate | — | not yet specified |
+| Gravity backdraft damper, 120 mm - seals the fan when it is off [^23] | 120 mm | 1 | $0.00 | — | — | estimate | — | not yet specified |
+| Awning hinge pair, 20 series - door hinges on the front top rail [^24] | 20 series | 2 | $0.00 | — | — | estimate | — | not yet specified |
+
+**Subtotal: $157.54** locally, **$157.54** buying overseas where it wins.
 
 ## Total
 
@@ -123,24 +137,25 @@ power supplies. Edit `bom.json`, then run `node scripts/genbom.js`.
 | E. Z axis | $299.85 | $136.70 |
 | F. Belt stock | $59.00 | $9.19 |
 | G. Electronics | $621.28 | $605.29 |
-| **Total** | **$2235.38** | **$1644.21** |
+| H. Enclosure | $157.54 | $157.54 |
+| **Total** | **$2392.92** | **$1801.75** |
 
-Buying everything from Australian stock costs **$2235.38**, GST included and
-delivered. Taking the overseas line wherever it is cheaper brings the parts to **$1644.21**, of which $1085.83 is still bought here. AliExpress
-prices exclude GST, so add about $55.84 at checkout: call it **$1700.05** all up, plus whatever shipping applies.
+Buying everything from Australian stock costs **$2392.92**, GST included and
+delivered. Taking the overseas line wherever it is cheaper brings the parts to **$1801.75**, of which $1243.37 is still bought here. AliExpress
+prices exclude GST, so add about $55.84 at checkout: call it **$1857.59** all up, plus whatever shipping applies.
 
 Those AliExpress figures are **list** prices. On 2026-11-12 the same basket
-rang up at $1135.48 on sale — but part of that gap is a first-order voucher
+rang up at $1293.02 on sale — but part of that gap is a first-order voucher
 that does not repeat, so the list column is the one to plan against. See
 `docs/budget-build.md`.
 
-Of that, $1902.18 is verified against live supplier data and $333.20 is estimated across 6 lines (extrusion and flat bar cut to length, the extra carriage blocks, and loose wiring).
+Of that, $1902.18 is verified against live supplier data and $490.74 is estimated across 13 lines (extrusion and flat bar cut to length, the extra carriage blocks, and loose wiring).
 Anything already on hand comes off the top.
 
 ## 24 V power budget
 
 A single 350 W supply does not fit this machine: two hotends and a 270 W bed come to
-411.6 W. The bed therefore gets its own supply, and no supply is loaded
+414.0 W. The bed therefore gets its own supply, and no supply is loaded
 past 80% of its rating.
 
 | Load | Qty | W each | Total W | Rail | Where the figure comes from |
@@ -151,11 +166,12 @@ past 80% of its rating.
 | 5015 part cooling blower | 2 | 2.8 | 5.6 | motion | 0.12 A at 24 V |
 | 4010 hotend fan | 2 | 1.5 | 3.0 | motion | 0.06 A at 24 V |
 | Octopus Pro board, drivers idle | 1 | 5 | 5.0 | motion | estimate |
+| Enclosure extractor fan, 120 mm | 1 | 2.4 | 2.4 | motion | typical 24 V 120 mm PWM fan at full speed; it runs at about 5% in normal use |
 
 | Supply | Rating | Load | Loaded |
 |---|---:|---:|---:|
 | Mean Well LRS-350-24 (bed) | 350 W | 270.0 W | 77% |
-| Mean Well LRS-200-24 (motion) | 211 W | 141.6 W | 67% |
+| Mean Well LRS-200-24 (motion) | 211 W | 144.0 W | 68% |
 
 The Raspberry Pi runs from its own 5 V USB-C supply, not the 24 V rails.
 
@@ -185,10 +201,18 @@ The Raspberry Pi runs from its own 5 V USB-C supply, not the 24 V rails.
 [^10]: D. Y and bed — Bed carrier bars - 6061 flat bar, 2 off at 235 x 35 x 5 mm: nearest stocked section is 6 x 50 mm, cut and trimmed to 35 x 5; price is the listing base, not a quote.
 [^11]: E. Z axis — LDO SLR12H / MGN12H stainless rail with carriage, 400 mm: 350 mm would also fit but is out of stock; 400 mm gives 355 mm of Z travel against a 230 mm build.
 [^12]: E. Z axis — F688Z flange bearing 8x16x5, 2 pc per pack - screw end supports: 4 bearings in the model, 2 per pack.
-[^13]: G. Electronics — Mean Well LRS-200-24 - motion, hotends and logic, 142 W of 211 W: second supply added after the 24 V budget came to 412 W: two hotends and a 270 W bed do not fit one 350 W unit.
-[^14]: G. Electronics — Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB: Pi 5 2 GB is $125.52 and is not needed for Klipper.
-[^15]: G. Electronics — Official Raspberry Pi 64 GB A2 micro SD card: the 32 GB card is $32.18 but was out of stock.
-[^16]: G. Electronics — ADXL345 accelerometer, 3 axis - shared, for input shaping: one only, moved between toolheads; the earlier BOM counted it twice.
+[^13]: F. Belt stock — Gates Powergrip RF 2GT 6 mm timing belt, 6 m: four X runs at 440 mm, two Y at 410, two Z at 370 - 2,320 mm of run plus wrap and tension allowance. The X runs shortened from 470 when the motors were folded inside the frame for the enclosure..
+[^14]: G. Electronics — Mean Well LRS-200-24 - motion, hotends and logic, 142 W of 211 W: second supply added after the 24 V budget came to 412 W: two hotends and a 270 W bed do not fit one 350 W unit.
+[^15]: G. Electronics — Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB: Pi 5 2 GB is $125.52 and is not needed for Klipper.
+[^16]: G. Electronics — Official Raspberry Pi 64 GB A2 micro SD card: the 32 GB card is $32.18 but was out of stock.
+[^17]: G. Electronics — ADXL345 accelerometer, 3 axis - shared, for input shaping: one only, moved between toolheads; the earlier BOM counted it twice.
+[^18]: H. Enclosure — 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m: cut to length, costed at the rate the frame’s own 2020 line implies ($14.15/m); RM Components publishes no per-mm rate, so it needs the same quote as the frame.
+[^19]: H. Enclosure — 20 series right-angle V-slot bracket, black - cage corners: 8 post ends and 4 top-rail corners need two brackets each where the load is real; 20 is the working number, not a measured one.
+[^20]: H. Enclosure — M5 T-nuts and cap screws for the cage - 40 pairs: costed at the rate the frame’s own fastener lines imply.
+[^21]: H. Enclosure — Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels: NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Five panels total 1.37 m2 of a 2.88 m2 sheet (48%); the offcut covers the electronics bay and leaves a spare side. Clear corflute is the same 6 mm if you want to see the print.
+[^22]: H. Enclosure — 120 mm 24 V extractor fan, PWM - top rear corner: NOT PRICED. Runs at about 5% as the continuous bleed and full for purging. An axial fan cannot push through HEPA - if the filter box carries HEPA it needs radial blowers of its own.
+[^23]: H. Enclosure — Gravity backdraft damper, 120 mm - seals the fan when it is off: NOT PRICED. Not optional for a heated chamber: a fan that is off but open is a chimney, and the bed cannot hold temperature against it.
+[^24]: H. Enclosure — Awning hinge pair, 20 series - door hinges on the front top rail: NOT PRICED. The door is 476 x 516, hinged along the top rail and lifting up.
 [^a1]: AliExpress, LDO SLR12H / MGN12H stainless rail with carriage, 500 mm: generic, not LDO; 4.7 over 130 reviews, 2,000+ sold. Reviewers all say to degrease and re-grease before use.
 [^a2]: AliExpress, MGN12H carriage blocks, 5 extra (10 blocks in the model, 5 come with the rails): this closes the one real sourcing gap - no Australian listing has these in stock.
 [^a3]: AliExpress, LDO NEMA 17 42STH48-2504AC: 2.0 A against the LDO part’s 2.5 A, same 48 mm body and ~59 N.cm holding torque; buy the 5-pack, the machine needs 5.
