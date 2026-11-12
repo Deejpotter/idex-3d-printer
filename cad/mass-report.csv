@@ -4,6 +4,9 @@ part,qty,mass_g_each,mass_g_total,material
 "8mm x 500mm Lead Screw",2,153.24,306.49,"Steel"
 "Base cross 2040",2,356.39,712.77,"Aluminum 6061"
 "Base rail 4040",2,655.24,1310.48,"Aluminum 6061"
+"Bay rail bottom",1,240.76,240.76,"MASS 2020 extrusion"
+"Bay rail mid",1,240.76,240.76,"MASS 2020 extrusion"
+"Bay rail top",1,240.76,240.76,"MASS 2020 extrusion"
 "Bed carrier bar F",1,111.04,111.04,"Aluminum 6061"
 "Bed carrier bar R",1,111.04,111.04,"Aluminum 6061"
 "Bed carrier spine",1,32.39,32.39,"Aluminum 6061"
@@ -13,7 +16,7 @@ part,qty,mass_g_each,mass_g_total,material
 "Belt A upper",1,4.80,4.80,"MAT GT2 belt"
 "Belt B lower",1,4.80,4.80,"MAT GT2 belt"
 "Belt B upper",1,4.80,4.80,"MAT GT2 belt"
-"Electronics panel",1,285.12,285.12,"Aluminum 6061"
+"Electronics panel",1,164.74,164.74,"MAT Bubbleboard 6mm"
 "Enc door awning",1,324.21,324.21,"MAT Bubbleboard 6mm"
 "Enc panel L",1,377.78,377.78,"MAT Bubbleboard 6mm"
 "Enc panel R",1,377.78,377.78,"MAT Bubbleboard 6mm"
@@ -73,4 +76,3 @@ part,qty,mass_g_each,mass_g_total,material
 "Z screw block top L",1,38.47,38.47,"Aluminum 6061"
 "Z screw block top R",1,38.47,38.47,"Aluminum 6061"
 "pulley gt2 6.35 bore",6,15.32,91.94,"Steel"
-"TOTAL",106,,18315.7,

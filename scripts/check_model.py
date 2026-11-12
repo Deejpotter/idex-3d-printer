@@ -30,6 +30,9 @@ Checks
  11  BOM check line - every cut length, count and stocked size in
      docs/bom.json is measured in the model, carriage blocks included
  12  24 V power budget - every load in docs/bom.json against the supplies
+ 13  BOM part counts - every component a BOM line buys exists in the model
+ 14  electronics bay - every supply and board sits on the panel and over a
+     ladder rail, so no fixing carries load in 6 mm polypropylene
 """
 
 import adsk.core
@@ -43,7 +46,8 @@ SOLID = (adsk.fusion.PointContainment.PointInsidePointContainment,
 P = adsk.core.Point3D.create
 
 FRAME = ('Upright 4040', 'Base rail 4040', 'Base cross 2040',
-         'Top tie 2040', 'X beam 2040', 'Bed rail 2020')
+         'Top tie 2040', 'X beam 2040', 'Bed rail 2020',
+         'Bay rail bottom', 'Bay rail mid', 'Bay rail top')
 BRACKETS = ('X motor mount', 'X idler bracket', 'Y motor mount',
             'Y idler bracket', 'Z screw block', 'Electronics panel',
             'Z motor mount')
@@ -87,6 +91,8 @@ DRIVER_RULES = {
     'th_drop':    (40, 200, 'beam underside to nozzle tip'),
     'bed_plate_x': (100, 500, 'bought heated plate width'),
     'bed_plate_y': (100, 500, 'bought heated plate depth'),
+    'bay_h':        (100, 600, 'electronics panel height'),
+    'bay_rail_mid': (40, 560, 'middle ladder rail - it carries the second supply'),
 }
 
 
@@ -343,6 +349,37 @@ def run(_context):
                     'nozzle x=%.1f, build area %.1f..%.1f' % (nx, bx0, bx1))
 
 
+            # 14 - the electronics bay: the sheet is a backplane, not a chassis.
+            # Each supply and board must sit flat on the panel, inside its outline,
+            # and overlap at least one ladder rail in z so its bolts reach a T-nut.
+            panel = find('Electronics panel', 'G - Electronics')
+            rails = [p for p in pl if p[0].startswith('Bay rail')]
+            bad = []
+            if not panel:
+                bad.append('no Electronics panel')
+            elif not rails:
+                bad.append('no ladder rails behind the panel')
+            else:
+                pb = panel[0][3]
+                for nm in ('PSU LRS-350-24', 'PSU LRS-200-24', 'Octopus Pro V1.1'):
+                    for occ in find(nm, 'G - Electronics'):
+                        b = occ[3]
+                        if abs(b[2] - pb[3]) > 0.02:
+                            bad.append('%s is %.1f mm off the panel face' % (nm, b[2] - pb[3]))
+                        if b[0] < pb[0] - 0.02 or b[1] > pb[1] + 0.02:
+                            bad.append('%s overhangs the panel in x' % nm)
+                        if b[4] < pb[4] - 0.02 or b[5] > pb[5] + 0.02:
+                            bad.append('%s reaches past the panel in z (%.0f..%.0f vs %.0f..%.0f)'
+                                       % (nm, b[4], b[5], pb[4], pb[5]))
+                        on = [r[0] for r in rails
+                              if r[3][4] < b[5] - 0.02 and r[3][5] > b[4] + 0.02]
+                        if not on:
+                            bad.append('%s lands on no ladder rail - its bolts would carry '
+                                       'in 6 mm polypropylene' % nm)
+            chk(sfx + 'bay gear lands on the panel and on a ladder rail', not bad,
+                '; '.join(bad) or '%d rails carry every supply and board' % len(rails))
+
+
         def rules(sfx=''):
             """Checks 10-12: driver ranges, the BOM check line and the 24 V budget.
 
@@ -373,6 +410,10 @@ def run(_context):
                               % (pv('upright_h'), pv('upright_h'), pv('z_screw_len')))
             if pv('gantry_z') < pv('bed_top'):
                 broken.append('gantry_z below bed_top - the nozzle would be inside the bed')
+            if not (pv('bay_rail') < pv('bay_rail_mid') < pv('bay_h') - 2 * pv('bay_rail')):
+                broken.append('bay_rail_mid %.0f collides with the bottom or top ladder rail '
+                              '(legal %.0f..%.0f)' % (pv('bay_rail_mid'), pv('bay_rail'),
+                                                      pv('bay_h') - 2 * pv('bay_rail')))
             chk(sfx + 'driver values are in range', not broken, '; '.join(broken) or 'all drivers legal')
 
             # 11 - the BOM check line: every cut length and count in docs/bom.json

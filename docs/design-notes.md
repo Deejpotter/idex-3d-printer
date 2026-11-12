@@ -1244,6 +1244,127 @@ LRS-350's 240 V terminals are exposed. One more thing to watch: the bed sweeps
 to y 505, 25 mm from that wall, at up to 100 °C. The 6 mm board is a reasonable
 thermal break. Do not also insulate the bay.
 
+## 26. One sheet for the electronics, and the 2020 that makes it work
+
+The ask was to mount all the electronics to a single Bubbleboard sheet, for ease
+of use. §25 had argued against it — "the bay carries 2.5 kg and 6 mm
+polypropylene with a bubble core will sag and let the fixings pull through".
+
+That argument was half wrong, and the model held something worse than either
+half.
+
+### The numbers say the sheet would have carried it
+
+The panel is **vertical**. Gravity acts in its plane, so there is no shelf to
+sag: the sheet is a plate in edge compression, not a beam in bending. Taking a
+6 mm twin-wall with 0.5 mm skins at ±2.75 mm, `EI` works out at about
+**9.8 N·m²** per metre of width, so for a 500 mm span:
+
+```
+P_cr   = pi^2 x EI / L^2 = 9.87 x 9.83e6 / 500^2 = 388 N/m
+applied = 2.505 kg x 9.81 / 0.52 m               =  47 N/m
+```
+
+An **8.2x margin** against buckling. Bearing at the bolts is no worse: an M4
+through two 0.5 mm skins is about 4 mm² of projected area, so roughly 120 N at
+PP's 30 MPa yield, against the 3.2 N each of four bolts under the LRS-350. The
+peel moment — 1.3 kg acting 15 mm off the face — resolves to about 1.1 N of
+tension per bolt. Nothing on that list is close to a limit.
+
+So the sheet was never the problem. The skin thicknesses are **assumed**, not
+measured off a real offcut, so treat the 8.2x as an order of magnitude rather
+than a number; but it would have to be out by a factor of eight to matter.
+
+### What the model actually had
+
+Reading the bay out properly found this:
+
+| Part | x | y | z | Mass |
+|---|---|---|---|---:|
+| "Electronics panel" | 40..480 | 530..**536** | 0..**40** | 285 g, **Aluminium 6061** |
+| PSU LRS-350-24 | 60..275 | 536..566 | 5..120 | 1,300 g |
+| Octopus Pro V1.1 | 300..460 | 536..556 | 5..105 | 180 g |
+| PSU LRS-200-24 | 276..475 | 536..566 | 125..223 | 1,025 g |
+
+The "panel" was a **440 x 40 mm aluminium strip** along the very bottom, and
+2.5 kg of gear cantilevered up to 183 mm off it. That is worse than anything
+§25 warned about, and it needed fixing whatever the sheet was made of.
+
+### A 2020 down the base, which is the answer
+
+Three 2020 rails, 520 mm each, in the plane `frame_d`..`frame_d + bay_rail`
+(y 530..550), with the sheet surface-mounted outboard of them at y 550..556:
+
+| Rail | z | Catches |
+|---|---|---|
+| Bay rail bottom | 0..20 | LRS-350 and Octopus, which both start at z 5 |
+| Bay rail mid | 110..130 | the LRS-350 top, and the LRS-200 base at z 125 |
+| Bay rail top | 220..240 | the LRS-200 top at z 223 |
+
+The bottom rail lands flat on the base cross and both base rails, so it needs no
+brackets at all. The mid and top rails bolt to the two enclosure rear posts,
+which already run from z 40 to 560 at x 0..20 and 500..520 — a 480 mm span
+carrying about a kilogram, which deflects **0.04 mm**.
+
+The point is not that the rails hold the sheet up. **It is that every bolt now
+threads into a T-nut instead of into polypropylene**, so the sheet carries
+nothing at all and its material stops being a structural question. And the
+sandwich is one object: lay the sheet on the bench, mark it, drill it, bolt the
+rails behind it and the gear through it, then lift the whole thing in and do up
+six screws. That is the ease of use the one-sheet idea was for.
+
+**Cost: 20 mm of depth.** The gear moves from y 536 to y 556 and the machine's
+rearmost point goes 566 to 586. `bay_face = frame_d + bay_rail + panel_t` makes
+that one expression, and re-pointing the two skeleton planes that were at
+`frame_d + 6 mm` moved all three parts without touching their geometry.
+
+### The other options, and why none of them is needed now
+
+Stiffness per metre of width, which is what a backplane is bought for:
+
+| Material | EI (N·m²/m) | vs bubble board | Mass | Against it |
+|---|---:|---:|---:|---|
+| 6 mm PP bubble board | ~10 | 1x | 1.3 kg/m² | nothing, once a ladder exists |
+| 3 mm acrylic | 7 | 0.7x | 3.6 kg/m² | creeps, cracks at fixings |
+| 1.6 mm aluminium | 24 | 2.4x | 4.3 kg/m² | **conductive**, in front of exposed mains |
+| 3 mm alu composite | 76 | 8x | 4.5 kg/m² | conductive skins at every cut edge |
+| 6 mm plywood | 126 | 13x | 3.4 kg/m² | heavier, and still not flame rated |
+
+Plywood is thirteen times stiffer and alu composite eight. Both would work as a
+bare backplane with no ladder at all. **But the ladder is cheaper than either**
+(1.56 m of 2020, $22.08) and once it is there the sheet's stiffness is
+irrelevant — so the right move is the ladder plus the sheet that is already
+being bought. The remaining option, a DIN rail on a sub-frame, is the industrial
+answer and is strictly better for swapping parts; it is also one more thing to
+buy, and the Octopus has no DIN foot.
+
+### The real risk is electrical, not mechanical
+
+Polypropylene being non-conductive is the reason to want it in front of the
+LRS-350's exposed 240 V terminals. It is also **combustible and not flame
+rated**, which aluminium composite and plywood are no better at. So the thing
+that matters is not the panel material at all:
+
+- Shroud the mains terminals. Mean Well sell a clip-on cover for the LRS series.
+- Fuse at the IEC inlet, not only at the supply.
+- The panel is outboard of the enclosure's rear wall (y 517..523), so it sees
+  room air on both faces and never the chamber's 45 °C or the bed's 100 °C.
+
+### Where it lands
+
+| | |
+|---|---|
+| Ladder | 3 x 2020 at 520 mm, 1.56 m, **722 g** |
+| Panel | 520 x 240 x 6 mm Bubbleboard, **165 g** (was a 285 g aluminium strip) |
+| Sheet usage | 1.50 m² of 2.88 m² — **still one sheet**, 48% to 52% |
+| Added cost | **$61.99** — extrusion $22.08, brackets $19.80, fasteners $20.11 |
+| Whole model | **109 parts, 18.92 kg**, 113 of 113 occurrences tied |
+
+**20 of 20 checks pass.** The new one is check 14: every supply and board must
+sit flat on the panel, inside its outline, and overlap at least one ladder rail
+in z. It is the check that would have caught the aluminium strip, and it runs at
+every flexed size.
+
 ## 11. Still open
 
 - **The bed's acceleration limit is not reliably known** (§23). The 5,646 mm/s²
@@ -1276,6 +1397,18 @@ thermal break. Do not also insulate the bay.
 - **The extractor fan, its damper and the filter cartridge are specified but not
   drawn** (§25). The cartridge wants a 120 × 120 face, a slot for the sheets and
   a pre-filter ahead of the carbon.
+- **The ladder rails land on the gear's bodies, not on its holes** (§26). The
+  three rail heights were measured from where each supply and board sits, not
+  from a chassis drawing. Check the real Mean Well and BigTreeTech hole
+  patterns before drilling the sheet; `bay_rail_mid` is a driver so a rail can
+  move.
+- **The mains terminals are not shrouded and the panel is not flame rated**
+  (§26). Polypropylene is the right insulator and the wrong fire load. A
+  clip-on LRS terminal cover and a fused IEC inlet matter more than the sheet.
+- The flex suite reports 3 failures at `build_x = 300 mm`, all pre-existing and
+  all honest: the bought bed plate cannot grow with the build area, and the two
+  cut-to-length extrusion lines need more stock. That is what a size change
+  really costs, not a model fault.
 - The enclosure has no sealing, no door catch and no gasket in the model, and a
   chamber that does not seal does not hold 45 °C.
 - **The rear panel needs two 20 × 13 mm notches** where it crosses the bed rails

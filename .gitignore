@@ -2,3 +2,4 @@
 # transient baselines written by skeleton_tie.py / nothing_moved.py
 scripts/before.json
 scripts/before_detail.json
+scripts/__pycache__/

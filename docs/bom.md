@@ -109,20 +109,23 @@ power supplies. Edit `bom.json`, then run `node scripts/genbom.js`.
 | ADXL345 accelerometer, 3 axis - shared, for input shaping [^17] | — | 1 | $4.95 | [DREMC](https://store.dremc.com.au/products/adxl345-accelerometer-3-axis-gy-291) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Wago 221-413 lever terminal block, 3 way | 221-413 3 Way | 6 | $17.70 | [DREMC](https://store.dremc.com.au/products/wago-221-series-terminal-block) | in stock | verified | — | cheaper or equal locally, or wanted next week rather than next month |
 | Wiring, ferrules, IEC inlet with switch and fuse, drag chain, sleeving | — | 1 | $70.00 | — | — | estimate | — | mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving |
+| 2020 V-slot black - electronics ladder, 3 rails at 520 mm = 1.56 m [^18] | — | 1 | $22.08 | [RM Components](https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series) | — | estimate | — | cut-to-length metal: too heavy to ship economically |
+| 20 series right-angle V-slot bracket, black - ladder rail ends [^19] | black | 6 | $19.80 | [RM Components](https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
+| M5 T-nuts and cap screws for the ladder and the gear - 24 pairs [^20] | M5 | 1 | $20.11 | [DREMC](https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
 
-**Subtotal: $621.28** locally, **$605.29** buying overseas where it wins.
+**Subtotal: $683.27** locally, **$667.28** buying overseas where it wins.
 
 ## H. Enclosure
 
 | Part | Option priced | Qty | Line | Source | Stock | Conf. | AliExpress | Read as |
 |---|---|---:|---:|---|---|---|---:|---|
-| 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m [^18] | — | 1 | $58.02 | [RM Components](https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series) | — | estimate | — | cut-to-length metal: too heavy to ship economically |
-| 20 series right-angle V-slot bracket, black - cage corners [^19] | black | 20 | $66.00 | [RM Components](https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
-| M5 T-nuts and cap screws for the cage - 40 pairs [^20] | M5 | 1 | $33.52 | [DREMC](https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
-| Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels [^21] | 6 mm, 2400 x 1200 | 1 | $0.00 | — | — | estimate | — | a Maker Store sheet; not sourced overseas |
-| 120 mm 24 V extractor fan, PWM - top rear corner [^22] | 120 x 120 x 25, 4-pin PWM | 1 | $0.00 | — | — | estimate | — | not yet specified |
-| Gravity backdraft damper, 120 mm - seals the fan when it is off [^23] | 120 mm | 1 | $0.00 | — | — | estimate | — | not yet specified |
-| Awning hinge pair, 20 series - door hinges on the front top rail [^24] | 20 series | 2 | $0.00 | — | — | estimate | — | not yet specified |
+| 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m [^21] | — | 1 | $58.02 | [RM Components](https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series) | — | estimate | — | cut-to-length metal: too heavy to ship economically |
+| 20 series right-angle V-slot bracket, black - cage corners [^22] | black | 20 | $66.00 | [RM Components](https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
+| M5 T-nuts and cap screws for the cage - 40 pairs [^23] | M5 | 1 | $33.52 | [DREMC](https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts) | in stock | estimate | — | cheaper or equal locally, or wanted next week rather than next month |
+| Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five enclosure panels and the electronics backplane [^24] | 6 mm, 2400 x 1200 | 1 | $0.00 | — | — | estimate | — | a Maker Store sheet; not sourced overseas |
+| 120 mm 24 V extractor fan, PWM - top rear corner [^25] | 120 x 120 x 25, 4-pin PWM | 1 | $0.00 | — | — | estimate | — | not yet specified |
+| Gravity backdraft damper, 120 mm - seals the fan when it is off [^26] | 120 mm | 1 | $0.00 | — | — | estimate | — | not yet specified |
+| Awning hinge pair, 20 series - door hinges on the front top rail [^27] | 20 series | 2 | $0.00 | — | — | estimate | — | not yet specified |
 
 **Subtotal: $157.54** locally, **$157.54** buying overseas where it wins.
 
@@ -136,20 +139,20 @@ power supplies. Edit `bom.json`, then run `node scripts/genbom.js`.
 | D. Y and bed | $351.85 | $193.82 |
 | E. Z axis | $299.85 | $136.70 |
 | F. Belt stock | $59.00 | $9.19 |
-| G. Electronics | $621.28 | $605.29 |
+| G. Electronics | $683.27 | $667.28 |
 | H. Enclosure | $157.54 | $157.54 |
-| **Total** | **$2392.92** | **$1801.75** |
+| **Total** | **$2454.91** | **$1863.74** |
 
-Buying everything from Australian stock costs **$2392.92**, GST included and
-delivered. Taking the overseas line wherever it is cheaper brings the parts to **$1801.75**, of which $1243.37 is still bought here. AliExpress
-prices exclude GST, so add about $55.84 at checkout: call it **$1857.59** all up, plus whatever shipping applies.
+Buying everything from Australian stock costs **$2454.91**, GST included and
+delivered. Taking the overseas line wherever it is cheaper brings the parts to **$1863.74**, of which $1305.36 is still bought here. AliExpress
+prices exclude GST, so add about $55.84 at checkout: call it **$1919.58** all up, plus whatever shipping applies.
 
 Those AliExpress figures are **list** prices. On 2026-11-12 the same basket
-rang up at $1293.02 on sale — but part of that gap is a first-order voucher
+rang up at $1355.01 on sale — but part of that gap is a first-order voucher
 that does not repeat, so the list column is the one to plan against. See
 `docs/budget-build.md`.
 
-Of that, $1902.18 is verified against live supplier data and $490.74 is estimated across 13 lines (extrusion and flat bar cut to length, the extra carriage blocks, and loose wiring).
+Of that, $1902.18 is verified against live supplier data and $552.73 is estimated across 16 lines (extrusion and flat bar cut to length, the extra carriage blocks, and loose wiring).
 Anything already on hand comes off the top.
 
 ## 24 V power budget
@@ -206,13 +209,16 @@ The Raspberry Pi runs from its own 5 V USB-C supply, not the 24 V rails.
 [^15]: G. Electronics — Raspberry Pi 4 Model B, 2 GB - runs Klipper over USB: Pi 5 2 GB is $125.52 and is not needed for Klipper.
 [^16]: G. Electronics — Official Raspberry Pi 64 GB A2 micro SD card: the 32 GB card is $32.18 but was out of stock.
 [^17]: G. Electronics — ADXL345 accelerometer, 3 axis - shared, for input shaping: one only, moved between toolheads; the earlier BOM counted it twice.
-[^18]: H. Enclosure — 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m: cut to length, costed at the rate the frame’s own 2020 line implies ($14.15/m); RM Components publishes no per-mm rate, so it needs the same quote as the frame.
-[^19]: H. Enclosure — 20 series right-angle V-slot bracket, black - cage corners: 8 post ends and 4 top-rail corners need two brackets each where the load is real; 20 is the working number, not a measured one.
-[^20]: H. Enclosure — M5 T-nuts and cap screws for the cage - 40 pairs: costed at the rate the frame’s own fastener lines imply.
-[^21]: H. Enclosure — Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels: NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Five panels total 1.37 m2 of a 2.88 m2 sheet (48%); the offcut covers the electronics bay and leaves a spare side. Clear corflute is the same 6 mm if you want to see the print.
-[^22]: H. Enclosure — 120 mm 24 V extractor fan, PWM - top rear corner: NOT PRICED. Runs at about 5% as the continuous bleed and full for purging. An axial fan cannot push through HEPA - if the filter box carries HEPA it needs radial blowers of its own.
-[^23]: H. Enclosure — Gravity backdraft damper, 120 mm - seals the fan when it is off: NOT PRICED. Not optional for a heated chamber: a fan that is off but open is a chimney, and the bed cannot hold temperature against it.
-[^24]: H. Enclosure — Awning hinge pair, 20 series - door hinges on the front top rail: NOT PRICED. The door is 476 x 516, hinged along the top rail and lifting up.
+[^18]: G. Electronics — 2020 V-slot black - electronics ladder, 3 rails at 520 mm = 1.56 m: the three rails the gear actually bolts through. The panel is a backplane, not a chassis: every supply and board bolt lands in a T-nut in one of these rails, so the sheet carries no load. Cut to length and costed at the rate the frame’s own 2020 line implies ($14.15/m).
+[^19]: G. Electronics — 20 series right-angle V-slot bracket, black - ladder rail ends: the bottom rail lands flat on the base cross and both base rails and needs none; the mid and top rails bolt to the two enclosure rear posts, one bracket each end plus spares.
+[^20]: G. Electronics — M5 T-nuts and cap screws for the ladder and the gear - 24 pairs: rails to frame, panel to rails, and every supply and board through the panel into a rail T-nut; costed at the rate the frame’s own fastener lines imply.
+[^21]: H. Enclosure — 2020 V-slot black - 4 posts at 520 + 2 top rails at 520 + 2 top rails at 490 = 4.10 m: cut to length, costed at the rate the frame’s own 2020 line implies ($14.15/m); RM Components publishes no per-mm rate, so it needs the same quote as the frame.
+[^22]: H. Enclosure — 20 series right-angle V-slot bracket, black - cage corners: 8 post ends and 4 top-rail corners need two brackets each where the load is real; 20 is the working number, not a measured one.
+[^23]: H. Enclosure — M5 T-nuts and cap screws for the cage - 40 pairs: costed at the rate the frame’s own fastener lines imply.
+[^24]: H. Enclosure — Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five enclosure panels and the electronics backplane: NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Six panels total 1.50 m2 of a 2.88 m2 sheet (52%): five enclosure panels plus the 520 x 240 electronics backplane. The offcut still covers a spare side. Clear corflute is the same 6 mm if you want to see the print.
+[^25]: H. Enclosure — 120 mm 24 V extractor fan, PWM - top rear corner: NOT PRICED. Runs at about 5% as the continuous bleed and full for purging. An axial fan cannot push through HEPA - if the filter box carries HEPA it needs radial blowers of its own.
+[^26]: H. Enclosure — Gravity backdraft damper, 120 mm - seals the fan when it is off: NOT PRICED. Not optional for a heated chamber: a fan that is off but open is a chimney, and the bed cannot hold temperature against it.
+[^27]: H. Enclosure — Awning hinge pair, 20 series - door hinges on the front top rail: NOT PRICED. The door is 476 x 516, hinged along the top rail and lifting up.
 [^a1]: AliExpress, LDO SLR12H / MGN12H stainless rail with carriage, 500 mm: generic, not LDO; 4.7 over 130 reviews, 2,000+ sold. Reviewers all say to degrease and re-grease before use.
 [^a2]: AliExpress, MGN12H carriage blocks, 5 extra (10 blocks in the model, 5 come with the rails): this closes the one real sourcing gap - no Australian listing has these in stock.
 [^a3]: AliExpress, LDO NEMA 17 42STH48-2504AC: 2.0 A against the LDO part’s 2.5 A, same 48 mm body and ~59 N.cm holding torque; buy the 5-pack, the machine needs 5.

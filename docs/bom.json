@@ -1376,6 +1376,77 @@
           "why": "mains-side part: a no-name supply or IEC inlet behind a 270 W bed is not worth the saving"
         },
         "not_modelled": "wiring is not modelled"
+      },
+      {
+        "item": "2020 V-slot black - electronics ladder, 3 rails at 520 mm = 1.56 m",
+        "qty": 1,
+        "unit": 22.08,
+        "line": 22.08,
+        "url": "https://rmcomponents.com.au/products/2020-black-v-slot-aluminium-profile-20-series",
+        "variant": null,
+        "stock": "n/a",
+        "conf": "estimate",
+        "note": "the three rails the gear actually bolts through. The panel is a backplane, not a chassis: every supply and board bolt lands in a T-nut in one of these rails, so the sheet carries no load. Cut to length and costed at the rate the frame’s own 2020 line implies ($14.15/m)",
+        "cuts": [
+          {
+            "component": "Bay rail bottom",
+            "mm": 520,
+            "qty": 1,
+            "measure": "x"
+          },
+          {
+            "component": "Bay rail mid",
+            "mm": 520,
+            "qty": 1,
+            "measure": "x"
+          },
+          {
+            "component": "Bay rail top",
+            "mm": 520,
+            "qty": 1,
+            "measure": "x"
+          }
+        ],
+        "stock_total_mm": 1560,
+        "ali": {
+          "sourced": false,
+          "reason": "freight",
+          "why": "cut-to-length metal: too heavy to ship economically"
+        }
+      },
+      {
+        "item": "20 series right-angle V-slot bracket, black - ladder rail ends",
+        "qty": 6,
+        "unit": 3.3,
+        "line": 19.8,
+        "url": "https://rmcomponents.com.au/products/20-series-right-angle-v-slot-bracket-black",
+        "variant": "black",
+        "stock": "in",
+        "conf": "estimate",
+        "note": "the bottom rail lands flat on the base cross and both base rails and needs none; the mid and top rails bolt to the two enclosure rear posts, one bracket each end plus spares",
+        "not_modelled": "fasteners are not modelled individually",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "cheaper or equal locally, or wanted next week rather than next month"
+        }
+      },
+      {
+        "item": "M5 T-nuts and cap screws for the ladder and the gear - 24 pairs",
+        "qty": 1,
+        "unit": 20.11,
+        "line": 20.11,
+        "url": "https://store.dremc.com.au/products/20pc-t-slot-hammer-head-nuts",
+        "variant": "M5",
+        "stock": "in",
+        "conf": "estimate",
+        "note": "rails to frame, panel to rails, and every supply and board through the panel into a rail T-nut; costed at the rate the frame’s own fastener lines imply",
+        "not_modelled": "fasteners are not modelled individually",
+        "ali": {
+          "sourced": false,
+          "reason": "local",
+          "why": "cheaper or equal locally, or wanted next week rather than next month"
+        }
       }
     ],
     "H. Enclosure": [
@@ -1481,7 +1552,7 @@
         }
       },
       {
-        "item": "Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five panels",
+        "item": "Heavy Duty Polypropylene Bubble Board 6 mm black, 2400 x 1200 - one sheet does all five enclosure panels and the electronics backplane",
         "qty": 1,
         "unit": 0,
         "line": 0,
@@ -1489,7 +1560,7 @@
         "variant": "6 mm, 2400 x 1200",
         "stock": "n/a",
         "conf": "estimate",
-        "note": "NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Five panels total 1.37 m2 of a 2.88 m2 sheet (48%); the offcut covers the electronics bay and leaves a spare side. Clear corflute is the same 6 mm if you want to see the print",
+        "note": "NOT PRICED - no public listing was found for this sheet, so no figure is carried rather than an invented one. Six panels total 1.50 m2 of a 2.88 m2 sheet (52%): five enclosure panels plus the 520 x 240 electronics backplane. The offcut still covers a spare side. Clear corflute is the same 6 mm if you want to see the print",
         "models": [
           {
             "component": "Enc panel L",
@@ -1509,6 +1580,10 @@
           },
           {
             "component": "Enc door awning",
+            "qty": 1
+          },
+          {
+            "component": "Electronics panel",
             "qty": 1
           }
         ],

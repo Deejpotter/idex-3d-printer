@@ -1,13 +1,16 @@
 # Getting it under A$1,000
 
-The full BOM is **A$2,235.38**. This is where that goes, what can come out, and
-what each cut costs in speed. Australian prices as at 11 November 2026,
+The machine's full BOM is **A$2,297.37**, and the optional enclosure adds
+**$157.54** on top. This is where the machine's figure goes, what can come out,
+and what each cut costs in speed. Australian prices as at 11 November 2026,
 AliExpress as at 12 November 2026; the model's own numbers come from
 `scripts/check_model.py` and `docs/design-notes.md`.
 
-**Short answer: A$966**, buying overseas where it is cheaper and reusing what
-you already own, at the same 5,646 mm/s2. Whether it lands under a thousand
-comes down to one line — see "The one line that decides it".
+**Short answer: A$1,028**, buying overseas where it is cheaper and reusing what
+you already own, at the same 5,646 mm/s2. That is **$28 over** the thousand this
+page is named for, and §26 of the design notes is why: the electronics ladder
+added $61.99 that the earlier $966 did not carry. One route back under is in
+"The one line that decides it".
 
 ## First, two things that are already true
 
@@ -143,11 +146,11 @@ the two.
 
 Order matters: take the overseas price first, then the local swaps, then
 what you already own. Every row is generated from `docs/bom.json`, so the
-running total cannot drift from the BOM.
+running total cannot drift from the BOM. The optional enclosure (group H, $157.54) is left out; everything else is in.
 
 | | Saving | Running total |
 |---|---:|---:|
-| **Full BOM, everything bought new at Australian retail** | | **$2235.38** |
+| **Full BOM, everything bought new at Australian retail** | | **$2297.37** |
 | *Buy overseas wherever AliExpress list beats the local price* | | |
 | 5 linear rails, 500 / 2 x 450 / 2 x 400 mm, generic MGN12H | $213.66 | |
 | 13 pulleys and toothed idlers | $54.95 | |
@@ -159,11 +162,11 @@ running total cannot drift from the BOM.
 | 5 NEMA 17s — a STEPPERONLINE 5-pack | $39.92 | |
 | 5 extra MGN12H carriage blocks — the one gap no AU seller could fill | $23.75 | |
 | 4 endstops, and a 10-pack of F688ZZ bearings | $22.49 | |
-| | | **$1644.21** |
+| | | **$1706.20** |
 | *Swap for a cheaper local part* | | |
 | Raspberry Pi 4 Model B, 2 GB → Pi Zero 2 W | $75.13 | |
 | Official Raspberry Pi 64 GB A2 micro SD card → generic A2 card | $32.50 | |
-| | | **$1536.58** |
+| | | **$1598.57** |
 | *Reuse what you already own* | | |
 | 4040 V-slot black → reuse the old frame | $90.00 | |
 | LDO NEMA 17 42STH48-2504AC → the two X motors you already own | $49.94 | |
@@ -172,10 +175,11 @@ running total cannot drift from the BOM.
 | Heated bed assembly, 255 x 245 mm, 24 V ~270 W → the 235 bed off the old printer | $28.99 | |
 | Magnetic sheet 235 x 235, high-temp 3M adhesive → its magnet and PEI sheet too | $29.39 | |
 | Wiring, ferrules, IEC inlet with switch and fuse, drag chain, sleeving → strip the old printer | $70.00 | |
-| | | **$1032.39** |
-| 10% GST, collected at checkout on the $425.09 of overseas lines | +$42.51 | **$1074.90** |
+| | | **$1094.38** |
+| 10% GST, collected at checkout on the $425.09 of overseas lines | +$42.51 | **$1136.89** |
 
-That is **$1,074.90** — just over. Which brings us to the line that decides it.
+That is **$1,136.89**. Which brings us to the line that decides it, and to the
+$28 that no longer quite fits.
 
 ## The one line that decides it
 
@@ -186,22 +190,32 @@ stars over 54 ratings, 1,000+ sold.
 
 | | Parts | GST | Total |
 |---|---:|---:|---:|
-| Budget build, everything at list prices | $1,032.39 | $42.51 | $1,074.90 |
-| **...with the Octopus bundle at its sale price** | $915.37 | $50.25 | **$965.62** |
-| ...with *every* line at the sale prices seen on 12 Nov | $654.13 | $24.13 | $678.26 |
+| Budget build, everything at list prices | $1,094.38 | $42.51 | $1,136.89 |
+| **...with the Octopus bundle at its sale price** | $977.36 | $50.25 | **$1,027.61** |
+| ...with *every* line at the sale prices seen on 12 Nov | $716.12 | $24.13 | $740.25 |
 
-**One line, $117, is the difference between over and under a thousand.** Watch
-that listing and buy the board on a sale; everything else can be bought at list
-and the budget still holds.
+**That one line is worth $109, and it is no longer quite enough.** The
+electronics ladder (§26) costs $61.99 and cannot be cut, because the supplies
+and the board have to bolt to something; the aluminium strip they used to bolt
+to was never in the BOM at all, which is why the old $966 looked better than the
+machine really was.
 
-The $678 figure is real in the sense that it is what the basket rang up that
-day, and unreal in the sense that it collects a first-order voucher on every
-line when you only get it once. Do not plan on it. Plan on **$966**, and treat
-anything below as a good day.
+Two honest routes back under a thousand, in order of how much they cost you:
+
+1. **Cut 1.56 m of 2020 from the old printer's frame.** The reuse column already
+   strips it for its 4040 and its wiring. That is the whole $61.99 and it takes
+   the build to **$966** again.
+2. **Drop to a Pi Zero 2 W *and* skip the SD card upgrade**, already counted at
+   $107.63 in the swaps column, then find $28 somewhere else.
+
+Plan on **$1,028** if you buy every rail and rail-end new, or **$966** if the
+old printer donates its extrusion. The $740 figure is real in the sense that it
+is what the basket rang up that day, and unreal in the sense that it collects a
+first-order voucher on every line when you only get it once. Do not plan on it.
 
 ## What stays in Australia, and why
 
-$607.30 of the budget build is still bought here. That is deliberate:
+$669.29 of the budget build is still bought here — $607.30 of machine plus the $61.99 electronics ladder. That is deliberate:
 
 - **Both Mean Well supplies ($143.65).** Mains-side. A no-name 350 W supply
   behind a 270 W bed is not where to save $46. The HI-LINK LRS-350-24 lookalike
